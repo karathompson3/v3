@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Shield, Eye, Lock, AlertTriangle, Globe, Smartphone } from 'lucide-react';
+import { Shield, Eye, Lock, AlertTriangle, Globe, Smartphone, Code, Github } from 'lucide-react';
 
 export const UserBillOfRights = () => {
   return (
@@ -120,6 +120,42 @@ export const UserBillOfRights = () => {
         </Card>
       </div>
 
+      {/* Open Source Commitment */}
+      <Card className="border-indigo-200 bg-indigo-50">
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Code className="w-5 h-5 text-indigo-600" />
+            <CardTitle className="text-indigo-800">Open Source Commitment</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-3 text-sm text-indigo-700">
+          <div>
+            <strong>Fully Open Source:</strong> This entire application is open source from day one. Every line of code is publicly available for inspection, modification, and contribution.
+          </div>
+          <div>
+            <strong>Community-Driven:</strong> We believe in transparent development. You can see exactly how your data is handled, what features are being built, and contribute improvements.
+          </div>
+          <div>
+            <strong>No Hidden Code:</strong> There are no proprietary algorithms, secret data processing, or hidden functionality. What you see is what you get.
+          </div>
+          <div>
+            <strong>Fork-Friendly:</strong> Don't like something? Fork the project and make it your own. The code is designed to be easily modifiable and self-hostable.
+          </div>
+          <div className="flex items-center gap-2 pt-2">
+            <Github className="w-4 h-4" />
+            <strong>Repository:</strong>
+            <a 
+              href="https://github.com/your-username/motif-journal" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-indigo-600 underline hover:text-indigo-800"
+            >
+              View source code on GitHub
+            </a>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Mobile Considerations */}
       <Card className="border-slate-200">
         <CardHeader>
@@ -160,10 +196,13 @@ export const UserBillOfRights = () => {
             <strong>Feature Additions:</strong> New features will be designed with privacy as the primary consideration.
           </div>
           <div>
-            <strong>No Surprise Changes:</strong> Any changes that could affect your privacy will be clearly communicated.
+            <strong>No Surprise Changes:</strong> Any changes that could affect your privacy will be clearly communicated through GitHub releases and commit history.
           </div>
           <div>
             <strong>User Control:</strong> You always maintain control over your data and can stop using the app at any time.
+          </div>
+          <div>
+            <strong>Open Development:</strong> All changes are public. You can track every modification in the GitHub repository and participate in discussions about future features.
           </div>
         </CardContent>
       </Card>
