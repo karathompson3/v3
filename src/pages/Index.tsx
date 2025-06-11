@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { WindDownMode } from '../components/WindDownMode';
 import { UserBillOfRights } from '../components/UserBillOfRights';
@@ -58,12 +59,12 @@ const Index = () => {
 
   if (showGettingStarted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 p-4">
         <div className="mb-6">
           <Button
             variant="outline"
             onClick={() => setShowGettingStarted(false)}
-            className="mb-4"
+            className="mb-4 hover:bg-slate-50 transition-colors"
           >
             ← Back to App
           </Button>
@@ -75,12 +76,12 @@ const Index = () => {
 
   if (showBillOfRights) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 p-4">
         <div className="mb-6">
           <Button
             variant="outline"
             onClick={() => setShowBillOfRights(false)}
-            className="mb-4"
+            className="mb-4 hover:bg-slate-50 transition-colors"
           >
             ← Back to App
           </Button>
@@ -110,7 +111,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 p-4">
       <div className="max-w-6xl mx-auto">
         <Header
           currentMantra={currentMantra}
