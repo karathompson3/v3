@@ -1,6 +1,7 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Tag, TrendingUp, Calendar, Camera, Mic } from 'lucide-react';
+import { Tag, Calendar, Camera, Mic } from 'lucide-react';
 
 interface MotifEntry {
   id: string;
@@ -30,7 +31,6 @@ export const MotifDisplay = ({ entries }: MotifDisplayProps) => {
     .sort(([,a], [,b]) => b - a)
     .slice(0, 8); // Top 8 motifs
 
-  const totalEntries = entries.length;
   const recentEntries = entries.slice(0, 3);
 
   return (
@@ -68,42 +68,6 @@ export const MotifDisplay = ({ entries }: MotifDisplayProps) => {
               Start journaling to see your motif patterns
             </p>
           )}
-        </CardContent>
-      </Card>
-
-      {/* Progress Snapshot */}
-      <Card className="bg-white/90 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <TrendingUp className="w-5 h-5" />
-            Progress Signal
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-slate-600">Total Entries</span>
-              <span className="font-semibold">{totalEntries}</span>
-            </div>
-            
-            {totalEntries > 0 && (
-              <>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-600">Days Active</span>
-                  <span className="font-semibold">
-                    {new Set(entries.map(e => e.timestamp.toDateString())).size}
-                  </span>
-                </div>
-                
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-600">Most Used Motif</span>
-                  <Badge variant="default" className="text-xs">
-                    {sortedMotifs[0]?.[0] || 'None yet'}
-                  </Badge>
-                </div>
-              </>
-            )}
-          </div>
         </CardContent>
       </Card>
 
