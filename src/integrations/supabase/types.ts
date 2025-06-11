@@ -9,6 +9,68 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      chat_messages: {
+        Row: {
+          content: string
+          daily_log_id: string
+          id: string
+          reflection_captured: boolean | null
+          role: string
+          timestamp: string
+        }
+        Insert: {
+          content: string
+          daily_log_id: string
+          id?: string
+          reflection_captured?: boolean | null
+          role: string
+          timestamp?: string
+        }
+        Update: {
+          content?: string
+          daily_log_id?: string
+          id?: string
+          reflection_captured?: boolean | null
+          role?: string
+          timestamp?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_daily_log_id_fkey"
+            columns: ["daily_log_id"]
+            isOneToOne: false
+            referencedRelation: "daily_chat_logs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      daily_chat_logs: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          id?: string
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null

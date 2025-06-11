@@ -3,9 +3,11 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Send, Bot, User, Sparkles, Settings, Paperclip, X, Image, Mic } from 'lucide-react';
+import { Send, Bot, User, Sparkles, Settings, Paperclip, X, Image, Mic, History } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { MediaCapture } from './MediaCapture';
+import { ChatHistory } from './ChatHistory';
+import { useDailyChatLog } from '../hooks/useDailyChatLog';
 
 interface MotifEntry {
   id: string;
@@ -43,19 +45,13 @@ interface ChatInterfaceProps {
 }
 
 export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfaceProps) => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      role: 'assistant',
-      content: "Hello! I'm your AI companion designed to support your dignity and autonomy. Share anything - thoughts, feelings, experiences, media. I'm here to engage with you while quietly building your personal foundation of insights.",
-      timestamp: new Date()
-    }
-  ]);
+  const { currentLog, loading, availableDates, addMessage, loadChatLog, deleteChatLog } = useDailyChatLog();
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [apiKey, setApiKey] = useState(localStorage.getItem('openai_api_key') || '');
   const [showApiKeyInput, setShowApiKeyInput] = useState(!apiKey);
   const [showMediaCapture, setShowMediaCapture] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
   const [attachedMedia, setAttachedMedia] = useState<{
     type: 'photo' | 'voice';
     url: string;
@@ -72,7 +68,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [currentLog?.messages]);
 
   const saveApiKey = (key: string) => {
     localStorage.setItem('openai_api_key', key);
@@ -98,19 +94,18 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
       : '';
 
     const mediaContextMessage = mediaContext ? `\n\nMedia context: ${mediaContext}` : '';
+    
+    // Include recent chat history for context
+    const recentMessages = currentLog?.messages.slice(-6) || [];
+    const chatHistoryContext = recentMessages.length > 0
+      ? `\n\nRecent conversation history: ${recentMessages.map(msg => 
+          `${msg.role}: ${msg.content}`
+        ).join('\n')}`
+      : '';
 
-    const systemPrompt = `You are a supportive AI companion focused on dignity, autonomy, and mental wellness. You help users reflect thoughtfully while building their personal foundation. Be warm, non-judgmental, and encouraging. Ask thoughtful follow-up questions and validate their experiences. Respond to EVERYTHING the user shares - whether it's deep reflection, casual thoughts, media, or simple statements. This is an interactive conversation, not just Q&A.${contextMessage}${mediaContextMessage}`;
+    const systemPrompt = `You are a supportive AI companion focused on dignity, autonomy, and mental wellness. You help users reflect thoughtfully while building their personal foundation. Be warm, non-judgmental, and encouraging. Ask thoughtful follow-up questions and validate their experiences. Respond to EVERYTHING the user shares - whether it's deep reflection, casual thoughts, media, or simple statements. This is an interactive conversation, not just Q&A. You have access to the user's conversation history and reflections to provide continuity.${contextMessage}${mediaContextMessage}${chatHistoryContext}`;
 
     try {
-      const chatMessages = [
-        { role: 'system', content: systemPrompt },
-        ...messages.slice(-6).map(msg => ({
-          role: msg.role,
-          content: msg.content
-        })),
-        { role: 'user', content: userMessage }
-      ];
-
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -119,7 +114,10 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
         },
         body: JSON.stringify({
           model: 'gpt-4o-mini',
-          messages: chatMessages,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userMessage }
+          ],
           max_tokens: 500,
           temperature: 0.7
         })
@@ -167,7 +165,6 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
   };
 
   const shouldCaptureReflection = (messageContent: string): boolean => {
-    // Auto-detect if this warrants reflection capture based on content patterns
     if (messageContent.length < 15) return false;
     
     const reflectionTriggers = [
@@ -183,7 +180,6 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
       lowerContent.includes(trigger)
     );
     
-    // Also capture if it's a longer, more thoughtful message
     const isThoughtfulLength = messageContent.length > 30;
     
     return hasReflectionContent || isThoughtfulLength;
@@ -192,19 +188,18 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
   const captureReflectionFromMessage = (messageContent: string, media?: any) => {
     if (!shouldCaptureReflection(messageContent)) return;
     
-    // Auto-generate motifs based on content
     const generateMotifs = (content: string): string[] => {
-      const basMotifs = ['Personal Reflection'];
+      const baseMotifs = ['Personal Reflection'];
       const lowerContent = content.toLowerCase();
       
-      if (lowerContent.includes('work') || lowerContent.includes('job')) basMotifs.push('Career');
-      if (lowerContent.includes('family') || lowerContent.includes('relationship')) basMotifs.push('Relationships');
-      if (lowerContent.includes('anxious') || lowerContent.includes('worry')) basMotifs.push('Anxiety');
-      if (lowerContent.includes('grateful') || lowerContent.includes('thankful')) basMotifs.push('Gratitude');
-      if (lowerContent.includes('goal') || lowerContent.includes('plan')) basMotifs.push('Goals');
-      if (media) basMotifs.push('Media Shared');
+      if (lowerContent.includes('work') || lowerContent.includes('job')) baseMotifs.push('Career');
+      if (lowerContent.includes('family') || lowerContent.includes('relationship')) baseMotifs.push('Relationships');
+      if (lowerContent.includes('anxious') || lowerContent.includes('worry')) baseMotifs.push('Anxiety');
+      if (lowerContent.includes('grateful') || lowerContent.includes('thankful')) baseMotifs.push('Gratitude');
+      if (lowerContent.includes('goal') || lowerContent.includes('plan')) baseMotifs.push('Goals');
+      if (media) baseMotifs.push('Media Shared');
       
-      return basMotifs;
+      return baseMotifs;
     };
     
     const reflection: MotifEntry = {
@@ -219,7 +214,6 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
     
     onReflectionCapture(reflection);
     
-    // Subtle notification that reflection was captured
     setTimeout(() => {
       toast({
         title: "Reflection captured",
@@ -247,7 +241,6 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
     let messageContent = input.trim();
     let mediaContext = '';
     
-    // Handle media attachments
     if (attachedMedia) {
       if (attachedMedia.type === 'photo') {
         mediaContext = `[Image uploaded${attachedMedia.caption ? `: ${attachedMedia.caption}` : ''}]`;
@@ -260,44 +253,27 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
       }
     }
     
-    // If still no content, don't proceed
     if (!messageContent) return;
     
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      role: 'user',
-      content: messageContent,
-      timestamp: new Date()
-    };
-    
-    setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
+    
+    // Add user message to database
+    const userMessage = await addMessage('user', messageContent);
+    
+    if (!userMessage) {
+      setIsLoading(false);
+      return;
+    }
     
     // Capture reflection BEFORE generating AI response
     const reflectionCaptured = captureReflectionFromMessage(messageContent, attachedMedia);
     
     try {
-      // ALWAYS generate AI response for any user input
       const aiResponse = await generateAIResponse(messageContent, mediaContext);
       
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: aiResponse,
-        timestamp: new Date()
-      };
-      
-      setMessages(prev => [...prev, assistantMessage]);
-      
-      // Mark user message as having reflection captured if applicable
-      if (reflectionCaptured) {
-        setMessages(prev => prev.map(msg => 
-          msg.id === userMessage.id 
-            ? { ...msg, reflectionCaptured: true }
-            : msg
-        ));
-      }
+      // Add AI response to database
+      await addMessage('assistant', aiResponse);
       
     } catch (error) {
       console.error('Error generating response:', error);
@@ -318,6 +294,33 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
       handleSend();
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex flex-col h-[600px] bg-white/90 backdrop-blur-sm rounded-lg border border-slate-200 shadow-lg">
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-slate-600">Loading chat history...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (showHistory) {
+    return (
+      <div className="flex flex-col h-[600px] bg-white/90 backdrop-blur-sm rounded-lg border border-slate-200 shadow-lg">
+        <ChatHistory
+          availableDates={availableDates}
+          currentDate={currentLog?.date || ''}
+          onDateSelect={(date) => {
+            loadChatLog(date);
+            setShowHistory(false);
+          }}
+          onDeleteDate={deleteChatLog}
+          onClose={() => setShowHistory(false)}
+        />
+      </div>
+    );
+  }
 
   if (showApiKeyInput) {
     return (
@@ -386,26 +389,64 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
     );
   }
 
+  const messages = currentLog?.messages || [];
+  const currentDate = currentLog?.date || new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split('T')[0];
+
   return (
     <div className="flex flex-col h-[600px] bg-white/90 backdrop-blur-sm rounded-lg border border-slate-200 shadow-lg">
-      {/* Header with API key management */}
+      {/* Header with controls */}
       <div className="flex justify-between items-center p-4 border-b border-slate-200">
         <div className="flex items-center gap-2">
           <Bot className="w-5 h-5 text-blue-600" />
           <span className="font-medium">AI Companion</span>
+          {currentDate !== today && (
+            <Badge variant="outline" className="text-xs">
+              {new Date(currentDate).toLocaleDateString()}
+            </Badge>
+          )}
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setShowApiKeyInput(true)}
-          className="text-slate-500 hover:text-slate-700"
-        >
-          <Settings className="w-4 h-4" />
-        </Button>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowHistory(true)}
+            className="text-slate-500 hover:text-slate-700"
+            title="Chat History"
+          >
+            <History className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowApiKeyInput(true)}
+            className="text-slate-500 hover:text-slate-700"
+          >
+            <Settings className="w-4 h-4" />
+          </Button>
+        </div>
       </div>
 
       {/* Chat Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {messages.length === 0 && (
+          <div className="flex gap-3 justify-start">
+            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+              <Bot className="w-4 h-4 text-blue-600" />
+            </div>
+            <Card className="bg-white border-slate-200 max-w-[70%]">
+              <CardContent className="p-3">
+                <p className="text-sm">
+                  Hello! I'm your AI companion designed to support your dignity and autonomy. Share anything - thoughts, feelings, experiences, media. I'm here to engage with you while quietly building your personal foundation of insights.
+                </p>
+                <p className="text-xs text-slate-500 mt-2">
+                  {new Date().toLocaleTimeString()}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
         {messages.map((message) => (
           <div
             key={message.id}
