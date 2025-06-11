@@ -1,10 +1,9 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { JournalEntry } from './JournalEntry';
+import { ChatInterface } from './ChatInterface';
+import { ReflectionsManager } from './ReflectionsManager';
 import { MotifDisplay } from './MotifDisplay';
-import { NextMoveList } from './NextMoveList';
-import { NarrativeMap } from './NarrativeMap';
-import { PenTool, Map, ArrowRight } from 'lucide-react';
+import { MessageCircle, Brain, Map } from 'lucide-react';
 
 interface MotifEntry {
   id: string;
@@ -33,57 +32,52 @@ interface MainTabsProps {
   currentEntry: string;
   setCurrentEntry: (entry: string) => void;
   onEntrySubmit: (entry: MotifEntry) => void;
+  onEntryDelete: (id: string) => void;
 }
 
-export const MainTabs = ({ entries, currentEntry, setCurrentEntry, onEntrySubmit }: MainTabsProps) => {
+export const MainTabs = ({ entries, currentEntry, setCurrentEntry, onEntrySubmit, onEntryDelete }: MainTabsProps) => {
   return (
-    <Tabs defaultValue="journal" className="w-full">
+    <Tabs defaultValue="chat" className="w-full">
       <TabsList className="grid w-full grid-cols-3 mb-6 bg-white/80 backdrop-blur-sm border border-slate-200 shadow-sm">
         <TabsTrigger 
-          value="journal" 
+          value="chat" 
           className="flex items-center gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 transition-all duration-200"
         >
-          <PenTool className="w-4 h-4" />
-          Journal
+          <MessageCircle className="w-4 h-4" />
+          AI Chat
         </TabsTrigger>
         <TabsTrigger 
-          value="narrative" 
+          value="reflections" 
           className="flex items-center gap-2 data-[state=active]:bg-green-50 data-[state=active]:text-green-700 transition-all duration-200"
         >
-          <Map className="w-4 h-4" />
-          Narrative Map
+          <Brain className="w-4 h-4" />
+          Reflections
         </TabsTrigger>
         <TabsTrigger 
-          value="moves" 
+          value="patterns" 
           className="flex items-center gap-2 data-[state=active]:bg-purple-50 data-[state=active]:text-purple-700 transition-all duration-200"
         >
-          <ArrowRight className="w-4 h-4" />
-          Next Moves
+          <Map className="w-4 h-4" />
+          Patterns
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="journal" className="space-y-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <JournalEntry 
-              onEntrySubmit={onEntrySubmit}
-              currentEntry={currentEntry}
-              setCurrentEntry={setCurrentEntry}
-              existingEntries={entries}
-            />
-          </div>
-          <div>
-            <MotifDisplay entries={entries} />
-          </div>
-        </div>
+      <TabsContent value="chat" className="space-y-6">
+        <ChatInterface 
+          onReflectionCapture={onEntrySubmit}
+          reflections={entries}
+        />
       </TabsContent>
 
-      <TabsContent value="narrative" className="space-y-6">
-        <NarrativeMap entries={entries} />
+      <TabsContent value="reflections" className="space-y-6">
+        <ReflectionsManager 
+          entries={entries}
+          onDelete={onEntryDelete}
+        />
       </TabsContent>
 
-      <TabsContent value="moves" className="space-y-6">
-        <NextMoveList entries={entries} />
+      <TabsContent value="patterns" className="space-y-6">
+        <MotifDisplay entries={entries} />
       </TabsContent>
     </Tabs>
   );

@@ -52,6 +52,10 @@ const Index = () => {
     }
   };
 
+  const handleDeleteEntry = (id: string) => {
+    setEntries(prev => prev.filter(entry => entry.id !== id));
+  };
+
   const handleWindDownEntry = (entry: MotifEntry) => {
     handleNewEntry(entry);
     setIsWindDownMode(false);
@@ -126,6 +130,7 @@ const Index = () => {
           currentEntry={currentEntry}
           setCurrentEntry={setCurrentEntry}
           onEntrySubmit={handleNewEntry}
+          onEntryDelete={handleDeleteEntry}
         />
       </div>
     </div>
