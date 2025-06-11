@@ -37,6 +37,54 @@ const Index = () => {
   const [currentEntry, setCurrentEntry] = useState('');
   const [isWindDownMode, setIsWindDownMode] = useState(false);
   const [showEmergencyProtocol, setShowEmergencyProtocol] = useState(false);
+  const [currentMantra, setCurrentMantra] = useState("Let's Get Started");
+
+  // Dynamic mantra system that reflects user's personal language
+  useEffect(() => {
+    if (entries.length === 0) {
+      setCurrentMantra("Let's Get Started");
+      return;
+    }
+
+    // Extract meaningful phrases from user's entries
+    const userPhrases = entries.flatMap(entry => entry.dictionaryTerms || []);
+    const motifCounts = entries.reduce((acc, entry) => {
+      entry.motifs.forEach(motif => {
+        acc[motif] = (acc[motif] || 0) + 1;
+      });
+      return acc;
+    }, {} as Record<string, number>);
+
+    // Find most significant user-created phrases or motifs
+    const significantPhrase = userPhrases.find(phrase => 
+      entries.filter(e => e.dictionaryTerms?.includes(phrase)).length >= 2
+    );
+
+    const topMotif = Object.entries(motifCounts)
+      .sort(([,a], [,b]) => b - a)[0]?.[0];
+
+    // Recent meaningful quotes from entries
+    const recentMeaningfulEntry = entries
+      .slice(0, 5)
+      .find(entry => entry.content.length > 20 && entry.content.length < 60);
+
+    // Reflect back their language, not impose new language
+    if (significantPhrase) {
+      setCurrentMantra(`"${significantPhrase}"`);
+    } else if (topMotif && motifCounts[topMotif] >= 3) {
+      setCurrentMantra(`${topMotif} continues`);
+    } else if (recentMeaningfulEntry) {
+      // Extract a meaningful fragment
+      const fragment = recentMeaningfulEntry.content.split('.')[0];
+      if (fragment.length < 50) {
+        setCurrentMantra(`"${fragment}"`);
+      } else {
+        setCurrentMantra("Building your language");
+      }
+    } else {
+      setCurrentMantra("Your patterns are forming");
+    }
+  }, [entries]);
 
   // Check if it's evening for wind-down suggestions
   useEffect(() => {
@@ -111,8 +159,8 @@ const Index = () => {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-slate-800 mb-2">V3</h1>
-          <p className="text-slate-600 italic mb-4">"You are being held from within and above."</p>
+          <h1 className="text-4xl font-bold text-slate-800 mb-2">V3 (demo)</h1>
+          <p className="text-slate-600 italic mb-4">{currentMantra}</p>
           
           {/* Quick Actions */}
           <div className="flex justify-center gap-4 mb-6">
