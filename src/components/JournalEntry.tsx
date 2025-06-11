@@ -1,11 +1,11 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Send, Tag, Clock, Shield, Lightbulb } from 'lucide-react';
+import { Send, Tag, Clock, Shield, Lightbulb, Camera, Mic, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { MediaCapture } from './MediaCapture';
 
 interface MotifEntry {
   id: string;
@@ -15,6 +15,12 @@ interface MotifEntry {
   emotionalTone: string;
   intent: string;
   dictionaryTerms?: string[];
+  media?: {
+    type: 'photo' | 'voice';
+    url: string;
+    duration?: number;
+    caption?: string;
+  };
 }
 
 interface JournalEntryProps {
@@ -46,6 +52,8 @@ export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, exi
   const [showOcclumency, setShowOcclumency] = useState(false);
   const [occlumencyOutput, setOcclumencyOutput] = useState('');
   const [suggestedReplay, setSuggestedReplay] = useState<MotifEntry | null>(null);
+  const [showMediaCapture, setShowMediaCapture] = useState(false);
+  const [attachedMedia, setAttachedMedia] = useState<{ type: 'photo' | 'voice'; url: string; duration?: number; caption?: string } | null>(null);
   const { toast } = useToast();
 
   const currentPlaceholder = placeholderPrompts[Math.floor(Math.random() * placeholderPrompts.length)];
@@ -118,8 +126,17 @@ export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, exi
     return null;
   };
 
+  const handleMediaCapture = (media: { type: 'photo' | 'voice'; url: string; duration?: number; caption?: string }) => {
+    setAttachedMedia(media);
+    setShowMediaCapture(false);
+    toast({
+      title: `${media.type === 'photo' ? 'Photo' : 'Voice note'} added`,
+      description: "Media attached to your entry",
+    });
+  };
+
   const handleSubmit = async () => {
-    if (!currentEntry.trim()) return;
+    if (!currentEntry.trim() && !attachedMedia) return;
 
     setIsProcessing(true);
     
@@ -134,12 +151,18 @@ export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, exi
 
       const entry: MotifEntry = {
         id: Date.now().toString(),
-        content: currentEntry,
+        content: currentEntry || (attachedMedia?.type === 'photo' ? attachedMedia.caption || 'Photo entry' : 'Voice note entry'),
         motifs: finalMotifs,
         timestamp: new Date(),
         emotionalTone: tone,
         intent: 'reflection',
-        dictionaryTerms: detectedTerms
+        dictionaryTerms: detectedTerms,
+        media: attachedMedia ? {
+          type: attachedMedia.type,
+          url: attachedMedia.url,
+          duration: attachedMedia.duration,
+          caption: attachedMedia.caption
+        } : undefined
       };
 
       // Find a relevant replay
@@ -148,6 +171,7 @@ export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, exi
 
       onEntrySubmit(entry);
       setSelectedMotifs([]);
+      setAttachedMedia(null);
       setIsProcessing(false);
 
       toast({
@@ -171,6 +195,15 @@ export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, exi
     );
   };
 
+  if (showMediaCapture) {
+    return (
+      <MediaCapture 
+        onMediaCapture={handleMediaCapture}
+        onClose={() => setShowMediaCapture(false)}
+      />
+    );
+  }
+
   return (
     <div className="space-y-4">
       <Card className="bg-white/90 backdrop-blur-sm shadow-lg">
@@ -188,6 +221,51 @@ export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, exi
             className="min-h-[120px] resize-none border-2 focus:border-blue-300"
             disabled={isProcessing}
           />
+
+          {/* Attached Media Preview */}
+          {attachedMedia && (
+            <div className="border-2 border-dashed border-blue-200 rounded-lg p-4">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  {attachedMedia.type === 'photo' ? (
+                    <>
+                      <img 
+                        src={attachedMedia.url} 
+                        alt="Attached" 
+                        className="w-16 h-16 object-cover rounded-lg"
+                      />
+                      <div>
+                        <p className="text-sm font-medium text-slate-700">Photo attached</p>
+                        {attachedMedia.caption && (
+                          <p className="text-xs text-slate-500">{attachedMedia.caption}</p>
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <Mic className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-slate-700">Voice note attached</p>
+                        <p className="text-xs text-slate-500">
+                          Duration: {Math.floor((attachedMedia.duration || 0) / 60)}:{((attachedMedia.duration || 0) % 60).toString().padStart(2, '0')}
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setAttachedMedia(null)}
+                  className="text-slate-400 hover:text-slate-600"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          )}
 
           {/* Motif Suggestions */}
           {currentEntry.length > 20 && (
@@ -234,11 +312,20 @@ export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, exi
           <div className="flex gap-2 flex-wrap">
             <Button
               onClick={handleSubmit}
-              disabled={!currentEntry.trim() || isProcessing}
+              disabled={(!currentEntry.trim() && !attachedMedia) || isProcessing}
               className="flex items-center gap-2"
             >
               <Send className="w-4 h-4" />
               {isProcessing ? 'Processing...' : 'Log Entry'}
+            </Button>
+            
+            <Button
+              variant="outline"
+              onClick={() => setShowMediaCapture(true)}
+              className="flex items-center gap-2"
+            >
+              <Camera className="w-4 h-4" />
+              Add Media
             </Button>
             
             {currentEntry.trim() && (

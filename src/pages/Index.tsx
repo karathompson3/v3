@@ -24,6 +24,12 @@ interface MotifEntry {
     spikes: boolean;
     containmentUsed: boolean;
   };
+  media?: {
+    type: 'photo' | 'voice';
+    url: string;
+    duration?: number;
+    caption?: string;
+  };
 }
 
 const Index = () => {

@@ -1,7 +1,6 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Tag, TrendingUp, Calendar } from 'lucide-react';
+import { Tag, TrendingUp, Calendar, Camera, Mic } from 'lucide-react';
 
 interface MotifEntry {
   id: string;
@@ -11,6 +10,7 @@ interface MotifEntry {
   emotionalTone: string;
   intent: string;
   dictionaryTerms?: string[];
+  media?: { type: string };
 }
 
 interface MotifDisplayProps {
@@ -120,19 +120,35 @@ export const MotifDisplay = ({ entries }: MotifDisplayProps) => {
             <div className="space-y-3">
               {recentEntries.map((entry) => (
                 <div key={entry.id} className="border-l-4 border-blue-200 pl-3 py-2">
-                  <p className="text-sm text-slate-700 line-clamp-2">
-                    {entry.content.slice(0, 80)}...
-                  </p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs text-slate-500">
-                      {entry.timestamp.toLocaleDateString()}
-                    </span>
-                    <div className="flex gap-1">
-                      {entry.motifs.slice(0, 2).map(motif => (
-                        <Badge key={motif} variant="secondary" className="text-xs">
-                          {motif}
-                        </Badge>
-                      ))}
+                  <div className="flex items-start gap-2">
+                    <div className="flex-1">
+                      <p className="text-sm text-slate-700 line-clamp-2">
+                        {entry.content.slice(0, 80)}...
+                      </p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-xs text-slate-500">
+                          {entry.timestamp.toLocaleDateString()}
+                        </span>
+                        {entry.media && (
+                          <div className="flex items-center gap-1">
+                            {entry.media.type === 'photo' ? (
+                              <Camera className="w-3 h-3 text-slate-400" />
+                            ) : (
+                              <Mic className="w-3 h-3 text-slate-400" />
+                            )}
+                            <span className="text-xs text-slate-400">
+                              {entry.media.type}
+                            </span>
+                          </div>
+                        )}
+                        <div className="flex gap-1">
+                          {entry.motifs.slice(0, 2).map(motif => (
+                            <Badge key={motif} variant="secondary" className="text-xs">
+                              {motif}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
