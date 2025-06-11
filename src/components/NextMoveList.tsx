@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Circle, ArrowRight, Moon, Shield } from 'lucide-react';
+import { CheckCircle, Circle, ArrowRight, Moon, Heart } from 'lucide-react';
 import { useState } from 'react';
 
 interface MotifEntry {
@@ -21,7 +21,7 @@ interface NextMoveListProps {
 interface NextMove {
   id: string;
   text: string;
-  type: 'ritual' | 'reflection' | 'action' | 'containment';
+  type: 'ritual' | 'reflection' | 'action' | 'wellness';
   motifBased?: string;
   completed: boolean;
 }
@@ -62,12 +62,12 @@ export const NextMoveList = ({ entries }: NextMoveListProps) => {
       });
     }
 
-    // Containment suggestions
+    // Wellness suggestions (formerly containment)
     if (motifCounts['Parental Tension'] || motifCounts['Occlumency']) {
       suggestions.push({
-        id: 'containment-prep',
-        text: 'Practice Occlumency check before next family interaction',
-        type: 'containment',
+        id: 'wellness-prep',
+        text: 'Check in with yourself before next family interaction',
+        type: 'wellness',
         motifBased: 'Occlumency',
         completed: false
       });
@@ -105,7 +105,7 @@ export const NextMoveList = ({ entries }: NextMoveListProps) => {
         },
         {
           id: 'motif-explore',
-          text: 'Explore what "containment" means for you',
+          text: 'Explore what patterns feel important to you',
           type: 'reflection',
           completed: false
         }
@@ -129,7 +129,7 @@ export const NextMoveList = ({ entries }: NextMoveListProps) => {
   const getTypeIcon = (type: NextMove['type']) => {
     switch (type) {
       case 'ritual': return <Moon className="w-4 h-4" />;
-      case 'containment': return <Shield className="w-4 h-4" />;
+      case 'wellness': return <Heart className="w-4 h-4" />;
       case 'reflection': return <ArrowRight className="w-4 h-4" />;
       default: return <Circle className="w-4 h-4" />;
     }
@@ -138,7 +138,7 @@ export const NextMoveList = ({ entries }: NextMoveListProps) => {
   const getTypeColor = (type: NextMove['type']) => {
     switch (type) {
       case 'ritual': return 'bg-purple-100 text-purple-700';
-      case 'containment': return 'bg-blue-100 text-blue-700';
+      case 'wellness': return 'bg-rose-100 text-rose-700';
       case 'reflection': return 'bg-green-100 text-green-700';
       default: return 'bg-slate-100 text-slate-700';
     }
@@ -158,7 +158,7 @@ export const NextMoveList = ({ entries }: NextMoveListProps) => {
           )}
         </CardTitle>
         <p className="text-sm text-slate-600">
-          Emotionally intelligent suggestions based on your patterns
+          Gentle suggestions based on your patterns
         </p>
       </CardHeader>
       <CardContent>
@@ -224,7 +224,7 @@ export const NextMoveList = ({ entries }: NextMoveListProps) => {
           <div className="text-center py-8 text-slate-500">
             <Circle className="w-8 h-8 mx-auto mb-3 opacity-50" />
             <p>Your next moves will appear here</p>
-            <p className="text-sm mt-1">Start journaling to get personalized suggestions</p>
+            <p className="text-sm mt-1">Start journaling to get gentle suggestions</p>
           </div>
         )}
       </CardContent>
