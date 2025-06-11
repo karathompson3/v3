@@ -4,10 +4,11 @@ import { MotifDisplay } from '../components/MotifDisplay';
 import { NextMoveList } from '../components/NextMoveList';
 import { NarrativeMap } from '../components/NarrativeMap';
 import { WindDownMode } from '../components/WindDownMode';
+import { UserBillOfRights } from '../components/UserBillOfRights';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Moon, Shield, AlertTriangle } from 'lucide-react';
+import { Moon, Shield, AlertTriangle, ScrollText } from 'lucide-react';
 
 interface MotifEntry {
   id: string;
@@ -36,6 +37,7 @@ const Index = () => {
   const [currentEntry, setCurrentEntry] = useState('');
   const [isWindDownMode, setIsWindDownMode] = useState(false);
   const [showEmergencyProtocol, setShowEmergencyProtocol] = useState(false);
+  const [showBillOfRights, setShowBillOfRights] = useState(false);
   const [currentMantra, setCurrentMantra] = useState("Let's Get Started");
 
   // Dynamic mantra system that reflects user's personal language
@@ -100,6 +102,23 @@ const Index = () => {
     handleNewEntry(entry);
     setIsWindDownMode(false);
   };
+
+  if (showBillOfRights) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4">
+        <div className="mb-6">
+          <Button
+            variant="outline"
+            onClick={() => setShowBillOfRights(false)}
+            className="mb-4"
+          >
+            ← Back to App
+          </Button>
+        </div>
+        <UserBillOfRights />
+      </div>
+    );
+  }
 
   if (showEmergencyProtocol) {
     return (
@@ -170,6 +189,14 @@ const Index = () => {
             >
               <Shield className="w-4 h-4" />
               Display Personal ID
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setShowBillOfRights(true)}
+              className="flex items-center gap-2"
+            >
+              <ScrollText className="w-4 h-4" />
+              Privacy Rights
             </Button>
           </div>
         </div>
