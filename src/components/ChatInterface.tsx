@@ -47,7 +47,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
     {
       id: '1',
       role: 'assistant',
-      content: "Hello! I'm your AI companion designed to support your dignity and autonomy. Ask me anything - I'm here to help while capturing meaningful reflections that build your personal foundation.",
+      content: "Hello! I'm your AI companion designed to support your dignity and autonomy. Share anything - thoughts, feelings, experiences, media. I'm here to engage with you while quietly building your personal foundation of insights.",
       timestamp: new Date()
     }
   ]);
@@ -99,7 +99,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
 
     const mediaContextMessage = mediaContext ? `\n\nMedia context: ${mediaContext}` : '';
 
-    const systemPrompt = `You are a supportive AI companion focused on dignity, autonomy, and mental wellness. You help users reflect thoughtfully while building their personal foundation. Be warm, non-judgmental, and encouraging. Ask thoughtful follow-up questions and validate their experiences.${contextMessage}${mediaContextMessage}`;
+    const systemPrompt = `You are a supportive AI companion focused on dignity, autonomy, and mental wellness. You help users reflect thoughtfully while building their personal foundation. Be warm, non-judgmental, and encouraging. Ask thoughtful follow-up questions and validate their experiences. Respond to EVERYTHING the user shares - whether it's deep reflection, casual thoughts, media, or simple statements. This is an interactive conversation, not just Q&A.${contextMessage}${mediaContextMessage}`;
 
     try {
       const chatMessages = [
@@ -166,43 +166,69 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
     setAttachedMedia(null);
   };
 
-  const captureReflection = (messageContent: string, isUserMessage: boolean) => {
-    if (!isUserMessage || messageContent.length < 20) return;
+  const shouldCaptureReflection = (messageContent: string): boolean => {
+    // Auto-detect if this warrants reflection capture based on content patterns
+    if (messageContent.length < 15) return false;
     
-    // Auto-detect if this warrants reflection capture
     const reflectionTriggers = [
       'feel', 'think', 'realize', 'notice', 'struggle', 'grateful', 
-      'worry', 'hope', 'learn', 'understand', 'difficult', 'proud'
+      'worry', 'hope', 'learn', 'understand', 'difficult', 'proud',
+      'today', 'yesterday', 'remember', 'experience', 'situation',
+      'relationship', 'work', 'family', 'anxious', 'calm', 'stressed',
+      'happy', 'sad', 'angry', 'confused', 'clear', 'stuck'
     ];
     
+    const lowerContent = messageContent.toLowerCase();
     const hasReflectionContent = reflectionTriggers.some(trigger => 
-      messageContent.toLowerCase().includes(trigger)
+      lowerContent.includes(trigger)
     );
     
-    if (hasReflectionContent) {
-      const reflection: MotifEntry = {
-        id: Date.now().toString(),
-        content: messageContent,
-        motifs: ['AI Conversation', 'Self-Reflection'],
-        timestamp: new Date(),
-        emotionalTone: 'thoughtful',
-        intent: 'exploration'
-      };
+    // Also capture if it's a longer, more thoughtful message
+    const isThoughtfulLength = messageContent.length > 30;
+    
+    return hasReflectionContent || isThoughtfulLength;
+  };
+
+  const captureReflectionFromMessage = (messageContent: string, media?: any) => {
+    if (!shouldCaptureReflection(messageContent)) return;
+    
+    // Auto-generate motifs based on content
+    const generateMotifs = (content: string): string[] => {
+      const basMotifs = ['Personal Reflection'];
+      const lowerContent = content.toLowerCase();
       
-      onReflectionCapture(reflection);
+      if (lowerContent.includes('work') || lowerContent.includes('job')) basMotifs.push('Career');
+      if (lowerContent.includes('family') || lowerContent.includes('relationship')) basMotifs.push('Relationships');
+      if (lowerContent.includes('anxious') || lowerContent.includes('worry')) basMotifs.push('Anxiety');
+      if (lowerContent.includes('grateful') || lowerContent.includes('thankful')) basMotifs.push('Gratitude');
+      if (lowerContent.includes('goal') || lowerContent.includes('plan')) basMotifs.push('Goals');
+      if (media) basMotifs.push('Media Shared');
       
-      // Mark the last user message as having captured reflection
-      setMessages(prev => prev.map(msg => 
-        msg.id === prev[prev.length - 1]?.id && msg.role === 'user'
-          ? { ...msg, reflectionCaptured: true }
-          : msg
-      ));
-      
+      return basMotifs;
+    };
+    
+    const reflection: MotifEntry = {
+      id: Date.now().toString(),
+      content: messageContent,
+      motifs: generateMotifs(messageContent),
+      timestamp: new Date(),
+      emotionalTone: 'reflective',
+      intent: 'self-exploration',
+      media: media || undefined
+    };
+    
+    onReflectionCapture(reflection);
+    
+    // Subtle notification that reflection was captured
+    setTimeout(() => {
       toast({
         title: "Reflection captured",
-        description: "Your insight has been added to your foundation",
+        description: "Added to your foundation",
+        duration: 2000
       });
-    }
+    }, 1000);
+    
+    return true;
   };
 
   const handleSend = async () => {
@@ -225,12 +251,17 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
     if (attachedMedia) {
       if (attachedMedia.type === 'photo') {
         mediaContext = `[Image uploaded${attachedMedia.caption ? `: ${attachedMedia.caption}` : ''}]`;
-        messageContent = messageContent ? `${messageContent}\n\n${mediaContext}` : mediaContext;
+        if (!messageContent) messageContent = "I shared an image";
+        else messageContent = `${messageContent}\n\n${mediaContext}`;
       } else if (attachedMedia.type === 'voice') {
         mediaContext = `[Voice memo recorded - ${Math.round((attachedMedia.duration || 0))}s]`;
-        messageContent = messageContent ? `${messageContent}\n\n${mediaContext}` : mediaContext;
+        if (!messageContent) messageContent = "I shared a voice memo";
+        else messageContent = `${messageContent}\n\n${mediaContext}`;
       }
     }
+    
+    // If still no content, don't proceed
+    if (!messageContent) return;
     
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -243,25 +274,12 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
     setInput('');
     setIsLoading(true);
     
+    // Capture reflection BEFORE generating AI response
+    const reflectionCaptured = captureReflectionFromMessage(messageContent, attachedMedia);
+    
     try {
-      // Capture reflection with media if appropriate
-      const reflection: MotifEntry = {
-        id: Date.now().toString(),
-        content: messageContent,
-        motifs: ['AI Conversation', 'Self-Reflection'],
-        timestamp: new Date(),
-        emotionalTone: 'thoughtful',
-        intent: 'exploration',
-        media: attachedMedia || undefined
-      };
-      
-      captureReflection(userMessage.content, true);
-      if (attachedMedia) {
-        onReflectionCapture(reflection);
-      }
-      
-      // Generate AI response
-      const aiResponse = await generateAIResponse(userMessage.content, mediaContext);
+      // ALWAYS generate AI response for any user input
+      const aiResponse = await generateAIResponse(messageContent, mediaContext);
       
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -271,6 +289,16 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
       };
       
       setMessages(prev => [...prev, assistantMessage]);
+      
+      // Mark user message as having reflection captured if applicable
+      if (reflectionCaptured) {
+        setMessages(prev => prev.map(msg => 
+          msg.id === userMessage.id 
+            ? { ...msg, reflectionCaptured: true }
+            : msg
+        ));
+      }
+      
     } catch (error) {
       console.error('Error generating response:', error);
       toast({
@@ -364,7 +392,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
       <div className="flex justify-between items-center p-4 border-b border-slate-200">
         <div className="flex items-center gap-2">
           <Bot className="w-5 h-5 text-blue-600" />
-          <span className="font-medium">ChatGPT Conversation</span>
+          <span className="font-medium">AI Companion</span>
         </div>
         <Button
           variant="ghost"
@@ -493,7 +521,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Ask me anything... Your meaningful thoughts will be automatically reflected."
+            placeholder="Share anything... thoughts, feelings, experiences. I'll respond and quietly capture meaningful reflections."
             className="resize-none min-h-[44px] max-h-32"
             disabled={isLoading}
           />
