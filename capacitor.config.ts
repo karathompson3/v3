@@ -2,7 +2,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.81ac98435cd645c29a627dfd2d5642f0',
+  appId: 'com.lovable.v3sparkwrapbuddy',
   appName: 'v3-spark-wrap-buddy',
   webDir: 'dist',
   server: {
