@@ -3,8 +3,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Send, Bot, User, Sparkles, Settings } from 'lucide-react';
+import { Send, Bot, User, Sparkles, Settings, Paperclip, X, Image, Mic } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { MediaCapture } from './MediaCapture';
 
 interface MotifEntry {
   id: string;
@@ -54,6 +55,14 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
   const [isLoading, setIsLoading] = useState(false);
   const [apiKey, setApiKey] = useState(localStorage.getItem('openai_api_key') || '');
   const [showApiKeyInput, setShowApiKeyInput] = useState(!apiKey);
+  const [showMediaCapture, setShowMediaCapture] = useState(false);
+  const [attachedMedia, setAttachedMedia] = useState<{
+    type: 'photo' | 'voice';
+    url: string;
+    duration?: number;
+    caption?: string;
+  } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -75,7 +84,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
     });
   };
 
-  const generateAIResponse = async (userMessage: string): Promise<string> => {
+  const generateAIResponse = async (userMessage: string, mediaContext?: string): Promise<string> => {
     if (!apiKey) {
       throw new Error('API key not configured');
     }
@@ -88,9 +97,20 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
         ).join('; ')}`
       : '';
 
-    const systemPrompt = `You are a supportive AI companion focused on dignity, autonomy, and mental wellness. You help users reflect thoughtfully while building their personal foundation. Be warm, non-judgmental, and encouraging. Ask thoughtful follow-up questions and validate their experiences.${contextMessage}`;
+    const mediaContextMessage = mediaContext ? `\n\nMedia context: ${mediaContext}` : '';
+
+    const systemPrompt = `You are a supportive AI companion focused on dignity, autonomy, and mental wellness. You help users reflect thoughtfully while building their personal foundation. Be warm, non-judgmental, and encouraging. Ask thoughtful follow-up questions and validate their experiences.${contextMessage}${mediaContextMessage}`;
 
     try {
+      const messages = [
+        { role: 'system', content: systemPrompt },
+        ...messages.slice(-6).map(msg => ({
+          role: msg.role,
+          content: msg.content
+        })),
+        { role: 'user', content: userMessage }
+      ];
+
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -99,14 +119,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
         },
         body: JSON.stringify({
           model: 'gpt-4o-mini',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            ...messages.slice(-6).map(msg => ({
-              role: msg.role,
-              content: msg.content
-            })),
-            { role: 'user', content: userMessage }
-          ],
+          messages,
           max_tokens: 500,
           temperature: 0.7
         })
@@ -123,6 +136,34 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
       console.error('OpenAI API error:', error);
       throw error;
     }
+  };
+
+  const handleMediaCapture = (media: { type: 'photo' | 'voice'; url: string; duration?: number; caption?: string }) => {
+    setAttachedMedia(media);
+    setShowMediaCapture(false);
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.type.startsWith('image/')) {
+        const url = URL.createObjectURL(file);
+        setAttachedMedia({ type: 'photo', url });
+      } else {
+        toast({
+          title: "Unsupported file type",
+          description: "Please upload an image file or use the voice recorder.",
+          variant: "destructive"
+        });
+      }
+    }
+  };
+
+  const removeAttachedMedia = () => {
+    if (attachedMedia?.url) {
+      URL.revokeObjectURL(attachedMedia.url);
+    }
+    setAttachedMedia(null);
   };
 
   const captureReflection = (messageContent: string, isUserMessage: boolean) => {
@@ -165,7 +206,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
   };
 
   const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+    if ((!input.trim() && !attachedMedia) || isLoading) return;
     
     if (!apiKey) {
       setShowApiKeyInput(true);
@@ -177,10 +218,24 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
       return;
     }
     
+    let messageContent = input.trim();
+    let mediaContext = '';
+    
+    // Handle media attachments
+    if (attachedMedia) {
+      if (attachedMedia.type === 'photo') {
+        mediaContext = `[Image uploaded${attachedMedia.caption ? `: ${attachedMedia.caption}` : ''}]`;
+        messageContent = messageContent ? `${messageContent}\n\n${mediaContext}` : mediaContext;
+      } else if (attachedMedia.type === 'voice') {
+        mediaContext = `[Voice memo recorded - ${Math.round((attachedMedia.duration || 0))}s]`;
+        messageContent = messageContent ? `${messageContent}\n\n${mediaContext}` : mediaContext;
+      }
+    }
+    
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: input.trim(),
+      content: messageContent,
       timestamp: new Date()
     };
     
@@ -189,11 +244,24 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
     setIsLoading(true);
     
     try {
-      // Capture reflection if appropriate
+      // Capture reflection with media if appropriate
+      const reflection: MotifEntry = {
+        id: Date.now().toString(),
+        content: messageContent,
+        motifs: ['AI Conversation', 'Self-Reflection'],
+        timestamp: new Date(),
+        emotionalTone: 'thoughtful',
+        intent: 'exploration',
+        media: attachedMedia || undefined
+      };
+      
       captureReflection(userMessage.content, true);
+      if (attachedMedia) {
+        onReflectionCapture(reflection);
+      }
       
       // Generate AI response
-      const aiResponse = await generateAIResponse(userMessage.content);
+      const aiResponse = await generateAIResponse(userMessage.content, mediaContext);
       
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -212,6 +280,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
       });
     } finally {
       setIsLoading(false);
+      removeAttachedMedia();
     }
   };
 
@@ -271,6 +340,19 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
               </div>
             </CardContent>
           </Card>
+        </div>
+      </div>
+    );
+  }
+
+  if (showMediaCapture) {
+    return (
+      <div className="flex flex-col h-[600px] bg-white/90 backdrop-blur-sm rounded-lg border border-slate-200 shadow-lg">
+        <div className="flex-1 flex items-center justify-center p-4">
+          <MediaCapture 
+            onMediaCapture={handleMediaCapture}
+            onClose={() => setShowMediaCapture(false)}
+          />
         </div>
       </div>
     );
@@ -362,7 +444,51 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
       
       {/* Input Area */}
       <div className="border-t border-slate-200 p-4">
+        {/* Media Preview */}
+        {attachedMedia && (
+          <div className="mb-3 p-3 bg-slate-50 rounded-lg border">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {attachedMedia.type === 'photo' ? (
+                  <>
+                    <Image className="w-4 h-4 text-slate-600" />
+                    <span className="text-sm text-slate-700">Image attached</span>
+                  </>
+                ) : (
+                  <>
+                    <Mic className="w-4 h-4 text-slate-600" />
+                    <span className="text-sm text-slate-700">
+                      Voice memo ({Math.round((attachedMedia.duration || 0))}s)
+                    </span>
+                  </>
+                )}
+                {attachedMedia.caption && (
+                  <span className="text-xs text-slate-500">- {attachedMedia.caption}</span>
+                )}
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={removeAttachedMedia}
+                className="h-6 w-6 p-0"
+              >
+                <X className="w-3 h-3" />
+              </Button>
+            </div>
+          </div>
+        )}
+        
         <div className="flex gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowMediaCapture(true)}
+            className="px-2"
+            title="Add media"
+          >
+            <Paperclip className="w-4 h-4" />
+          </Button>
+          
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -373,12 +499,20 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
           />
           <Button
             onClick={handleSend}
-            disabled={!input.trim() || isLoading}
+            disabled={(!input.trim() && !attachedMedia) || isLoading}
             className="px-4"
           >
             <Send className="w-4 h-4" />
           </Button>
         </div>
+        
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleFileUpload}
+          className="hidden"
+        />
       </div>
     </div>
   );
