@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { WindDownMode } from '../components/WindDownMode';
 import { UserBillOfRights } from '../components/UserBillOfRights';
@@ -7,6 +6,8 @@ import { Header } from '../components/Header';
 import { EmergencyProtocol } from '../components/EmergencyProtocol';
 import { MainTabs } from '../components/MainTabs';
 import { useMantra } from '../hooks/useMantra';
+import { useAuth } from '../hooks/useAuth';
+import { AuthPage } from '../components/AuthPage';
 import { Button } from '@/components/ui/button';
 
 interface MotifEntry {
@@ -32,6 +33,7 @@ interface MotifEntry {
 }
 
 const Index = () => {
+  const { user, loading } = useAuth();
   const [entries, setEntries] = useState<MotifEntry[]>([]);
   const [currentEntry, setCurrentEntry] = useState('');
   const [isWindDownMode, setIsWindDownMode] = useState(false);
@@ -40,6 +42,20 @@ const Index = () => {
   const [showGettingStarted, setShowGettingStarted] = useState(false);
   
   const currentMantra = useMantra(entries);
+
+  // Show loading while checking authentication
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 flex items-center justify-center">
+        <div className="text-slate-600">Loading...</div>
+      </div>
+    );
+  }
+
+  // Show auth page if user is not logged in
+  if (!user) {
+    return <AuthPage />;
+  }
 
   const handleNewEntry = (entry: MotifEntry) => {
     setEntries(prev => [entry, ...prev]);
