@@ -12,7 +12,8 @@ import {
   Clock, 
   ArrowRight,
   Sparkles,
-  BookOpen
+  BookOpen,
+  Zap
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -105,12 +106,26 @@ export const GettingStartedGuide = () => {
           <BookOpen className="w-8 h-8" />
           How to Use V3
         </h1>
-        <p className="text-slate-600 text-lg">Real patterns tested by the creator — refined and emotionally reliable</p>
-        <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <p className="text-blue-800 text-sm">
-            <Sparkles className="w-4 h-4 inline mr-1" />
-            These are actual use cases I've relied on. The system is early, but these work.
-          </p>
+        <p className="text-slate-600 text-lg mb-4">Real patterns tested by the creator — refined and emotionally reliable</p>
+        
+        <div className="space-y-4">
+          <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-200">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Zap className="w-5 h-5 text-purple-600" />
+              <p className="text-purple-800 font-medium">Break Conventional Thinking</p>
+            </div>
+            <p className="text-purple-700 text-sm">
+              These examples are starting points. We want to see how your brilliant, unique mind uses this system. 
+              Invent your own techniques. Break the rules. Make it yours.
+            </p>
+          </div>
+          
+          <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <p className="text-blue-800 text-sm">
+              <Sparkles className="w-4 h-4 inline mr-1" />
+              The most interesting discoveries happen when users go off-script and find their own patterns.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -121,6 +136,15 @@ export const GettingStartedGuide = () => {
         </TabsList>
 
         <TabsContent value="overview">
+          <div className="mb-6 p-4 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg border border-amber-200">
+            <h3 className="font-medium text-amber-800 mb-2">Your Creative Playground</h3>
+            <p className="text-amber-700 text-sm">
+              These are proven techniques, but they're meant to inspire your own experiments. 
+              What would happen if you combined them? What if you used them differently? 
+              We're genuinely curious to see what you'll discover.
+            </p>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {useCases.map((useCase, index) => (
               <Card 
@@ -171,7 +195,7 @@ export const GettingStartedGuide = () => {
                   <Sparkles className="w-5 h-5" />
                   Interactive Examples
                 </CardTitle>
-                <p className="text-slate-600">Click any use case below to see it in action</p>
+                <p className="text-slate-600">Click any use case below to see it in action, then experiment with your own variations</p>
               </CardHeader>
             </Card>
 
@@ -217,13 +241,21 @@ export const GettingStartedGuide = () => {
                         <div className="text-green-700">{useCase.expectedReturn}</div>
                       </div>
 
+                      <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg border border-purple-200">
+                        <div className="font-medium text-purple-800 mb-2">Now make it yours:</div>
+                        <div className="text-purple-700 text-sm">
+                          What's your version of this? How would you twist it? What would happen if you combined this with another technique? 
+                          The most interesting discoveries come from users who go completely off-script.
+                        </div>
+                      </div>
+
                       <div className="flex justify-center">
                         <Button 
                           onClick={() => setSelectedUseCase(null)}
                           variant="outline"
                           size="sm"
                         >
-                          Ready to try this yourself? Start journaling →
+                          Ready to experiment? Start journaling →
                         </Button>
                       </div>
                     </div>
