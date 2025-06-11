@@ -1,10 +1,9 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Send, Bot, User, Sparkles } from 'lucide-react';
+import { Send, Bot, User, Sparkles, Settings } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface MotifEntry {
@@ -53,6 +52,8 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [apiKey, setApiKey] = useState(localStorage.getItem('openai_api_key') || '');
+  const [showApiKeyInput, setShowApiKeyInput] = useState(!apiKey);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -64,40 +65,64 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
     scrollToBottom();
   }, [messages]);
 
+  const saveApiKey = (key: string) => {
+    localStorage.setItem('openai_api_key', key);
+    setApiKey(key);
+    setShowApiKeyInput(false);
+    toast({
+      title: "API Key saved",
+      description: "You can now chat with real ChatGPT!",
+    });
+  };
+
   const generateAIResponse = async (userMessage: string): Promise<string> => {
-    // Simulate AI response - in production, this would call OpenAI/GPT
-    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
-    
-    // Use reflection context to inform responses
-    const recentReflections = reflections.slice(0, 3);
-    const contextualPhrases = recentReflections.flatMap(r => r.motifs);
-    
-    // Simple contextual responses based on user patterns
-    if (userMessage.toLowerCase().includes('how am i doing')) {
-      if (recentReflections.length > 0) {
-        return `Based on your recent reflections, I can see themes around ${contextualPhrases.slice(0, 2).join(' and ')}. You're actively engaging with self-awareness, which shows strength. What specific aspect would you like to explore?`;
+    if (!apiKey) {
+      throw new Error('API key not configured');
+    }
+
+    // Prepare context from recent reflections
+    const recentReflections = reflections.slice(0, 5);
+    const contextMessage = recentReflections.length > 0 
+      ? `\n\nUser's recent reflections context: ${recentReflections.map(r => 
+          `"${r.content}" (themes: ${r.motifs.join(', ')})`
+        ).join('; ')}`
+      : '';
+
+    const systemPrompt = `You are a supportive AI companion focused on dignity, autonomy, and mental wellness. You help users reflect thoughtfully while building their personal foundation. Be warm, non-judgmental, and encouraging. Ask thoughtful follow-up questions and validate their experiences.${contextMessage}`;
+
+    try {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            ...messages.slice(-6).map(msg => ({
+              role: msg.role,
+              content: msg.content
+            })),
+            { role: 'user', content: userMessage }
+          ],
+          max_tokens: 500,
+          temperature: 0.7
+        })
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error?.message || 'Failed to get response from OpenAI');
       }
-      return "I'd love to help you reflect on that. What's been on your mind lately?";
+
+      const data = await response.json();
+      return data.choices[0]?.message?.content || 'Sorry, I had trouble generating a response.';
+    } catch (error) {
+      console.error('OpenAI API error:', error);
+      throw error;
     }
-    
-    if (userMessage.toLowerCase().includes('stress') || userMessage.toLowerCase().includes('overwhelm')) {
-      return "I hear you're feeling stressed. Remember, seeking support shows wisdom, not weakness. What's one small thing that usually helps you feel more grounded? We can build from there.";
-    }
-    
-    if (userMessage.toLowerCase().includes('pattern') || userMessage.toLowerCase().includes('notice')) {
-      return "Pattern recognition is powerful for growth. Your reflections are creating a foundation for understanding yourself better. What patterns are you curious about exploring?";
-    }
-    
-    // Default helpful AI responses
-    const responses = [
-      "That's an interesting perspective. Can you tell me more about what's driving that thought?",
-      "I appreciate you sharing that with me. What feels most important about this situation to you?",
-      "Thank you for trusting me with this. How would you like to approach this challenge?",
-      "I'm here to support you through this. What would feeling more settled look like to you right now?",
-      "Your awareness of this shows real insight. What do you think your next step might be?"
-    ];
-    
-    return responses[Math.floor(Math.random() * responses.length)];
   };
 
   const captureReflection = (messageContent: string, isUserMessage: boolean) => {
@@ -142,6 +167,16 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
     
+    if (!apiKey) {
+      setShowApiKeyInput(true);
+      toast({
+        title: "API Key Required",
+        description: "Please enter your OpenAI API key to chat",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
@@ -172,7 +207,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
       console.error('Error generating response:', error);
       toast({
         title: "Connection issue",
-        description: "I'm having trouble responding right now. Please try again.",
+        description: error instanceof Error ? error.message : "Please check your API key and try again.",
         variant: "destructive"
       });
     } finally {
@@ -187,8 +222,78 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
     }
   };
 
+  if (showApiKeyInput) {
+    return (
+      <div className="flex flex-col h-[600px] bg-white/90 backdrop-blur-sm rounded-lg border border-slate-200 shadow-lg">
+        <div className="flex-1 flex items-center justify-center p-8">
+          <Card className="w-full max-w-md">
+            <CardContent className="p-6">
+              <div className="text-center mb-6">
+                <Settings className="w-12 h-12 mx-auto text-blue-600 mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Connect to OpenAI</h3>
+                <p className="text-sm text-slate-600">
+                  Enter your OpenAI API key to enable real ChatGPT conversations
+                </p>
+              </div>
+              
+              <div className="space-y-4">
+                <Textarea
+                  value={apiKey}
+                  onChange={(e) => setApiKey(e.target.value)}
+                  placeholder="sk-..."
+                  className="font-mono text-sm"
+                />
+                <div className="flex gap-2">
+                  <Button 
+                    onClick={() => saveApiKey(apiKey)}
+                    disabled={!apiKey.trim()}
+                    className="flex-1"
+                  >
+                    Save & Connect
+                  </Button>
+                  {localStorage.getItem('openai_api_key') && (
+                    <Button 
+                      variant="outline"
+                      onClick={() => {
+                        setApiKey(localStorage.getItem('openai_api_key') || '');
+                        setShowApiKeyInput(false);
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  )}
+                </div>
+              </div>
+              
+              <div className="mt-4 text-xs text-slate-500">
+                <p>Find your API key at <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">platform.openai.com/api-keys</a></p>
+                <p className="mt-1">Your key is stored locally and never shared.</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-[600px] bg-white/90 backdrop-blur-sm rounded-lg border border-slate-200 shadow-lg">
+      {/* Header with API key management */}
+      <div className="flex justify-between items-center p-4 border-b border-slate-200">
+        <div className="flex items-center gap-2">
+          <Bot className="w-5 h-5 text-blue-600" />
+          <span className="font-medium">ChatGPT Conversation</span>
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setShowApiKeyInput(true)}
+          className="text-slate-500 hover:text-slate-700"
+        >
+          <Settings className="w-4 h-4" />
+        </Button>
+      </div>
+
       {/* Chat Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message) => (
