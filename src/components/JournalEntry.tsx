@@ -39,10 +39,10 @@ const suggestedMotifs = [
 const placeholderPrompts = [
   "What's holding you right now?",
   "What's echoing from earlier?", 
-  "What feels true tonight?",
-  "Where are you landing today?",
+  "What feels true?",
+  "Where are you landing?",
   "Let me show you how to talk to yourself, through me...",
-  "What helped you stay steady today?",
+  "What helped you stay steady?",
   "What's asking for attention?"
 ];
 
@@ -153,7 +153,7 @@ export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, exi
         id: Date.now().toString(),
         content: currentEntry || (attachedMedia?.type === 'photo' ? attachedMedia.caption || 'Photo entry' : 'Voice note entry'),
         motifs: finalMotifs,
-        timestamp: new Date(),
+        timestamp: new Date(), // Keep timestamp for logging when user actually submits
         emotionalTone: tone,
         intent: 'reflection',
         dictionaryTerms: detectedTerms,

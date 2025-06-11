@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { JournalEntry } from '../components/JournalEntry';
 import { MotifDisplay } from '../components/MotifDisplay';
@@ -85,14 +84,6 @@ const Index = () => {
       setCurrentMantra("Your patterns are forming");
     }
   }, [entries]);
-
-  // Check if it's evening for wind-down suggestions
-  useEffect(() => {
-    const hour = new Date().getHours();
-    if (hour >= 20 || hour <= 6) {
-      // Suggest wind-down mode in evening/night
-    }
-  }, []);
 
   const handleNewEntry = (entry: MotifEntry) => {
     setEntries(prev => [entry, ...prev]);
