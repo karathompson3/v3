@@ -102,7 +102,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
     const systemPrompt = `You are a supportive AI companion focused on dignity, autonomy, and mental wellness. You help users reflect thoughtfully while building their personal foundation. Be warm, non-judgmental, and encouraging. Ask thoughtful follow-up questions and validate their experiences.${contextMessage}${mediaContextMessage}`;
 
     try {
-      const messages = [
+      const chatMessages = [
         { role: 'system', content: systemPrompt },
         ...messages.slice(-6).map(msg => ({
           role: msg.role,
@@ -119,7 +119,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
         },
         body: JSON.stringify({
           model: 'gpt-4o-mini',
-          messages,
+          messages: chatMessages,
           max_tokens: 500,
           temperature: 0.7
         })
