@@ -4,16 +4,18 @@ interface HeaderProps {
   onWindDownMode: () => void;
   onEmergencyProtocol: () => void;
   onShowBillOfRights: () => void;
+  onShowGettingStarted: () => void;
 }
 
 import { Button } from '@/components/ui/button';
-import { Moon, Shield, ScrollText } from 'lucide-react';
+import { Moon, Shield, ScrollText, BookOpen } from 'lucide-react';
 
 export const Header = ({ 
   currentMantra, 
   onWindDownMode, 
   onEmergencyProtocol, 
-  onShowBillOfRights 
+  onShowBillOfRights,
+  onShowGettingStarted
 }: HeaderProps) => {
   return (
     <div className="text-center mb-8">
@@ -22,6 +24,14 @@ export const Header = ({
       
       {/* Quick Actions */}
       <div className="flex justify-center gap-4 mb-6">
+        <Button
+          variant="outline"
+          onClick={onShowGettingStarted}
+          className="flex items-center gap-2"
+        >
+          <BookOpen className="w-4 h-4" />
+          How to Use
+        </Button>
         <Button
           variant="outline"
           onClick={onWindDownMode}

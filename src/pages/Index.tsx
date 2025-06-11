@@ -1,7 +1,7 @@
-
 import { useState } from 'react';
 import { WindDownMode } from '../components/WindDownMode';
 import { UserBillOfRights } from '../components/UserBillOfRights';
+import { GettingStartedGuide } from '../components/GettingStartedGuide';
 import { Header } from '../components/Header';
 import { EmergencyProtocol } from '../components/EmergencyProtocol';
 import { MainTabs } from '../components/MainTabs';
@@ -36,6 +36,7 @@ const Index = () => {
   const [isWindDownMode, setIsWindDownMode] = useState(false);
   const [showEmergencyProtocol, setShowEmergencyProtocol] = useState(false);
   const [showBillOfRights, setShowBillOfRights] = useState(false);
+  const [showGettingStarted, setShowGettingStarted] = useState(false);
   
   const currentMantra = useMantra(entries);
 
@@ -54,6 +55,23 @@ const Index = () => {
     handleNewEntry(entry);
     setIsWindDownMode(false);
   };
+
+  if (showGettingStarted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4">
+        <div className="mb-6">
+          <Button
+            variant="outline"
+            onClick={() => setShowGettingStarted(false)}
+            className="mb-4"
+          >
+            ← Back to App
+          </Button>
+        </div>
+        <GettingStartedGuide />
+      </div>
+    );
+  }
 
   if (showBillOfRights) {
     return (
@@ -99,6 +117,7 @@ const Index = () => {
           onWindDownMode={() => setIsWindDownMode(true)}
           onEmergencyProtocol={() => setShowEmergencyProtocol(true)}
           onShowBillOfRights={() => setShowBillOfRights(true)}
+          onShowGettingStarted={() => setShowGettingStarted(true)}
         />
 
         <MainTabs
