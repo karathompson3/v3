@@ -1,7 +1,8 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Shield } from 'lucide-react';
+import { Shield, Share2, Copy } from 'lucide-react';
+import { useState } from 'react';
 
 interface EmergencyProtocolProps {
   entriesCount: number;
@@ -9,6 +10,38 @@ interface EmergencyProtocolProps {
 }
 
 export const EmergencyProtocol = ({ entriesCount, onClose }: EmergencyProtocolProps) => {
+  const [copied, setCopied] = useState(false);
+  
+  // Use the actual project URL instead of hardcoded v3.lovable.app
+  const currentUrl = window.location.href;
+  
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Personal ID Display - V3 Demo',
+          text: 'This person is demonstrating emotional regulation and stability.',
+          url: currentUrl,
+        });
+      } catch (err) {
+        console.log('Error sharing:', err);
+      }
+    } else {
+      // Fallback to copying to clipboard
+      handleCopyLink();
+    }
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(currentUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.log('Error copying to clipboard:', err);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4">
       <div className="max-w-2xl mx-auto">
@@ -29,6 +62,26 @@ export const EmergencyProtocol = ({ entriesCount, onClose }: EmergencyProtocolPr
                 <p><strong>Request:</strong> Please treat with respect and non-escalation. No danger to self or others.</p>
               </div>
             </div>
+            
+            <div className="flex gap-2">
+              <Button 
+                onClick={handleShare}
+                variant="outline"
+                className="flex-1 flex items-center gap-2"
+              >
+                <Share2 className="w-4 h-4" />
+                Share This Status
+              </Button>
+              <Button 
+                onClick={handleCopyLink}
+                variant="outline"
+                className="flex items-center gap-2"
+              >
+                <Copy className="w-4 h-4" />
+                {copied ? 'Copied!' : 'Copy Link'}
+              </Button>
+            </div>
+            
             <Button 
               onClick={onClose}
               className="w-full"
