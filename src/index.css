@@ -11,14 +11,14 @@
 @layer base {
   :root {
     /* V3 Dark Mode Color Scheme - Emotionally warm, never loud */
-    --background: 0 0% 7%; /* #121212 Deep Charcoal Black */
-    --foreground: 30 20% 96%; /* #F5F3F1 Porcelain White */
+    --background: 220 13% 7%; /* #121212 Deep Charcoal Black */
+    --foreground: 30 15% 96%; /* #F5F3F1 Porcelain White */
 
-    --card: 20 10% 11%; /* #1E1B18 Inky Brown-Black */
-    --card-foreground: 30 20% 96%; /* #F5F3F1 Porcelain White */
+    --card: 24 8% 11%; /* #1E1B18 Inky Brown-Black */
+    --card-foreground: 30 15% 96%; /* #F5F3F1 Porcelain White */
 
-    --popover: 20 10% 11%; /* #1E1B18 Inky Brown-Black */
-    --popover-foreground: 30 20% 96%; /* #F5F3F1 Porcelain White */
+    --popover: 24 8% 11%; /* #1E1B18 Inky Brown-Black */
+    --popover-foreground: 30 15% 96%; /* #F5F3F1 Porcelain White */
 
     /* Input fields - Espresso Ash */
     --input: 25 8% 16%; /* #2A2623 Espresso Ash */
@@ -26,7 +26,7 @@
 
     /* Primary/Interactive - Blush Coral */
     --primary: 10 60% 78%; /* #F3A89C Blush Coral */
-    --primary-foreground: 0 0% 7%; /* Deep charcoal for contrast */
+    --primary-foreground: 220 13% 7%; /* Deep charcoal for contrast */
 
     /* Secondary text - Warm Fog */
     --secondary: 25 8% 16%; /* #2A2623 Espresso Ash */
@@ -37,34 +37,41 @@
 
     /* Accent - Clay Rose */
     --accent: 10 45% 63%; /* #D3776D Clay Rose */
-    --accent-foreground: 30 20% 96%; /* #F5F3F1 Porcelain White */
+    --accent-foreground: 30 15% 96%; /* #F5F3F1 Porcelain White */
 
     /* Success - Herbal Sage */
     --destructive: 120 25% 70%; /* #B2CEB2 Herbal Sage for success states */
-    --destructive-foreground: 0 0% 7%; /* Deep charcoal */
+    --destructive-foreground: 220 13% 7%; /* Deep charcoal */
 
     --ring: 10 60% 78%; /* #F3A89C Blush Coral for focus */
 
     --radius: 0.75rem;
 
     /* Sidebar colors with V3 palette */
-    --sidebar-background: 0 0% 6%; /* Slightly darker than main */
-    --sidebar-foreground: 30 20% 90%; /* Porcelain White */
+    --sidebar-background: 220 13% 6%; /* Slightly darker than main */
+    --sidebar-foreground: 30 15% 90%; /* Porcelain White */
     --sidebar-primary: 10 60% 78%; /* Blush Coral */
-    --sidebar-primary-foreground: 0 0% 7%; /* Deep charcoal */
+    --sidebar-primary-foreground: 220 13% 7%; /* Deep charcoal */
     --sidebar-accent: 10 45% 63%; /* Clay Rose */
-    --sidebar-accent-foreground: 30 20% 90%; /* Porcelain White */
+    --sidebar-accent-foreground: 30 15% 90%; /* Porcelain White */
     --sidebar-border: 25 8% 16%; /* Espresso Ash */
     --sidebar-ring: 10 60% 78%; /* Blush Coral */
 
-    /* Custom V3 emotional colors */
+    /* Custom V3 emotional colors - Exact hex codes */
+    --canvas-black: 220 13% 7%; /* #121212 */
+    --surface-black: 24 8% 11%; /* #1E1B18 */
+    --espresso-ash: 25 8% 16%; /* #2A2623 */
+    --porcelain-white: 30 15% 96%; /* #F5F3F1 */
+    --warm-fog: 30 15% 82%; /* #D0C8C0 */
+    --clay-smoke: 25 12% 65%; /* #A0938A */
     --blush-coral: 10 60% 78%; /* #F3A89C */
     --clay-rose: 10 45% 63%; /* #D3776D */
     --dusty-lavender: 320 15% 72%; /* #BCAFB3 */
     --herbal-sage: 120 25% 70%; /* #B2CEB2 */
-    --warm-fog: 30 15% 82%; /* #D0C8C0 */
-    --clay-smoke: 25 12% 65%; /* #A0938A */
+    --reflection-glow: 25 12% 25%; /* #403C3A */
     --twilight-cloud: 240 15% 30%; /* #444258 */
+    --vinyl-rose: 340 25% 52%; /* #A56A7C */
+    --desert-morning: 20 40% 85%; /* #F4CDC1 */
   }
 
   .light {
@@ -105,11 +112,6 @@
     --sidebar-accent-foreground: 0 0% 10%;
     --sidebar-border: 160 15% 85%;
     --sidebar-ring: 210 85% 55%;
-
-    --blush-coral: 20 40% 85%;
-    --clay-rose: 35 70% 75%;
-    --dusty-lavender: 160 15% 75%;
-    --herbal-sage: 210 25% 70%;
   }
 }
 
@@ -123,9 +125,9 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 400;
     line-height: 1.6;
-    /* Subtle dark texture for warmth - more prominent in V3 */
-    background-image: radial-gradient(circle at 1px 1px, rgba(243,168,156,0.03) 1px, transparent 0);
-    background-size: 20px 20px;
+    /* Cinematic texture for warmth - more prominent in V3 */
+    background-image: radial-gradient(circle at 1px 1px, rgba(243,168,156,0.04) 1px, transparent 0);
+    background-size: 24px 24px;
   }
 
   /* Editorial Typography - Headers with bite */
@@ -134,7 +136,7 @@
     font-weight: 600;
     letter-spacing: -0.02em;
     line-height: 1.2;
-    color: hsl(var(--foreground));
+    color: hsl(var(--porcelain-white));
   }
 
   /* Handwritten-style annotations */
@@ -155,19 +157,19 @@
 
   /* Soft glow highlights - V3 blush coral */
   .soft-glow {
-    box-shadow: 0 0 20px rgba(243, 168, 156, 0.15);
+    box-shadow: 0 0 20px rgba(243, 168, 156, 0.2);
     @apply transition-shadow duration-300;
   }
 
   .soft-glow:hover {
-    box-shadow: 0 0 30px rgba(243, 168, 156, 0.25);
+    box-shadow: 0 0 30px rgba(243, 168, 156, 0.35);
   }
 
   /* Canvas-first layout helpers - V3 dark cinematic */
   .canvas-container {
     background: linear-gradient(135deg, 
-      hsl(var(--background)) 0%, 
-      hsl(var(--card)) 100%);
+      hsl(var(--canvas-black)) 0%, 
+      hsl(var(--surface-black)) 100%);
     position: relative;
     overflow: hidden;
   }
@@ -177,12 +179,12 @@
     @apply rounded-lg overflow-hidden shadow-lg;
     transform: rotate(-0.5deg);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
   }
 
   .postcard:hover {
     transform: rotate(0deg) scale(1.02);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.7);
   }
 
   /* Floating markers for tags/motifs - V3 dusty lavender */
@@ -192,24 +194,24 @@
       hsl(var(--dusty-lavender)), 
       hsl(var(--herbal-sage)));
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(243,168,156,0.2);
+    border: 1px solid rgba(243,168,156,0.25);
     transform: translateY(-2px);
     transition: all 0.3s ease;
-    color: hsl(var(--background));
+    color: hsl(var(--canvas-black));
   }
 
   .floating-marker:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
   }
 
   /* Moodboard-style cards - V3 inky brown-black */
   .moodboard-card {
-    background: hsl(var(--card));
+    background: hsl(var(--surface-black));
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(243,168,156,0.1);
+    border: 1px solid rgba(243,168,156,0.12);
     @apply rounded-lg p-6;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
     transition: all 0.4s ease;
     position: relative;
     overflow: hidden;
@@ -236,8 +238,8 @@
 
   .moodboard-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-    border-color: rgba(243,168,156,0.2);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    border-color: rgba(243,168,156,0.25);
   }
 
   /* Story-style vertical rhythm */
@@ -268,20 +270,20 @@
 
   /* Glass morphism for overlays - V3 reflection mode */
   .glass-morph {
-    background: rgba(30, 27, 24, 0.8);
+    background: rgba(30, 27, 24, 0.85);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(243, 168, 156, 0.1);
+    border: 1px solid rgba(243, 168, 156, 0.15);
   }
 
   /* V3 Reflection Mode Background Glow */
   .reflection-mode {
-    background: rgba(64, 60, 58, 0.6);
+    background: rgba(64, 60, 58, 0.7);
     backdrop-filter: blur(8px);
   }
 
   /* V3 Occlumency Vault Tint */
   .vault-mode {
-    background: rgba(68, 66, 88, 0.7);
+    background: rgba(68, 66, 88, 0.75);
     backdrop-filter: blur(10px);
   }
 }
@@ -308,10 +310,10 @@
 /* V3 Soundtrack Cue Aura */
 @keyframes soundtrack-glow {
   0%, 100% { 
-    background: linear-gradient(45deg, rgba(165, 106, 124, 0.3), rgba(244, 205, 193, 0.3));
+    background: linear-gradient(45deg, rgba(165, 106, 124, 0.4), rgba(244, 205, 193, 0.4));
   }
   50% { 
-    background: linear-gradient(45deg, rgba(165, 106, 124, 0.5), rgba(244, 205, 193, 0.5));
+    background: linear-gradient(45deg, rgba(165, 106, 124, 0.6), rgba(244, 205, 193, 0.6));
   }
 }
 
@@ -329,7 +331,7 @@
 .vault-shimmer {
   background: linear-gradient(90deg, 
     transparent, 
-    rgba(68, 66, 88, 0.3), 
+    rgba(68, 66, 88, 0.4), 
     transparent);
   background-size: 200% 100%;
   animation: shimmer 3s ease-in-out infinite;
@@ -343,4 +345,35 @@
 
 .occlumency-pulse {
   animation: occlumency-pulse 2s ease-in-out infinite;
+}
+
+/* V3 Cinematic Focus States */
+.cinematic-focus:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px hsl(var(--blush-coral)), 0 0 20px rgba(243, 168, 156, 0.3);
+  transform: scale(1.01);
+}
+
+/* V3 Intimate Text Selection */
+::selection {
+  background: rgba(243, 168, 156, 0.3);
+  color: hsl(var(--porcelain-white));
+}
+
+/* V3 Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--surface-black));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--clay-smoke));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--dusty-lavender));
 }
