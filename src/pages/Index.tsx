@@ -49,8 +49,8 @@ const Index = () => {
   // Show loading while checking authentication
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 flex items-center justify-center">
-        <div className="text-slate-600">Loading...</div>
+      <div className="min-h-screen canvas-container flex items-center justify-center">
+        <div className="text-foreground/60 font-light tracking-wide">Loading your space...</div>
       </div>
     );
   }
@@ -141,14 +141,14 @@ const Index = () => {
 
   if (showGettingStarted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 p-4">
-        <div className="mb-6">
+      <div className="min-h-screen canvas-container p-6">
+        <div className="mb-8">
           <Button
             variant="outline"
             onClick={() => setShowGettingStarted(false)}
-            className="mb-4 hover:bg-slate-50 transition-colors"
+            className="whisper-button glass-morph hover:bg-accent/20"
           >
-            ← Back to App
+            ← Return to Canvas
           </Button>
         </div>
         <GettingStartedGuide />
@@ -158,14 +158,14 @@ const Index = () => {
 
   if (showBillOfRights) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 p-4">
-        <div className="mb-6">
+      <div className="min-h-screen canvas-container p-6">
+        <div className="mb-8">
           <Button
             variant="outline"
             onClick={() => setShowBillOfRights(false)}
-            className="mb-4 hover:bg-slate-50 transition-colors"
+            className="whisper-button glass-morph hover:bg-accent/20"
           >
-            ← Back to App
+            ← Return to Canvas
           </Button>
         </div>
         <UserBillOfRights />
@@ -193,8 +193,13 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 p-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen canvas-container">
+      {/* Background texture overlay */}
+      <div className="absolute inset-0 opacity-30 pointer-events-none">
+        <div className="h-full w-full bg-gradient-to-br from-accent/10 via-transparent to-secondary/10"></div>
+      </div>
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-8">
         <Header
           currentMantra={currentMantra}
           onWindDownMode={() => setIsWindDownMode(true)}
@@ -203,13 +208,16 @@ const Index = () => {
           onShowGettingStarted={() => setShowGettingStarted(true)}
         />
 
-        <MainTabs
-          entries={entries}
-          currentEntry={currentEntry}
-          setCurrentEntry={setCurrentEntry}
-          onEntrySubmit={handleNewEntry}
-          onEntryDelete={handleDeleteEntry}
-        />
+        {/* Main content with moodboard styling */}
+        <div className="mt-12">
+          <MainTabs
+            entries={entries}
+            currentEntry={currentEntry}
+            setCurrentEntry={setCurrentEntry}
+            onEntrySubmit={handleNewEntry}
+            onEntryDelete={handleDeleteEntry}
+          />
+        </div>
         
         <Footer />
       </div>

@@ -1,94 +1,102 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
+/* V3 "Structured Intuition" Design System */
+/* Core Philosophy: Auteur's moodboard - cinematic, intentional, emotionally intelligent */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Base Colors - Moody Pastel meets Clean Contrast */
+    --background: 30 20% 98%; /* Creamy off-white #F9F6F2 */
+    --foreground: 0 0% 10%; /* Rich black #1A1A1A */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 30 20% 98%;
+    --card-foreground: 0 0% 10%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 30 20% 98%;
+    --popover-foreground: 0 0% 10%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Accent Tones - Desaturated & Emotionally Loaded */
+    --primary: 210 20% 25%; /* Coastal blue */
+    --primary-foreground: 30 20% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 160 15% 85%; /* Muted sage */
+    --secondary-foreground: 0 0% 10%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 160 15% 90%;
+    --muted-foreground: 0 0% 40%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 350 25% 85%; /* Desaturated rose */
+    --accent-foreground: 0 0% 10%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Highlight States - Soft glow, contrasting ink-blue/neon coral */
+    --destructive: 15 80% 65%; /* Neon coral */
+    --destructive-foreground: 30 20% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 160 15% 88%;
+    --input: 160 15% 92%;
+    --ring: 210 85% 55%; /* Ink blue for focus states */
 
-    --radius: 0.5rem;
+    --radius: 0.75rem; /* Slightly more rounded for softness */
 
-    --sidebar-background: 0 0% 98%;
+    /* Sidebar colors with moody palette */
+    --sidebar-background: 30 20% 96%;
+    --sidebar-foreground: 0 0% 15%;
+    --sidebar-primary: 210 20% 25%;
+    --sidebar-primary-foreground: 30 20% 98%;
+    --sidebar-accent: 350 25% 88%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 160 15% 85%;
+    --sidebar-ring: 210 85% 55%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Custom accent colors for emotional states */
+    --blush: 20 40% 85%;
+    --tangerine: 35 70% 75%;
+    --sage: 160 15% 75%;
+    --coastal: 210 25% 70%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 0 0% 8%; /* Rich dark for night mode */
+    --foreground: 30 20% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 10%;
+    --card-foreground: 30 20% 95%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 30 20% 95%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 210 40% 70%;
+    --primary-foreground: 0 0% 8%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 160 15% 20%;
+    --secondary-foreground: 30 20% 95%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 160 10% 15%;
+    --muted-foreground: 30 10% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 350 25% 25%;
+    --accent-foreground: 30 20% 95%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 15 80% 60%;
+    --destructive-foreground: 30 20% 95%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: 160 10% 18%;
+    --input: 160 10% 18%;
+    --ring: 210 85% 65%;
+
+    --sidebar-background: 0 0% 6%;
+    --sidebar-foreground: 30 20% 90%;
+    --sidebar-primary: 210 40% 70%;
+    --sidebar-primary-foreground: 0 0% 8%;
+    --sidebar-accent: 350 25% 20%;
+    --sidebar-accent-foreground: 30 20% 90%;
+    --sidebar-border: 160 10% 15%;
+    --sidebar-ring: 210 85% 65%;
   }
 }
 
@@ -99,5 +107,180 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    /* Subtle texture for warmth */
+    background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.3) 1px, transparent 0);
+    background-size: 20px 20px;
   }
+
+  /* Editorial Typography - Headers with bite */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  /* Handwritten-style annotations */
+  .annotation {
+    font-family: 'Caveat', cursive;
+    font-size: 0.9em;
+    opacity: 0.8;
+    transform: rotate(-1deg);
+  }
+}
+
+@layer components {
+  /* Cinematic transitions - fade, not slide */
+  .fade-transition {
+    @apply transition-all duration-500 ease-out;
+  }
+
+  /* Soft glow highlights */
+  .soft-glow {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+    @apply transition-shadow duration-300;
+  }
+
+  .soft-glow:hover {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.25);
+  }
+
+  /* Canvas-first layout helpers */
+  .canvas-container {
+    background: linear-gradient(135deg, 
+      hsl(var(--background)) 0%, 
+      hsl(var(--muted)) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Postcard-style image blocks */
+  .postcard {
+    @apply rounded-lg overflow-hidden shadow-lg;
+    transform: rotate(-0.5deg);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .postcard:hover {
+    transform: rotate(0deg) scale(1.02);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  }
+
+  /* Floating markers for tags/motifs */
+  .floating-marker {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+    background: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--secondary)));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+  }
+
+  .floating-marker:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  }
+
+  /* Moodboard-style cards */
+  .moodboard-card {
+    @apply bg-card/80 backdrop-blur-sm border border-border/50 rounded-lg p-6;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .moodboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+      hsl(var(--accent)), 
+      hsl(var(--primary)), 
+      hsl(var(--secondary)));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .moodboard-card:hover::before {
+    opacity: 1;
+  }
+
+  .moodboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+  }
+
+  /* Story-style vertical rhythm */
+  .story-rhythm > * + * {
+    margin-top: 1.5rem;
+  }
+
+  /* Whisper, not ping - subtle interactions */
+  .whisper-button {
+    @apply transition-all duration-300 ease-out;
+    transform-origin: center;
+  }
+
+  .whisper-button:hover {
+    transform: scale(1.02);
+    filter: brightness(1.05);
+  }
+
+  .whisper-button:active {
+    transform: scale(0.98);
+  }
+
+  /* Emotional accent colors */
+  .accent-blush { background-color: hsl(var(--blush)); }
+  .accent-tangerine { background-color: hsl(var(--tangerine)); }
+  .accent-sage { background-color: hsl(var(--sage)); }
+  .accent-coastal { background-color: hsl(var(--coastal)); }
+
+  /* Glass morphism for overlays */
+  .glass-morph {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Playful Easter eggs */
+@keyframes vinyl-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spotlight-pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+.vinyl-spin {
+  animation: vinyl-spin 3s linear infinite;
+}
+
+.spotlight {
+  animation: spotlight-pulse 2s ease-in-out infinite;
+}
+
+/* Shimmer for vault mode */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.vault-shimmer {
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255,255,255,0.4), 
+    transparent);
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
 }

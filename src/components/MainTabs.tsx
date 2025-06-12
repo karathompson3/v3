@@ -38,46 +38,52 @@ interface MainTabsProps {
 export const MainTabs = ({ entries, currentEntry, setCurrentEntry, onEntrySubmit, onEntryDelete }: MainTabsProps) => {
   return (
     <Tabs defaultValue="chat" className="w-full">
-      <TabsList className="grid w-full grid-cols-3 mb-6 bg-white/80 backdrop-blur-sm border border-slate-200 shadow-sm">
+      <TabsList className="grid w-full grid-cols-3 mb-8 glass-morph border-border/30 shadow-lg">
         <TabsTrigger 
           value="chat" 
-          className="flex items-center gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 transition-all duration-200"
+          className="flex items-center gap-3 whisper-button data-[state=active]:bg-coastal/20 data-[state=active]:text-primary data-[state=active]:shadow-md fade-transition font-medium"
         >
           <MessageCircle className="w-4 h-4" />
-          AI Chat
+          <span className="font-serif">Dialogue</span>
         </TabsTrigger>
         <TabsTrigger 
           value="reflections" 
-          className="flex items-center gap-2 data-[state=active]:bg-green-50 data-[state=active]:text-green-700 transition-all duration-200"
+          className="flex items-center gap-3 whisper-button data-[state=active]:bg-sage/20 data-[state=active]:text-primary data-[state=active]:shadow-md fade-transition font-medium"
         >
           <Brain className="w-4 h-4" />
-          Reflections
+          <span className="font-serif">Archive</span>
         </TabsTrigger>
         <TabsTrigger 
           value="patterns" 
-          className="flex items-center gap-2 data-[state=active]:bg-purple-50 data-[state=active]:text-purple-700 transition-all duration-200"
+          className="flex items-center gap-3 whisper-button data-[state=active]:bg-accent/20 data-[state=active]:text-primary data-[state=active]:shadow-md fade-transition font-medium"
         >
           <Map className="w-4 h-4" />
-          Patterns
+          <span className="font-serif">Patterns</span>
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="chat" className="space-y-6">
-        <ChatInterface 
-          onReflectionCapture={onEntrySubmit}
-          reflections={entries}
-        />
+      <TabsContent value="chat" className="space-y-8 fade-transition">
+        <div className="moodboard-card">
+          <ChatInterface 
+            onReflectionCapture={onEntrySubmit}
+            reflections={entries}
+          />
+        </div>
       </TabsContent>
 
-      <TabsContent value="reflections" className="space-y-6">
-        <ReflectionsManager 
-          entries={entries}
-          onDelete={onEntryDelete}
-        />
+      <TabsContent value="reflections" className="space-y-8 fade-transition">
+        <div className="moodboard-card">
+          <ReflectionsManager 
+            entries={entries}
+            onDelete={onEntryDelete}
+          />
+        </div>
       </TabsContent>
 
-      <TabsContent value="patterns" className="space-y-6">
-        <MotifDisplay entries={entries} />
+      <TabsContent value="patterns" className="space-y-8 fade-transition">
+        <div className="moodboard-card">
+          <MotifDisplay entries={entries} />
+        </div>
       </TabsContent>
     </Tabs>
   );
