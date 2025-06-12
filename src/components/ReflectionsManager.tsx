@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Trash2, Clock, Tag } from 'lucide-react';
+import { Trash2, Clock, Feather } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface MotifEntry {
@@ -38,71 +38,83 @@ export const ReflectionsManager = ({ entries, onDelete }: ReflectionsManagerProp
   const handleDelete = (id: string) => {
     onDelete(id);
     toast({
-      title: "Reflection deleted",
-      description: "The reflection has been removed from your records",
+      title: "Memory released",
+      description: "The reflection has been returned to the ether",
     });
   };
 
   return (
-    <div className="space-y-4">
-      <Card className="bg-white/90 backdrop-blur-sm">
+    <div className="space-y-6 journey-rhythm">
+      <Card className="observatory-glow">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Tag className="w-5 h-5" />
-            Your Reflections
+          <CardTitle className="flex items-center gap-3 text-foreground">
+            <Feather className="w-5 h-5 text-primary" />
+            Sacred Archive
           </CardTitle>
-          <p className="text-sm text-slate-600">
-            {entries.length} reflections captured • Click delete to remove instantly
+          <p className="text-sm text-muted-foreground font-serif italic">
+            {entries.length} reflections preserved • Each memory a thread in the tapestry
           </p>
         </CardHeader>
       </Card>
 
       {entries.length === 0 ? (
-        <Card className="bg-slate-50/50">
-          <CardContent className="text-center py-12">
-            <p className="text-slate-500">No reflections yet. Start a conversation to begin building your foundation.</p>
+        <Card className="portal-glass">
+          <CardContent className="text-center py-16">
+            <div className="space-y-4">
+              <div className="w-16 h-16 mx-auto rounded-full bg-accent/10 flex items-center justify-center">
+                <Feather className="w-8 h-8 text-accent" />
+              </div>
+              <p className="text-muted-foreground font-serif italic">
+                The pages await your first inscription...
+              </p>
+              <p className="text-sm text-muted-foreground/80">
+                Begin a chronicle to weave your foundation
+              </p>
+            </div>
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {entries.map((entry) => (
             <Card
               key={entry.id}
-              className="bg-white/90 backdrop-blur-sm hover:shadow-md transition-all duration-200"
+              className="observatory-glow hover:memory-glow whisper-hover group"
             >
-              <CardContent className="p-4">
-                <div className="flex justify-between items-start gap-4">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-slate-700 mb-3 line-clamp-3">
+              <CardContent className="p-6">
+                <div className="flex justify-between items-start gap-6">
+                  <div className="flex-1 min-w-0 space-y-4">
+                    <div className="reflection-quote text-foreground/90 leading-relaxed">
                       {entry.content}
-                    </p>
+                    </div>
                     
-                    <div className="flex flex-wrap gap-2 mb-2">
+                    <div className="flex flex-wrap gap-2">
                       {entry.motifs.map((motif) => (
-                        <Badge key={motif} variant="outline" className="text-xs">
+                        <span key={motif} className="thread-marker">
                           {motif}
-                        </Badge>
+                        </span>
                       ))}
                     </div>
                     
-                    <div className="flex items-center gap-4 text-xs text-slate-500">
-                      <span className="flex items-center gap-1">
+                    <div className="flex items-center gap-6 text-xs text-muted-foreground font-serif">
+                      <span className="flex items-center gap-2">
                         <Clock className="w-3 h-3" />
-                        {entry.timestamp.toLocaleDateString()} at {entry.timestamp.toLocaleTimeString()}
+                        {entry.timestamp.toLocaleDateString()} • {entry.timestamp.toLocaleTimeString()}
                       </span>
-                      <span>Tone: {entry.emotionalTone}</span>
+                      <span className="text-accent font-medium">
+                        Essence: {entry.emotionalTone}
+                      </span>
                     </div>
                   </div>
                   
-                  <div className="flex-shrink-0">
+                  <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => handleDelete(entry.id)}
-                      className="hover:bg-red-50 hover:text-red-600 transition-colors"
+                      className="hover:bg-destructive/10 hover:text-destructive whisper-hover"
                     >
-                      <Trash2 className="w-4 h-4 mr-1" />
-                      Delete
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Release
                     </Button>
                   </div>
                 </div>

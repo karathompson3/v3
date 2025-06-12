@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { WindDownMode } from '../components/WindDownMode';
 import { UserBillOfRights } from '../components/UserBillOfRights';
@@ -49,8 +50,10 @@ const Index = () => {
   // Show loading while checking authentication
   if (loading) {
     return (
-      <div className="min-h-screen canvas-container flex items-center justify-center">
-        <div className="text-foreground/60 font-light tracking-wide">Loading your space...</div>
+      <div className="min-h-screen codex-container flex items-center justify-center">
+        <div className="text-foreground/60 font-light tracking-wide font-serif italic candle-flicker">
+          The codex awakens...
+        </div>
       </div>
     );
   }
@@ -141,14 +144,14 @@ const Index = () => {
 
   if (showGettingStarted) {
     return (
-      <div className="min-h-screen canvas-container p-6">
+      <div className="min-h-screen codex-container p-6">
         <div className="mb-8">
           <Button
             variant="outline"
             onClick={() => setShowGettingStarted(false)}
-            className="whisper-button glass-morph hover:bg-accent/20"
+            className="whisper-hover portal-glass hover:bg-accent/20"
           >
-            ← Return to Canvas
+            ← Return to Codex
           </Button>
         </div>
         <GettingStartedGuide />
@@ -158,14 +161,14 @@ const Index = () => {
 
   if (showBillOfRights) {
     return (
-      <div className="min-h-screen canvas-container p-6">
+      <div className="min-h-screen codex-container p-6">
         <div className="mb-8">
           <Button
             variant="outline"
             onClick={() => setShowBillOfRights(false)}
-            className="whisper-button glass-morph hover:bg-accent/20"
+            className="whisper-hover portal-glass hover:bg-accent/20"
           >
-            ← Return to Canvas
+            ← Return to Codex
           </Button>
         </div>
         <UserBillOfRights />
@@ -184,19 +187,21 @@ const Index = () => {
 
   if (isWindDownMode) {
     return (
-      <WindDownMode 
-        onEntry={handleWindDownEntry}
-        onClose={() => setIsWindDownMode(false)}
-        recentEntries={entries.slice(0, 3)}
-      />
+      <div className="ritual-vignette fixed inset-0 z-50">
+        <WindDownMode 
+          onEntry={handleWindDownEntry}
+          onClose={() => setIsWindDownMode(false)}
+          recentEntries={entries.slice(0, 3)}
+        />
+      </div>
     );
   }
 
   return (
-    <div className="min-h-screen canvas-container">
-      {/* Background texture overlay */}
-      <div className="absolute inset-0 opacity-30 pointer-events-none">
-        <div className="h-full w-full bg-gradient-to-br from-accent/10 via-transparent to-secondary/10"></div>
+    <div className="min-h-screen codex-container memory-mapping-mode">
+      {/* Mystical background texture overlay */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div className="h-full w-full bg-gradient-to-br from-accent/5 via-transparent to-primary/5"></div>
       </div>
       
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-8">
@@ -208,7 +213,7 @@ const Index = () => {
           onShowGettingStarted={() => setShowGettingStarted(true)}
         />
 
-        {/* Main content with moodboard styling */}
+        {/* Sacred codex interface */}
         <div className="mt-12">
           <MainTabs
             entries={entries}

@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ChatInterface } from './ChatInterface';
 import { ReflectionsManager } from './ReflectionsManager';
 import { MotifDisplay } from './MotifDisplay';
-import { MessageCircle, Brain, Map } from 'lucide-react';
+import { Scroll, Archive, Map } from 'lucide-react';
 
 interface MotifEntry {
   id: string;
@@ -38,32 +38,32 @@ interface MainTabsProps {
 export const MainTabs = ({ entries, currentEntry, setCurrentEntry, onEntrySubmit, onEntryDelete }: MainTabsProps) => {
   return (
     <Tabs defaultValue="chat" className="w-full">
-      <TabsList className="grid w-full grid-cols-3 mb-8 glass-morph border-border/30 shadow-lg">
+      <TabsList className="grid w-full grid-cols-3 mb-8 portal-glass border-border/30 shadow-lg backdrop-blur-16">
         <TabsTrigger 
           value="chat" 
-          className="flex items-center gap-3 whisper-button data-[state=active]:bg-coastal/20 data-[state=active]:text-primary data-[state=active]:shadow-md fade-transition font-medium"
+          className="flex items-center gap-3 whisper-hover data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:shadow-md codex-transition font-medium"
         >
-          <MessageCircle className="w-4 h-4" />
-          <span className="font-serif">Dialogue</span>
+          <Scroll className="w-4 h-4" />
+          <span className="font-serif">Chronicle</span>
         </TabsTrigger>
         <TabsTrigger 
           value="reflections" 
-          className="flex items-center gap-3 whisper-button data-[state=active]:bg-sage/20 data-[state=active]:text-primary data-[state=active]:shadow-md fade-transition font-medium"
+          className="flex items-center gap-3 whisper-hover data-[state=active]:bg-accent/20 data-[state=active]:text-foreground data-[state=active]:shadow-md codex-transition font-medium"
         >
-          <Brain className="w-4 h-4" />
-          <span className="font-serif">Archive</span>
+          <Archive className="w-4 h-4" />
+          <span className="font-serif">Codex</span>
         </TabsTrigger>
         <TabsTrigger 
           value="patterns" 
-          className="flex items-center gap-3 whisper-button data-[state=active]:bg-accent/20 data-[state=active]:text-primary data-[state=active]:shadow-md fade-transition font-medium"
+          className="flex items-center gap-3 whisper-hover data-[state=active]:bg-accent/20 data-[state=active]:text-foreground data-[state=active]:shadow-md codex-transition font-medium"
         >
           <Map className="w-4 h-4" />
-          <span className="font-serif">Patterns</span>
+          <span className="font-serif">Threads</span>
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="chat" className="space-y-8 fade-transition">
-        <div className="moodboard-card">
+      <TabsContent value="chat" className="space-y-8 portal-fade">
+        <div className="sacred-scroll observatory-glow">
           <ChatInterface 
             onReflectionCapture={onEntrySubmit}
             reflections={entries}
@@ -71,8 +71,8 @@ export const MainTabs = ({ entries, currentEntry, setCurrentEntry, onEntrySubmit
         </div>
       </TabsContent>
 
-      <TabsContent value="reflections" className="space-y-8 fade-transition">
-        <div className="moodboard-card">
+      <TabsContent value="reflections" className="space-y-8 portal-fade">
+        <div className="sacred-scroll rune-cipher">
           <ReflectionsManager 
             entries={entries}
             onDelete={onEntryDelete}
@@ -80,8 +80,8 @@ export const MainTabs = ({ entries, currentEntry, setCurrentEntry, onEntrySubmit
         </div>
       </TabsContent>
 
-      <TabsContent value="patterns" className="space-y-8 fade-transition">
-        <div className="moodboard-card">
+      <TabsContent value="patterns" className="space-y-8 portal-fade">
+        <div className="sacred-scroll memory-surface">
           <MotifDisplay entries={entries} />
         </div>
       </TabsContent>

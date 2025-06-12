@@ -3,115 +3,100 @@
 @tailwind components;
 @tailwind utilities;
 
-/* V3 "Structured Intuition" Design System - Dark Mode Default */
-/* Core Philosophy: Auteur's moodboard - cinematic, intentional, emotionally intelligent */
+/* V3 Codex Interface - Living Artifact Design System */
+/* Philosophy: A portal, not an app. A whisper, not a shout. */
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&display=swap');
 
 @layer base {
   :root {
-    /* V3 Dark Mode Color Scheme - Emotionally warm, never loud */
-    --background: 220 13% 7%; /* #121212 Deep Charcoal Black */
-    --foreground: 30 15% 96%; /* #F5F3F1 Porcelain White */
+    /* V3 Codex Color Scheme - Magical Realism Palette */
+    --background: 26 24 22; /* #1A1816 Matte black-brown like worn leather journal */
+    --foreground: 236 226 220; /* #ECE2DC Soft candlewhite */
 
-    --card: 24 8% 11%; /* #1E1B18 Inky Brown-Black */
-    --card-foreground: 30 15% 96%; /* #F5F3F1 Porcelain White */
+    --card: 43 39 37; /* #2B2725 Dusty charcoal, like edge of old scroll */
+    --card-foreground: 236 226 220; /* #ECE2DC Soft candlewhite */
 
-    --popover: 24 8% 11%; /* #1E1B18 Inky Brown-Black */
-    --popover-foreground: 30 15% 96%; /* #F5F3F1 Porcelain White */
+    --popover: 43 39 37; /* #2B2725 Dusty charcoal */
+    --popover-foreground: 236 226 220; /* #ECE2DC Soft candlewhite */
 
-    /* Input fields - Espresso Ash */
-    --input: 25 8% 16%; /* #2A2623 Espresso Ash */
-    --border: 25 8% 16%; /* #2A2623 Espresso Ash */
+    /* Input fields - Deeper scroll texture */
+    --input: 35 32 30; /* #23201E Deeper than card for nested feeling */
+    --border: 35 32 30; /* #23201E Deeper scroll border */
 
-    /* Primary/Interactive - Blush Coral */
-    --primary: 10 60% 78%; /* #F3A89C Blush Coral */
-    --primary-foreground: 220 13% 7%; /* Deep charcoal for contrast */
+    /* Primary/Interactive - Faint plum (emotional highlight thread) */
+    --primary: 141 106 159; /* #8D6A9F Faint plum/mauve */
+    --primary-foreground: 236 226 220; /* Soft candlewhite for contrast */
 
-    /* Secondary text - Warm Fog */
-    --secondary: 25 8% 16%; /* #2A2623 Espresso Ash */
-    --secondary-foreground: 30 15% 82%; /* #D0C8C0 Warm Fog */
+    /* Secondary text - Stone beige */
+    --secondary: 35 32 30; /* #23201E Deeper scroll */
+    --secondary-foreground: 182 171 162; /* #B6ABA2 Stone beige */
 
-    --muted: 25 8% 16%; /* #2A2623 Espresso Ash */
-    --muted-foreground: 25 12% 65%; /* #A0938A Clay Smoke */
+    --muted: 35 32 30; /* #23201E Deeper scroll */
+    --muted-foreground: 154 142 130; /* #9A8E82 Muted stone */
 
-    /* Accent - Clay Rose */
-    --accent: 10 45% 63%; /* #D3776D Clay Rose */
-    --accent-foreground: 30 15% 96%; /* #F5F3F1 Porcelain White */
+    /* Accent - Memory glow */
+    --accent: 255 214 165; /* #FFD6A5 Memory glow (like match being struck) */
+    --accent-foreground: 26 24 22; /* Background for contrast */
 
-    /* Success - Herbal Sage */
-    --destructive: 120 25% 70%; /* #B2CEB2 Herbal Sage for success states */
-    --destructive-foreground: 220 13% 7%; /* Deep charcoal */
+    /* Success - Sage wisdom */
+    --destructive: 141 106 159; /* #8D6A9F Using plum for gentle success */
+    --destructive-foreground: 236 226 220; /* Soft candlewhite */
 
-    --ring: 10 60% 78%; /* #F3A89C Blush Coral for focus */
+    --ring: 141 106 159; /* #8D6A9F Faint plum for focus */
 
-    --radius: 0.75rem;
+    --radius: 0.875rem; /* Slightly more rounded for organic feel */
 
-    /* Sidebar colors with V3 palette */
-    --sidebar-background: 220 13% 6%; /* Slightly darker than main */
-    --sidebar-foreground: 30 15% 90%; /* Porcelain White */
-    --sidebar-primary: 10 60% 78%; /* Blush Coral */
-    --sidebar-primary-foreground: 220 13% 7%; /* Deep charcoal */
-    --sidebar-accent: 10 45% 63%; /* Clay Rose */
-    --sidebar-accent-foreground: 30 15% 90%; /* Porcelain White */
-    --sidebar-border: 25 8% 16%; /* Espresso Ash */
-    --sidebar-ring: 10 60% 78%; /* Blush Coral */
+    /* Sidebar colors matching codex theme */
+    --sidebar-background: 22 20 18; /* Slightly darker than main */
+    --sidebar-foreground: 236 226 220; /* Soft candlewhite */
+    --sidebar-primary: 141 106 159; /* Faint plum */
+    --sidebar-primary-foreground: 236 226 220; /* Soft candlewhite */
+    --sidebar-accent: 255 214 165; /* Memory glow */
+    --sidebar-accent-foreground: 26 24 22; /* Background */
+    --sidebar-border: 35 32 30; /* Deeper scroll */
+    --sidebar-ring: 141 106 159; /* Faint plum */
 
-    /* Custom V3 emotional colors - Exact hex codes */
-    --canvas-black: 220 13% 7%; /* #121212 */
-    --surface-black: 24 8% 11%; /* #1E1B18 */
-    --espresso-ash: 25 8% 16%; /* #2A2623 */
-    --porcelain-white: 30 15% 96%; /* #F5F3F1 */
-    --warm-fog: 30 15% 82%; /* #D0C8C0 */
-    --clay-smoke: 25 12% 65%; /* #A0938A */
-    --blush-coral: 10 60% 78%; /* #F3A89C */
-    --clay-rose: 10 45% 63%; /* #D3776D */
-    --dusty-lavender: 320 15% 72%; /* #BCAFB3 */
-    --herbal-sage: 120 25% 70%; /* #B2CEB2 */
-    --reflection-glow: 25 12% 25%; /* #403C3A */
-    --twilight-cloud: 240 15% 30%; /* #444258 */
-    --vinyl-rose: 340 25% 52%; /* #A56A7C */
-    --desert-morning: 20 40% 85%; /* #F4CDC1 */
+    /* Custom codex emotional colors */
+    --leather-journal: 26 24 22; /* #1A1816 */
+    --dusty-scroll: 43 39 37; /* #2B2725 */
+    --deeper-scroll: 35 32 30; /* #23201E */
+    --candlewhite: 236 226 220; /* #ECE2DC */
+    --stone-beige: 182 171 162; /* #B6ABA2 */
+    --emotional-plum: 141 106 159; /* #8D6A9F */
+    --memory-glow: 255 214 165; /* #FFD6A5 */
+    --whisper-shadow: 30 27 25; /* #1E1B19 */
   }
 
   .light {
-    /* Light mode as fallback - keeping original values */
-    --background: 30 20% 98%; /* Creamy off-white #F9F6F2 */
-    --foreground: 0 0% 10%; /* Rich black #1A1A1A */
-
-    --card: 30 20% 98%;
-    --card-foreground: 0 0% 10%;
-
-    --popover: 30 20% 98%;
-    --popover-foreground: 0 0% 10%;
-
-    --primary: 210 20% 25%; /* Coastal blue */
-    --primary-foreground: 30 20% 98%;
-
-    --secondary: 160 15% 85%; /* Muted sage */
-    --secondary-foreground: 0 0% 10%;
-
-    --muted: 160 15% 90%;
-    --muted-foreground: 0 0% 40%;
-
-    --accent: 350 25% 85%; /* Desaturated rose */
-    --accent-foreground: 0 0% 10%;
-
-    --destructive: 15 80% 65%; /* Neon coral */
-    --destructive-foreground: 30 20% 98%;
-
-    --border: 160 15% 88%;
-    --input: 160 15% 92%;
-    --ring: 210 85% 55%;
-
-    --sidebar-background: 30 20% 96%;
-    --sidebar-foreground: 0 0% 15%;
-    --sidebar-primary: 210 20% 25%;
-    --sidebar-primary-foreground: 30 20% 98%;
-    --sidebar-accent: 350 25% 88%;
-    --sidebar-accent-foreground: 0 0% 10%;
-    --sidebar-border: 160 15% 85%;
-    --sidebar-ring: 210 85% 55%;
+    /* Keeping minimal light mode as fallback */
+    --background: 250 248 246; /* Parchment white */
+    --foreground: 26 24 22; /* Leather journal dark */
+    --card: 255 253 251;
+    --card-foreground: 26 24 22;
+    --popover: 255 253 251;
+    --popover-foreground: 26 24 22;
+    --primary: 141 106 159;
+    --primary-foreground: 250 248 246;
+    --secondary: 245 243 241;
+    --secondary-foreground: 82 75 69;
+    --muted: 245 243 241;
+    --muted-foreground: 120 113 108;
+    --accent: 238 213 184;
+    --accent-foreground: 26 24 22;
+    --destructive: 141 106 159;
+    --destructive-foreground: 250 248 246;
+    --border: 229 225 221;
+    --input: 229 225 221;
+    --ring: 141 106 159;
+    --sidebar-background: 248 246 244;
+    --sidebar-foreground: 26 24 22;
+    --sidebar-primary: 141 106 159;
+    --sidebar-primary-foreground: 250 248 246;
+    --sidebar-accent: 238 213 184;
+    --sidebar-accent-foreground: 26 24 22;
+    --sidebar-border: 229 225 221;
+    --sidebar-ring: 141 106 159;
   }
 }
 
@@ -124,256 +109,284 @@
     @apply bg-background text-foreground;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 400;
-    line-height: 1.6;
-    /* Cinematic texture for warmth - more prominent in V3 */
-    background-image: radial-gradient(circle at 1px 1px, rgba(243,168,156,0.04) 1px, transparent 0);
-    background-size: 24px 24px;
+    line-height: 1.7;
+    /* Codex texture - subtle parchment grain */
+    background-image: 
+      radial-gradient(circle at 1px 1px, rgba(255,214,165,0.03) 1px, transparent 0),
+      radial-gradient(circle at 3px 7px, rgba(141,106,159,0.02) 1px, transparent 0);
+    background-size: 32px 32px, 48px 48px;
+    background-position: 0 0, 16px 24px;
   }
 
-  /* Editorial Typography - Headers with bite */
+  /* Codex Typography - Poetic and Trustworthy */
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Crimson Text', serif;
     font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-    color: hsl(var(--porcelain-white));
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+    color: hsl(var(--candlewhite));
   }
 
-  /* Handwritten-style annotations */
-  .annotation {
-    font-family: 'Caveat', cursive;
-    font-size: 0.9em;
-    opacity: 0.8;
-    transform: rotate(-1deg);
-    color: hsl(var(--clay-smoke));
+  /* Quotes and memories - soft, weighted, reflective */
+  blockquote, .memory-text, .reflection-quote {
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    font-weight: 400;
+    opacity: 0.95;
+    color: hsl(var(--stone-beige));
+  }
+
+  /* Body text - clean, soulful */
+  p, div, span {
+    font-family: 'Inter', sans-serif;
   }
 }
 
 @layer components {
-  /* Cinematic transitions - fade, not slide */
-  .fade-transition {
-    @apply transition-all duration-500 ease-out;
+  /* Codex Portal Transitions - Fades, never pops */
+  .codex-transition {
+    @apply transition-all duration-700 ease-out;
   }
 
-  /* Soft glow highlights - V3 blush coral */
-  .soft-glow {
-    box-shadow: 0 0 20px rgba(243, 168, 156, 0.2);
-    @apply transition-shadow duration-300;
+  .portal-fade {
+    @apply transition-opacity duration-1000 ease-in-out;
   }
 
-  .soft-glow:hover {
-    box-shadow: 0 0 30px rgba(243, 168, 156, 0.35);
+  /* Memory glow effects - like striking a match */
+  .memory-glow {
+    box-shadow: 0 0 24px rgba(255, 214, 165, 0.15);
+    @apply transition-shadow duration-500;
   }
 
-  /* Canvas-first layout helpers - V3 dark cinematic */
-  .canvas-container {
+  .memory-glow:hover {
+    box-shadow: 0 0 36px rgba(255, 214, 165, 0.25);
+    transform: translateY(-1px);
+  }
+
+  /* Scroll and parchment containers */
+  .codex-container {
     background: linear-gradient(135deg, 
-      hsl(var(--canvas-black)) 0%, 
-      hsl(var(--surface-black)) 100%);
+      hsl(var(--leather-journal)) 0%, 
+      hsl(var(--dusty-scroll)) 100%);
     position: relative;
     overflow: hidden;
   }
 
-  /* Postcard-style image blocks */
-  .postcard {
-    @apply rounded-lg overflow-hidden shadow-lg;
-    transform: rotate(-0.5deg);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-  }
-
-  .postcard:hover {
-    transform: rotate(0deg) scale(1.02);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.7);
-  }
-
-  /* Floating markers for tags/motifs - V3 dusty lavender */
-  .floating-marker {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
-    background: linear-gradient(135deg, 
-      hsl(var(--dusty-lavender)), 
-      hsl(var(--herbal-sage)));
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(243,168,156,0.25);
-    transform: translateY(-2px);
-    transition: all 0.3s ease;
-    color: hsl(var(--canvas-black));
-  }
-
-  .floating-marker:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-  }
-
-  /* Moodboard-style cards - V3 inky brown-black */
-  .moodboard-card {
-    background: hsl(var(--surface-black));
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(243,168,156,0.12);
-    @apply rounded-lg p-6;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-    transition: all 0.4s ease;
+  /* Sacred scroll cards - like unfolding ancient maps */
+  .sacred-scroll {
+    @apply rounded-xl overflow-hidden;
+    background: hsl(var(--dusty-scroll));
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,214,165,0.08);
+    box-shadow: 
+      0 8px 32px rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(255,214,165,0.05);
+    transition: all 0.6s ease;
     position: relative;
-    overflow: hidden;
   }
 
-  .moodboard-card::before {
+  .sacred-scroll::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 2px;
+    height: 1px;
     background: linear-gradient(90deg, 
-      hsl(var(--blush-coral)), 
-      hsl(var(--clay-rose)), 
-      hsl(var(--dusty-lavender)));
+      transparent 0%, 
+      rgba(141,106,159,0.3) 50%, 
+      transparent 100%);
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.4s ease;
   }
 
-  .moodboard-card:hover::before {
+  .sacred-scroll:hover::before {
     opacity: 1;
   }
 
-  .moodboard-card:hover {
+  .sacred-scroll:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-    border-color: rgba(243,168,156,0.25);
+    box-shadow: 
+      0 12px 48px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,214,165,0.1);
+    border-color: rgba(255,214,165,0.15);
   }
 
-  /* Story-style vertical rhythm */
-  .story-rhythm > * + * {
-    margin-top: 1.5rem;
+  /* Emotional thread tags - floating markers */
+  .thread-marker {
+    @apply inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium;
+    background: linear-gradient(135deg, 
+      rgba(141,106,159,0.2), 
+      rgba(255,214,165,0.1));
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(141,106,159,0.2);
+    color: hsl(var(--stone-beige));
+    transition: all 0.4s ease;
+    position: relative;
   }
 
-  /* Whisper, not ping - subtle interactions */
-  .whisper-button {
+  .thread-marker:hover {
+    transform: translateY(-1px);
+    background: linear-gradient(135deg, 
+      rgba(141,106,159,0.3), 
+      rgba(255,214,165,0.2));
+    box-shadow: 0 6px 20px rgba(141,106,159,0.2);
+  }
+
+  /* Sealing wax button press effect */
+  .wax-seal {
     @apply transition-all duration-300 ease-out;
     transform-origin: center;
+    position: relative;
   }
 
-  .whisper-button:hover {
+  .wax-seal:hover {
     transform: scale(1.02);
-    filter: brightness(1.15);
+    filter: brightness(1.1);
   }
 
-  .whisper-button:active {
+  .wax-seal:active {
     transform: scale(0.98);
+    box-shadow: 
+      inset 0 4px 8px rgba(0,0,0,0.3),
+      0 0 16px rgba(255,214,165,0.4);
   }
 
-  /* V3 Emotional accent colors */
-  .accent-blush-coral { background-color: hsl(var(--blush-coral)); }
-  .accent-clay-rose { background-color: hsl(var(--clay-rose)); }
-  .accent-dusty-lavender { background-color: hsl(var(--dusty-lavender)); }
-  .accent-herbal-sage { background-color: hsl(var(--herbal-sage)); }
+  /* Hero's journey story rhythm */
+  .journey-rhythm > * + * {
+    margin-top: 2rem;
+  }
 
-  /* Glass morphism for overlays - V3 reflection mode */
-  .glass-morph {
-    background: rgba(30, 27, 24, 0.85);
+  /* Whisper interactions - never loud */
+  .whisper-hover {
+    @apply transition-all duration-500 ease-out;
+  }
+
+  .whisper-hover:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+    text-shadow: 0 0 8px rgba(255,214,165,0.3);
+  }
+
+  /* Codex accent colors */
+  .accent-emotional-plum { background-color: hsl(var(--emotional-plum)); }
+  .accent-memory-glow { background-color: hsl(var(--memory-glow)); }
+  .accent-stone-beige { background-color: hsl(var(--stone-beige)); }
+
+  /* Portal glass morphism */
+  .portal-glass {
+    background: rgba(43, 39, 37, 0.8);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 214, 165, 0.1);
+  }
+
+  /* Observatory glow mode */
+  .observatory-glow {
+    background: rgba(30, 27, 25, 0.9);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(243, 168, 156, 0.15);
+    box-shadow: 
+      inset 0 1px 0 rgba(255,214,165,0.05),
+      0 0 40px rgba(141,106,159,0.1);
   }
 
-  /* V3 Reflection Mode Background Glow */
-  .reflection-mode {
-    background: rgba(64, 60, 58, 0.7);
+  /* Rune cipher mode for patterns */
+  .rune-cipher {
+    background: rgba(35, 32, 30, 0.95);
     backdrop-filter: blur(8px);
+    border: 1px solid rgba(141,106,159,0.2);
+    position: relative;
   }
 
-  /* V3 Occlumency Vault Tint */
-  .vault-mode {
-    background: rgba(68, 66, 88, 0.75);
-    backdrop-filter: blur(10px);
+  .rune-cipher::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, 
+      transparent 48%, 
+      rgba(255,214,165,0.03) 50%, 
+      transparent 52%);
+    pointer-events: none;
   }
 }
 
-/* Playful Easter eggs */
-@keyframes vinyl-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+/* Codex Mystical Animations */
+@keyframes candle-flicker {
+  0%, 100% { opacity: 0.9; filter: brightness(1); }
+  25% { opacity: 0.95; filter: brightness(1.05); }
+  50% { opacity: 0.85; filter: brightness(0.98); }
+  75% { opacity: 0.92; filter: brightness(1.02); }
 }
 
-@keyframes spotlight-pulse {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; }
+@keyframes memory-surface {
+  0%, 100% { transform: translateY(0); opacity: 0.8; }
+  50% { transform: translateY(-2px); opacity: 1; }
 }
 
-.vinyl-spin {
-  animation: vinyl-spin 3s linear infinite;
-}
-
-.spotlight {
-  animation: spotlight-pulse 2s ease-in-out infinite;
-}
-
-/* V3 Soundtrack Cue Aura */
-@keyframes soundtrack-glow {
+@keyframes rune-glow {
   0%, 100% { 
-    background: linear-gradient(45deg, rgba(165, 106, 124, 0.4), rgba(244, 205, 193, 0.4));
+    box-shadow: 0 0 20px rgba(141,106,159,0.2);
   }
   50% { 
-    background: linear-gradient(45deg, rgba(165, 106, 124, 0.6), rgba(244, 205, 193, 0.6));
+    box-shadow: 0 0 30px rgba(141,106,159,0.4);
   }
 }
 
-.soundtrack-aura {
-  animation: soundtrack-glow 3s ease-in-out infinite;
-  border-radius: 12px;
+.candle-flicker {
+  animation: candle-flicker 4s ease-in-out infinite;
 }
 
-/* Shimmer for vault mode - V3 twilight cloud */
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+.memory-surface {
+  animation: memory-surface 3s ease-in-out infinite;
 }
 
-.vault-shimmer {
-  background: linear-gradient(90deg, 
-    transparent, 
-    rgba(68, 66, 88, 0.4), 
-    transparent);
-  background-size: 200% 100%;
-  animation: shimmer 3s ease-in-out infinite;
+.rune-glow {
+  animation: rune-glow 2s ease-in-out infinite;
 }
 
-/* V3 Occlumency pulse animation */
-@keyframes occlumency-pulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 0.8; }
+/* Cursor trails in key modes */
+.memory-mapping-mode {
+  cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="rgba(255,214,165,0.6)"/></svg>') 12 12, auto;
 }
 
-.occlumency-pulse {
-  animation: occlumency-pulse 2s ease-in-out infinite;
-}
-
-/* V3 Cinematic Focus States */
-.cinematic-focus:focus-visible {
+/* Codex Focus States - Gentle, never harsh */
+.codex-focus:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px hsl(var(--blush-coral)), 0 0 20px rgba(243, 168, 156, 0.3);
+  box-shadow: 
+    0 0 0 2px hsl(var(--emotional-plum)), 
+    0 0 20px rgba(141,106,159,0.3);
   transform: scale(1.01);
 }
 
-/* V3 Intimate Text Selection */
+/* Codex Text Selection */
 ::selection {
-  background: rgba(243, 168, 156, 0.3);
-  color: hsl(var(--porcelain-white));
+  background: rgba(255,214,165,0.25);
+  color: hsl(var(--candlewhite));
 }
 
-/* V3 Scrollbar Styling */
+/* Codex Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(var(--surface-black));
+  background: hsl(var(--dusty-scroll));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--clay-smoke));
-  border-radius: 3px;
+  background: hsl(var(--stone-beige));
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--dusty-lavender));
+  background: hsl(var(--emotional-plum));
+}
+
+/* Wind-down ritual mode */
+.ritual-vignette {
+  background: radial-gradient(circle at center, 
+    transparent 0%, 
+    transparent 60%, 
+    rgba(26,24,22,0.3) 80%, 
+    rgba(26,24,22,0.6) 100%);
+  pointer-events: none;
 }
