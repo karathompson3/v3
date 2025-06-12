@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -297,7 +298,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
 
   if (loading) {
     return (
-      <div className="flex flex-col h-[600px] bg-white/90 backdrop-blur-sm rounded-lg border border-slate-200 shadow-lg">
+      <div className="flex flex-col h-[600px] chat-message rounded-lg border border-slate-200 shadow-lg">
         <div className="flex-1 flex items-center justify-center">
           <div className="text-slate-600">Loading chat history...</div>
         </div>
@@ -307,7 +308,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
 
   if (showHistory) {
     return (
-      <div className="flex flex-col h-[600px] bg-white/90 backdrop-blur-sm rounded-lg border border-slate-200 shadow-lg">
+      <div className="flex flex-col h-[600px] chat-message rounded-lg border border-slate-200 shadow-lg">
         <ChatHistory
           availableDates={availableDates}
           currentDate={currentLog?.date || ''}
@@ -324,14 +325,14 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
 
   if (showApiKeyInput) {
     return (
-      <div className="flex flex-col h-[600px] bg-white/90 backdrop-blur-sm rounded-lg border border-slate-200 shadow-lg">
+      <div className="flex flex-col h-[600px] chat-message rounded-lg border border-slate-200 shadow-lg">
         <div className="flex-1 flex items-center justify-center p-8">
           <Card className="w-full max-w-md">
             <CardContent className="p-6">
               <div className="text-center mb-6">
                 <Settings className="w-12 h-12 mx-auto text-blue-600 mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Connect to OpenAI</h3>
-                <p className="text-sm text-slate-600">
+                <h3 className="text-lg font-semibold mb-2 chat-message">Connect to OpenAI</h3>
+                <p className="text-sm text-slate-600 chat-message">
                   Enter your OpenAI API key to enable real ChatGPT conversations
                 </p>
               </div>
@@ -341,7 +342,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
                   value={apiKey}
                   onChange={(e) => setApiKey(e.target.value)}
                   placeholder="sk-..."
-                  className="font-mono text-sm"
+                  className="font-mono text-sm chat-input"
                 />
                 <div className="flex gap-2">
                   <Button 
@@ -365,7 +366,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
                 </div>
               </div>
               
-              <div className="mt-4 text-xs text-slate-500">
+              <div className="mt-4 text-xs text-slate-500 chat-message">
                 <p>Find your API key at <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">platform.openai.com/api-keys</a></p>
                 <p className="mt-1">Your key is stored locally and never shared.</p>
               </div>
@@ -378,7 +379,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
 
   if (showMediaCapture) {
     return (
-      <div className="flex flex-col h-[600px] bg-white/90 backdrop-blur-sm rounded-lg border border-slate-200 shadow-lg">
+      <div className="flex flex-col h-[600px] chat-message rounded-lg border border-slate-200 shadow-lg">
         <div className="flex-1 flex items-center justify-center p-4">
           <MediaCapture 
             onMediaCapture={handleMediaCapture}
@@ -394,12 +395,12 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="flex flex-col h-[600px] bg-white/90 backdrop-blur-sm rounded-lg border border-slate-200 shadow-lg">
+    <div className="flex flex-col h-[600px] chat-message rounded-lg border border-slate-200 shadow-lg">
       {/* Header with controls */}
       <div className="flex justify-between items-center p-4 border-b border-slate-200">
         <div className="flex items-center gap-2">
           <Bot className="w-5 h-5 text-blue-600" />
-          <span className="font-medium">AI Companion</span>
+          <span className="font-medium chat-message">AI Companion</span>
           {currentDate !== today && (
             <Badge variant="outline" className="text-xs">
               {new Date(currentDate).toLocaleDateString()}
@@ -436,10 +437,10 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
             </div>
             <Card className="bg-white border-slate-200 max-w-[70%]">
               <CardContent className="p-3">
-                <p className="text-sm">
+                <p className="text-sm chat-message">
                   Hello! I'm your AI companion designed to support your dignity and autonomy. Share anything - thoughts, feelings, experiences, media. I'm here to engage with you while quietly building your personal foundation of insights.
                 </p>
-                <p className="text-xs text-slate-500 mt-2">
+                <p className="text-xs text-slate-500 mt-2 chat-message">
                   {new Date().toLocaleTimeString()}
                 </p>
               </CardContent>
@@ -465,10 +466,14 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
                   : 'bg-white border-slate-200'
               }`}>
                 <CardContent className="p-3">
-                  <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                  <p className={`text-sm whitespace-pre-wrap ${
+                    message.role === 'user' ? 'text-white' : 'chat-message'
+                  }`}>
+                    {message.content}
+                  </p>
                   <div className="flex items-center justify-between mt-2">
                     <p className={`text-xs ${
-                      message.role === 'user' ? 'text-blue-100' : 'text-slate-500'
+                      message.role === 'user' ? 'text-blue-100' : 'text-slate-500 chat-message'
                     }`}>
                       {message.timestamp.toLocaleTimeString()}
                     </p>
@@ -521,18 +526,18 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
                 {attachedMedia.type === 'photo' ? (
                   <>
                     <Image className="w-4 h-4 text-slate-600" />
-                    <span className="text-sm text-slate-700">Image attached</span>
+                    <span className="text-sm text-slate-700 chat-message">Image attached</span>
                   </>
                 ) : (
                   <>
                     <Mic className="w-4 h-4 text-slate-600" />
-                    <span className="text-sm text-slate-700">
+                    <span className="text-sm text-slate-700 chat-message">
                       Voice memo ({Math.round((attachedMedia.duration || 0))}s)
                     </span>
                   </>
                 )}
                 {attachedMedia.caption && (
-                  <span className="text-xs text-slate-500">- {attachedMedia.caption}</span>
+                  <span className="text-xs text-slate-500 chat-message">- {attachedMedia.caption}</span>
                 )}
               </div>
               <Button
@@ -563,7 +568,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Share anything... thoughts, feelings, experiences. I'll respond and quietly capture meaningful reflections."
-            className="resize-none min-h-[44px] max-h-32"
+            className="resize-none min-h-[44px] max-h-32 chat-input"
             disabled={isLoading}
           />
           <Button

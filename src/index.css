@@ -67,7 +67,7 @@
     --memory-glow: 255 214 165; /* #FFD6A5 */
     --whisper-shadow: 18 24 36; /* #121824 */
 
-    /* Chat text colors */
+    /* Chat text colors - BLACK text on light background */
     --chat-text: 20 20 20; /* #141414 Dark text for chat messages */
     --chat-background: 248 250 252; /* #F8FAFC Light background for chat */
   }
@@ -124,7 +124,7 @@
     background-position: 0 0, 16px 24px;
   }
 
-  /* ... keep existing code (typography rules) */
+  /* Typography rules */
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Crimson Text', serif;
     font-weight: 600;
@@ -147,20 +147,20 @@
     font-family: 'Inter', sans-serif;
   }
 
-  /* Chat message styling */
+  /* Chat message styling - BLACK text on light background */
   .chat-message {
-    color: hsl(var(--chat-text));
+    color: hsl(var(--chat-text)) !important;
     background-color: hsl(var(--chat-background));
   }
 
   .chat-input {
-    color: hsl(var(--chat-text));
+    color: hsl(var(--chat-text)) !important;
     background-color: hsl(var(--chat-background));
   }
 }
 
 @layer components {
-  /* ... keep existing code (codex portal transitions) */
+  /* Codex portal transitions */
   .codex-transition {
     @apply transition-all duration-700 ease-out;
   }
@@ -229,7 +229,7 @@
     border-color: rgba(255,214,165,0.15);
   }
 
-  /* ... keep existing code (emotional thread tags, wax seal, journey rhythm, whisper interactions, accent colors, portal glass, observatory glow, rune cipher) */
+  /* Emotional thread tags */
   .thread-marker {
     @apply inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium;
     background: linear-gradient(135deg, 
@@ -326,7 +326,7 @@
   }
 }
 
-/* ... keep existing code (mystical animations, cursor trails, focus states, text selection, scrollbar, wind-down ritual mode) */
+/* Mystical animations */
 @keyframes candle-flicker {
   0%, 100% { opacity: 0.9; filter: brightness(1); }
   25% { opacity: 0.95; filter: brightness(1.05); }
