@@ -7,8 +7,10 @@ import { EmergencyProtocol } from '../components/EmergencyProtocol';
 import { MainTabs } from '../components/MainTabs';
 import { useMantra } from '../hooks/useMantra';
 import { useAuth } from '../hooks/useAuth';
+import { useGovernance } from '../hooks/useGovernance';
 import { AuthPage } from '../components/AuthPage';
 import { Button } from '@/components/ui/button';
+import { Footer } from '../components/Footer';
 
 interface MotifEntry {
   id: string;
@@ -34,6 +36,7 @@ interface MotifEntry {
 
 const Index = () => {
   const { user, loading } = useAuth();
+  const { logInteraction } = useGovernance();
   const [entries, setEntries] = useState<MotifEntry[]>([]);
   const [currentEntry, setCurrentEntry] = useState('');
   const [isWindDownMode, setIsWindDownMode] = useState(false);
@@ -61,20 +64,79 @@ const Index = () => {
     setEntries(prev => [entry, ...prev]);
     setCurrentEntry('');
     
+    // Log the interaction for governance transparency
+    logInteraction({
+      type: 'entry_created',
+      input: entry.content,
+      motifTags: entry.motifs,
+      metadata: {
+        emotionalTone: entry.emotionalTone,
+        intent: entry.intent,
+        hasMedia: !!entry.media,
+      },
+      visible: true,
+    });
+
+    // Check for motifs and log them
+    if (entry.motifs.length > 0) {
+      logInteraction({
+        type: 'motif_detected',
+        input: entry.content,
+        motifTags: entry.motifs,
+        metadata: {
+          detectedMotifs: entry.motifs,
+          totalMotifs: entry.motifs.length,
+        },
+        visible: true,
+      });
+    }
+    
     // Check for emergency triggers
     const emergencyPhrases = ['display personal id', 'initiate translator mode'];
     if (emergencyPhrases.some(phrase => entry.content.toLowerCase().includes(phrase))) {
       setShowEmergencyProtocol(true);
+      logInteraction({
+        type: 'system_update',
+        input: 'Emergency protocol triggered',
+        metadata: {
+          trigger: 'emergency_phrase_detected',
+          phrase: emergencyPhrases.find(phrase => entry.content.toLowerCase().includes(phrase)),
+        },
+        visible: true,
+      });
     }
   };
 
   const handleDeleteEntry = (id: string) => {
+    const deletedEntry = entries.find(entry => entry.id === id);
     setEntries(prev => prev.filter(entry => entry.id !== id));
+    
+    if (deletedEntry) {
+      logInteraction({
+        type: 'system_update',
+        input: 'Entry deleted',
+        metadata: {
+          deletedEntryId: id,
+          entryContent: deletedEntry.content.substring(0, 100),
+        },
+        visible: true,
+      });
+    }
   };
 
   const handleWindDownEntry = (entry: MotifEntry) => {
     handleNewEntry(entry);
     setIsWindDownMode(false);
+    
+    logInteraction({
+      type: 'system_update',
+      input: 'Wind-down mode session completed',
+      metadata: {
+        windDownEntry: true,
+        entryLength: entry.content.length,
+      },
+      visible: true,
+    });
   };
 
   if (showGettingStarted) {
@@ -148,6 +210,8 @@ const Index = () => {
           onEntrySubmit={handleNewEntry}
           onEntryDelete={handleDeleteEntry}
         />
+        
+        <Footer />
       </div>
     </div>
   );

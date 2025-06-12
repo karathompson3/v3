@@ -7,8 +7,12 @@ interface HeaderProps {
   onShowGettingStarted: () => void;
 }
 
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Moon, Shield, ScrollText, BookOpen, Sparkles } from 'lucide-react';
+import { Moon, Shield, ScrollText, BookOpen, Sparkles, Clock, FileText } from 'lucide-react';
+import { GovernanceCovenantModal } from './GovernanceCovenantModal';
+import { InteractionLogsModal } from './InteractionLogsModal';
+import { useGovernance } from '../hooks/useGovernance';
 
 export const Header = ({ 
   currentMantra, 
@@ -17,63 +21,105 @@ export const Header = ({
   onShowBillOfRights,
   onShowGettingStarted
 }: HeaderProps) => {
+  const [showGovernanceModal, setShowGovernanceModal] = useState(false);
+  const [showLogsModal, setShowLogsModal] = useState(false);
+  const { userRole, permissions } = useGovernance();
+
   return (
-    <div className="text-center mb-8">
-      <div className="relative">
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-slate-800 via-blue-700 to-slate-800 bg-clip-text text-transparent mb-3">
-          V3
-        </h1>
-        <div className="absolute -top-1 -right-4">
-          <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full border border-blue-200">
-            <Sparkles className="w-3 h-3 mr-1" />
-            demo
-          </span>
+    <>
+      <div className="text-center mb-8">
+        <div className="relative">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-slate-800 via-blue-700 to-slate-800 bg-clip-text text-transparent mb-3">
+            V3
+          </h1>
+          <div className="absolute -top-1 -right-4">
+            <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full border border-blue-200">
+              <Sparkles className="w-3 h-3 mr-1" />
+              demo
+            </span>
+          </div>
+        </div>
+        
+        <div className="mb-6">
+          <div className="inline-block p-4 bg-gradient-to-r from-blue-50 to-slate-50 rounded-xl border border-slate-200 shadow-sm">
+            <p className="text-slate-700 italic font-medium max-w-lg">
+              {currentMantra}
+            </p>
+          </div>
+        </div>
+        
+        {/* Quick Actions */}
+        <div className="flex justify-center gap-3 mb-6 flex-wrap">
+          <Button
+            variant="outline"
+            onClick={onShowGettingStarted}
+            className="flex items-center gap-2 hover:bg-blue-50 hover:border-blue-300 transition-all duration-200 group"
+          >
+            <BookOpen className="w-4 h-4 group-hover:text-blue-600 transition-colors" />
+            How to Use
+          </Button>
+          <Button
+            variant="outline"
+            onClick={onWindDownMode}
+            className="flex items-center gap-2 hover:bg-purple-50 hover:border-purple-300 transition-all duration-200 group"
+          >
+            <Moon className="w-4 h-4 group-hover:text-purple-600 transition-colors" />
+            Wind-Down Mode
+          </Button>
+          <Button
+            variant="outline"
+            onClick={onEmergencyProtocol}
+            className="flex items-center gap-2 hover:bg-amber-50 hover:border-amber-300 transition-all duration-200 group"
+          >
+            <Shield className="w-4 h-4 group-hover:text-amber-600 transition-colors" />
+            Display Personal ID
+          </Button>
+          <Button
+            variant="outline"
+            onClick={onShowBillOfRights}
+            className="flex items-center gap-2 hover:bg-green-50 hover:border-green-300 transition-all duration-200 group"
+          >
+            <ScrollText className="w-4 h-4 group-hover:text-green-600 transition-colors" />
+            Privacy Rights
+          </Button>
+        </div>
+
+        {/* Governance Actions */}
+        <div className="flex justify-center gap-3 mb-4 flex-wrap">
+          <Button
+            variant="outline"
+            onClick={() => setShowGovernanceModal(true)}
+            className="flex items-center gap-2 hover:bg-indigo-50 hover:border-indigo-300 transition-all duration-200 group text-xs"
+          >
+            <FileText className="w-3 h-3 group-hover:text-indigo-600 transition-colors" />
+            Governance Covenant
+          </Button>
+          {permissions.canViewLogs && (
+            <Button
+              variant="outline"
+              onClick={() => setShowLogsModal(true)}
+              className="flex items-center gap-2 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 group text-xs"
+            >
+              <Clock className="w-3 h-3 group-hover:text-slate-600 transition-colors" />
+              Interaction Logs
+            </Button>
+          )}
+        </div>
+
+        <div className="text-xs text-slate-500 mb-2">
+          Role: {userRole} • Open Access Model • Full Transparency Mode
         </div>
       </div>
+
+      <GovernanceCovenantModal 
+        open={showGovernanceModal} 
+        onOpenChange={setShowGovernanceModal} 
+      />
       
-      <div className="mb-6">
-        <div className="inline-block p-4 bg-gradient-to-r from-blue-50 to-slate-50 rounded-xl border border-slate-200 shadow-sm">
-          <p className="text-slate-700 italic font-medium max-w-lg">
-            {currentMantra}
-          </p>
-        </div>
-      </div>
-      
-      {/* Quick Actions */}
-      <div className="flex justify-center gap-3 mb-6 flex-wrap">
-        <Button
-          variant="outline"
-          onClick={onShowGettingStarted}
-          className="flex items-center gap-2 hover:bg-blue-50 hover:border-blue-300 transition-all duration-200 group"
-        >
-          <BookOpen className="w-4 h-4 group-hover:text-blue-600 transition-colors" />
-          How to Use
-        </Button>
-        <Button
-          variant="outline"
-          onClick={onWindDownMode}
-          className="flex items-center gap-2 hover:bg-purple-50 hover:border-purple-300 transition-all duration-200 group"
-        >
-          <Moon className="w-4 h-4 group-hover:text-purple-600 transition-colors" />
-          Wind-Down Mode
-        </Button>
-        <Button
-          variant="outline"
-          onClick={onEmergencyProtocol}
-          className="flex items-center gap-2 hover:bg-amber-50 hover:border-amber-300 transition-all duration-200 group"
-        >
-          <Shield className="w-4 h-4 group-hover:text-amber-600 transition-colors" />
-          Display Personal ID
-        </Button>
-        <Button
-          variant="outline"
-          onClick={onShowBillOfRights}
-          className="flex items-center gap-2 hover:bg-green-50 hover:border-green-300 transition-all duration-200 group"
-        >
-          <ScrollText className="w-4 h-4 group-hover:text-green-600 transition-colors" />
-          Privacy Rights
-        </Button>
-      </div>
-    </div>
+      <InteractionLogsModal 
+        open={showLogsModal} 
+        onOpenChange={setShowLogsModal} 
+      />
+    </>
   );
 };
