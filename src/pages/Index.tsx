@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { WindDownMode } from '../components/WindDownMode';
 import { UserBillOfRights } from '../components/UserBillOfRights';
@@ -50,8 +49,8 @@ const Index = () => {
   // Show loading while checking authentication
   if (loading) {
     return (
-      <div className="min-h-screen codex-container flex items-center justify-center">
-        <div className="text-foreground/60 font-light tracking-wide font-serif italic candle-flicker">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 flex items-center justify-center">
+        <div className="text-white/60 font-light tracking-wide font-serif italic candle-flicker">
           The codex awakens...
         </div>
       </div>
@@ -144,12 +143,12 @@ const Index = () => {
 
   if (showGettingStarted) {
     return (
-      <div className="min-h-screen codex-container p-6">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 p-6">
         <div className="mb-8">
           <Button
             variant="outline"
             onClick={() => setShowGettingStarted(false)}
-            className="whisper-hover portal-glass hover:bg-accent/20"
+            className="whisper-hover bg-white/10 border-white/20 text-white hover:bg-white/20"
           >
             ← Return to Codex
           </Button>
@@ -161,12 +160,12 @@ const Index = () => {
 
   if (showBillOfRights) {
     return (
-      <div className="min-h-screen codex-container p-6">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 p-6">
         <div className="mb-8">
           <Button
             variant="outline"
             onClick={() => setShowBillOfRights(false)}
-            className="whisper-hover portal-glass hover:bg-accent/20"
+            className="whisper-hover bg-white/10 border-white/20 text-white hover:bg-white/20"
           >
             ← Return to Codex
           </Button>
@@ -198,10 +197,10 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen codex-container memory-mapping-mode">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 memory-mapping-mode">
       {/* Mystical background texture overlay */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
-        <div className="h-full w-full bg-gradient-to-br from-accent/5 via-transparent to-primary/5"></div>
+        <div className="h-full w-full bg-gradient-to-br from-blue-300/5 via-transparent to-purple-300/5"></div>
       </div>
       
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-8">
