@@ -10,34 +10,34 @@
 
 @layer base {
   :root {
-    /* V3 Codex Color Scheme - Magical Realism Palette */
-    --background: 26 24 22; /* #1A1816 Matte black-brown like worn leather journal */
+    /* V3 Codex Color Scheme - Blue Observatory Palette */
+    --background: 16 20 32; /* #101420 Deep observatory blue */
     --foreground: 236 226 220; /* #ECE2DC Soft candlewhite */
 
-    --card: 43 39 37; /* #2B2725 Dusty charcoal, like edge of old scroll */
+    --card: 24 32 48; /* #182030 Deeper blue scroll, like twilight parchment */
     --card-foreground: 236 226 220; /* #ECE2DC Soft candlewhite */
 
-    --popover: 43 39 37; /* #2B2725 Dusty charcoal */
+    --popover: 24 32 48; /* #182030 Deeper blue scroll */
     --popover-foreground: 236 226 220; /* #ECE2DC Soft candlewhite */
 
     /* Input fields - Deeper scroll texture */
-    --input: 35 32 30; /* #23201E Deeper than card for nested feeling */
-    --border: 35 32 30; /* #23201E Deeper scroll border */
+    --input: 20 28 42; /* #141C2A Even deeper blue for nested feeling */
+    --border: 20 28 42; /* #141C2A Deeper scroll border */
 
     /* Primary/Interactive - Faint plum (emotional highlight thread) */
     --primary: 141 106 159; /* #8D6A9F Faint plum/mauve */
     --primary-foreground: 236 226 220; /* Soft candlewhite for contrast */
 
     /* Secondary text - Stone beige */
-    --secondary: 35 32 30; /* #23201E Deeper scroll */
+    --secondary: 20 28 42; /* #141C2A Deeper scroll */
     --secondary-foreground: 182 171 162; /* #B6ABA2 Stone beige */
 
-    --muted: 35 32 30; /* #23201E Deeper scroll */
+    --muted: 20 28 42; /* #141C2A Deeper scroll */
     --muted-foreground: 154 142 130; /* #9A8E82 Muted stone */
 
     /* Accent - Memory glow */
     --accent: 255 214 165; /* #FFD6A5 Memory glow (like match being struck) */
-    --accent-foreground: 26 24 22; /* Background for contrast */
+    --accent-foreground: 16 20 32; /* Background for contrast */
 
     /* Success - Sage wisdom */
     --destructive: 141 106 159; /* #8D6A9F Using plum for gentle success */
@@ -48,24 +48,28 @@
     --radius: 0.875rem; /* Slightly more rounded for organic feel */
 
     /* Sidebar colors matching codex theme */
-    --sidebar-background: 22 20 18; /* Slightly darker than main */
+    --sidebar-background: 12 16 28; /* Slightly darker than main */
     --sidebar-foreground: 236 226 220; /* Soft candlewhite */
     --sidebar-primary: 141 106 159; /* Faint plum */
     --sidebar-primary-foreground: 236 226 220; /* Soft candlewhite */
     --sidebar-accent: 255 214 165; /* Memory glow */
-    --sidebar-accent-foreground: 26 24 22; /* Background */
-    --sidebar-border: 35 32 30; /* Deeper scroll */
+    --sidebar-accent-foreground: 16 20 32; /* Background */
+    --sidebar-border: 20 28 42; /* Deeper scroll */
     --sidebar-ring: 141 106 159; /* Faint plum */
 
     /* Custom codex emotional colors */
-    --leather-journal: 26 24 22; /* #1A1816 */
-    --dusty-scroll: 43 39 37; /* #2B2725 */
-    --deeper-scroll: 35 32 30; /* #23201E */
+    --observatory-blue: 16 20 32; /* #101420 */
+    --twilight-scroll: 24 32 48; /* #182030 */
+    --deeper-scroll: 20 28 42; /* #141C2A */
     --candlewhite: 236 226 220; /* #ECE2DC */
     --stone-beige: 182 171 162; /* #B6ABA2 */
     --emotional-plum: 141 106 159; /* #8D6A9F */
     --memory-glow: 255 214 165; /* #FFD6A5 */
-    --whisper-shadow: 30 27 25; /* #1E1B19 */
+    --whisper-shadow: 18 24 36; /* #121824 */
+
+    /* Chat text colors */
+    --chat-text: 20 20 20; /* #141414 Dark text for chat messages */
+    --chat-background: 248 250 252; /* #F8FAFC Light background for chat */
   }
 
   .light {
@@ -97,6 +101,8 @@
     --sidebar-accent-foreground: 26 24 22;
     --sidebar-border: 229 225 221;
     --sidebar-ring: 141 106 159;
+    --chat-text: 20 20 20;
+    --chat-background: 248 250 252;
   }
 }
 
@@ -110,7 +116,7 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 400;
     line-height: 1.7;
-    /* Codex texture - subtle parchment grain */
+    /* Codex texture - subtle starlight grain */
     background-image: 
       radial-gradient(circle at 1px 1px, rgba(255,214,165,0.03) 1px, transparent 0),
       radial-gradient(circle at 3px 7px, rgba(141,106,159,0.02) 1px, transparent 0);
@@ -118,7 +124,7 @@
     background-position: 0 0, 16px 24px;
   }
 
-  /* Codex Typography - Poetic and Trustworthy */
+  /* ... keep existing code (typography rules) */
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Crimson Text', serif;
     font-weight: 600;
@@ -140,10 +146,21 @@
   p, div, span {
     font-family: 'Inter', sans-serif;
   }
+
+  /* Chat message styling */
+  .chat-message {
+    color: hsl(var(--chat-text));
+    background-color: hsl(var(--chat-background));
+  }
+
+  .chat-input {
+    color: hsl(var(--chat-text));
+    background-color: hsl(var(--chat-background));
+  }
 }
 
 @layer components {
-  /* Codex Portal Transitions - Fades, never pops */
+  /* ... keep existing code (codex portal transitions) */
   .codex-transition {
     @apply transition-all duration-700 ease-out;
   }
@@ -166,8 +183,8 @@
   /* Scroll and parchment containers */
   .codex-container {
     background: linear-gradient(135deg, 
-      hsl(var(--leather-journal)) 0%, 
-      hsl(var(--dusty-scroll)) 100%);
+      hsl(var(--observatory-blue)) 0%, 
+      hsl(var(--twilight-scroll)) 100%);
     position: relative;
     overflow: hidden;
   }
@@ -175,7 +192,7 @@
   /* Sacred scroll cards - like unfolding ancient maps */
   .sacred-scroll {
     @apply rounded-xl overflow-hidden;
-    background: hsl(var(--dusty-scroll));
+    background: hsl(var(--twilight-scroll));
     backdrop-filter: blur(8px);
     border: 1px solid rgba(255,214,165,0.08);
     box-shadow: 
@@ -212,7 +229,7 @@
     border-color: rgba(255,214,165,0.15);
   }
 
-  /* Emotional thread tags - floating markers */
+  /* ... keep existing code (emotional thread tags, wax seal, journey rhythm, whisper interactions, accent colors, portal glass, observatory glow, rune cipher) */
   .thread-marker {
     @apply inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium;
     background: linear-gradient(135deg, 
@@ -275,14 +292,14 @@
 
   /* Portal glass morphism */
   .portal-glass {
-    background: rgba(43, 39, 37, 0.8);
+    background: rgba(24, 32, 48, 0.8);
     backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 214, 165, 0.1);
   }
 
   /* Observatory glow mode */
   .observatory-glow {
-    background: rgba(30, 27, 25, 0.9);
+    background: rgba(18, 24, 36, 0.9);
     backdrop-filter: blur(12px);
     box-shadow: 
       inset 0 1px 0 rgba(255,214,165,0.05),
@@ -291,7 +308,7 @@
 
   /* Rune cipher mode for patterns */
   .rune-cipher {
-    background: rgba(35, 32, 30, 0.95);
+    background: rgba(20, 28, 42, 0.95);
     backdrop-filter: blur(8px);
     border: 1px solid rgba(141,106,159,0.2);
     position: relative;
@@ -309,7 +326,7 @@
   }
 }
 
-/* Codex Mystical Animations */
+/* ... keep existing code (mystical animations, cursor trails, focus states, text selection, scrollbar, wind-down ritual mode) */
 @keyframes candle-flicker {
   0%, 100% { opacity: 0.9; filter: brightness(1); }
   25% { opacity: 0.95; filter: brightness(1.05); }
@@ -369,7 +386,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(var(--dusty-scroll));
+  background: hsl(var(--twilight-scroll));
 }
 
 ::-webkit-scrollbar-thumb {
@@ -386,7 +403,7 @@
   background: radial-gradient(circle at center, 
     transparent 0%, 
     transparent 60%, 
-    rgba(26,24,22,0.3) 80%, 
-    rgba(26,24,22,0.6) 100%);
+    rgba(16,20,32,0.3) 80%, 
+    rgba(16,20,32,0.6) 100%);
   pointer-events: none;
 }
