@@ -10,54 +10,61 @@
 
 @layer base {
   :root {
-    /* Dark Mode Base Colors - Moody cinematic palette */
-    --background: 0 0% 8%; /* Rich dark for night mode */
-    --foreground: 30 20% 95%; /* Warm off-white */
+    /* V3 Dark Mode Color Scheme - Emotionally warm, never loud */
+    --background: 0 0% 7%; /* #121212 Deep Charcoal Black */
+    --foreground: 30 20% 96%; /* #F5F3F1 Porcelain White */
 
-    --card: 0 0% 10%;
-    --card-foreground: 30 20% 95%;
+    --card: 20 10% 11%; /* #1E1B18 Inky Brown-Black */
+    --card-foreground: 30 20% 96%; /* #F5F3F1 Porcelain White */
 
-    --popover: 0 0% 10%;
-    --popover-foreground: 30 20% 95%;
+    --popover: 20 10% 11%; /* #1E1B18 Inky Brown-Black */
+    --popover-foreground: 30 20% 96%; /* #F5F3F1 Porcelain White */
 
-    /* Accent Tones - Emotionally loaded darks */
-    --primary: 210 40% 70%; /* Brighter coastal blue for contrast */
-    --primary-foreground: 0 0% 8%;
+    /* Input fields - Espresso Ash */
+    --input: 25 8% 16%; /* #2A2623 Espresso Ash */
+    --border: 25 8% 16%; /* #2A2623 Espresso Ash */
 
-    --secondary: 160 15% 25%; /* Deep sage */
-    --secondary-foreground: 30 20% 95%;
+    /* Primary/Interactive - Blush Coral */
+    --primary: 10 60% 78%; /* #F3A89C Blush Coral */
+    --primary-foreground: 0 0% 7%; /* Deep charcoal for contrast */
 
-    --muted: 160 10% 15%;
-    --muted-foreground: 30 10% 65%;
+    /* Secondary text - Warm Fog */
+    --secondary: 25 8% 16%; /* #2A2623 Espresso Ash */
+    --secondary-foreground: 30 15% 82%; /* #D0C8C0 Warm Fog */
 
-    --accent: 350 25% 30%; /* Deep rose */
-    --accent-foreground: 30 20% 95%;
+    --muted: 25 8% 16%; /* #2A2623 Espresso Ash */
+    --muted-foreground: 25 12% 65%; /* #A0938A Clay Smoke */
 
-    /* Highlight States - Neon coral and ink blue for drama */
-    --destructive: 15 80% 60%;
-    --destructive-foreground: 30 20% 95%;
+    /* Accent - Clay Rose */
+    --accent: 10 45% 63%; /* #D3776D Clay Rose */
+    --accent-foreground: 30 20% 96%; /* #F5F3F1 Porcelain White */
 
-    --border: 160 10% 18%;
-    --input: 160 10% 18%;
-    --ring: 210 85% 65%; /* Bright ink blue for focus */
+    /* Success - Herbal Sage */
+    --destructive: 120 25% 70%; /* #B2CEB2 Herbal Sage for success states */
+    --destructive-foreground: 0 0% 7%; /* Deep charcoal */
+
+    --ring: 10 60% 78%; /* #F3A89C Blush Coral for focus */
 
     --radius: 0.75rem;
 
-    /* Sidebar colors with dark moody palette */
-    --sidebar-background: 0 0% 6%;
-    --sidebar-foreground: 30 20% 90%;
-    --sidebar-primary: 210 40% 70%;
-    --sidebar-primary-foreground: 0 0% 8%;
-    --sidebar-accent: 350 25% 25%;
-    --sidebar-accent-foreground: 30 20% 90%;
-    --sidebar-border: 160 10% 15%;
-    --sidebar-ring: 210 85% 65%;
+    /* Sidebar colors with V3 palette */
+    --sidebar-background: 0 0% 6%; /* Slightly darker than main */
+    --sidebar-foreground: 30 20% 90%; /* Porcelain White */
+    --sidebar-primary: 10 60% 78%; /* Blush Coral */
+    --sidebar-primary-foreground: 0 0% 7%; /* Deep charcoal */
+    --sidebar-accent: 10 45% 63%; /* Clay Rose */
+    --sidebar-accent-foreground: 30 20% 90%; /* Porcelain White */
+    --sidebar-border: 25 8% 16%; /* Espresso Ash */
+    --sidebar-ring: 10 60% 78%; /* Blush Coral */
 
-    /* Custom accent colors for emotional states - darker variants */
-    --blush: 20 40% 35%;
-    --tangerine: 35 70% 45%;
-    --sage: 160 15% 35%;
-    --coastal: 210 25% 50%;
+    /* Custom V3 emotional colors */
+    --blush-coral: 10 60% 78%; /* #F3A89C */
+    --clay-rose: 10 45% 63%; /* #D3776D */
+    --dusty-lavender: 320 15% 72%; /* #BCAFB3 */
+    --herbal-sage: 120 25% 70%; /* #B2CEB2 */
+    --warm-fog: 30 15% 82%; /* #D0C8C0 */
+    --clay-smoke: 25 12% 65%; /* #A0938A */
+    --twilight-cloud: 240 15% 30%; /* #444258 */
   }
 
   .light {
@@ -99,10 +106,10 @@
     --sidebar-border: 160 15% 85%;
     --sidebar-ring: 210 85% 55%;
 
-    --blush: 20 40% 85%;
-    --tangerine: 35 70% 75%;
-    --sage: 160 15% 75%;
-    --coastal: 210 25% 70%;
+    --blush-coral: 20 40% 85%;
+    --clay-rose: 35 70% 75%;
+    --dusty-lavender: 160 15% 75%;
+    --herbal-sage: 210 25% 70%;
   }
 }
 
@@ -116,8 +123,8 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 400;
     line-height: 1.6;
-    /* Subtle dark texture for warmth */
-    background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+    /* Subtle dark texture for warmth - more prominent in V3 */
+    background-image: radial-gradient(circle at 1px 1px, rgba(243,168,156,0.03) 1px, transparent 0);
     background-size: 20px 20px;
   }
 
@@ -127,6 +134,7 @@
     font-weight: 600;
     letter-spacing: -0.02em;
     line-height: 1.2;
+    color: hsl(var(--foreground));
   }
 
   /* Handwritten-style annotations */
@@ -135,6 +143,7 @@
     font-size: 0.9em;
     opacity: 0.8;
     transform: rotate(-1deg);
+    color: hsl(var(--clay-smoke));
   }
 }
 
@@ -144,21 +153,21 @@
     @apply transition-all duration-500 ease-out;
   }
 
-  /* Soft glow highlights - enhanced for dark mode */
+  /* Soft glow highlights - V3 blush coral */
   .soft-glow {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.25);
+    box-shadow: 0 0 20px rgba(243, 168, 156, 0.15);
     @apply transition-shadow duration-300;
   }
 
   .soft-glow:hover {
-    box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+    box-shadow: 0 0 30px rgba(243, 168, 156, 0.25);
   }
 
-  /* Canvas-first layout helpers - dark cinematic */
+  /* Canvas-first layout helpers - V3 dark cinematic */
   .canvas-container {
     background: linear-gradient(135deg, 
       hsl(var(--background)) 0%, 
-      hsl(var(--muted)) 100%);
+      hsl(var(--card)) 100%);
     position: relative;
     overflow: hidden;
   }
@@ -168,32 +177,39 @@
     @apply rounded-lg overflow-hidden shadow-lg;
     transform: rotate(-0.5deg);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
   }
 
   .postcard:hover {
     transform: rotate(0deg) scale(1.02);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
   }
 
-  /* Floating markers for tags/motifs - enhanced for dark */
+  /* Floating markers for tags/motifs - V3 dusty lavender */
   .floating-marker {
     @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
-    background: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--secondary)));
+    background: linear-gradient(135deg, 
+      hsl(var(--dusty-lavender)), 
+      hsl(var(--herbal-sage)));
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(243,168,156,0.2);
     transform: translateY(-2px);
     transition: all 0.3s ease;
+    color: hsl(var(--background));
   }
 
   .floating-marker:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
   }
 
-  /* Moodboard-style cards - dark cinematic */
+  /* Moodboard-style cards - V3 inky brown-black */
   .moodboard-card {
-    @apply bg-card/80 backdrop-blur-sm border border-border/50 rounded-lg p-6;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    background: hsl(var(--card));
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(243,168,156,0.1);
+    @apply rounded-lg p-6;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     transition: all 0.4s ease;
     position: relative;
     overflow: hidden;
@@ -207,9 +223,9 @@
     right: 0;
     height: 2px;
     background: linear-gradient(90deg, 
-      hsl(var(--accent)), 
-      hsl(var(--primary)), 
-      hsl(var(--secondary)));
+      hsl(var(--blush-coral)), 
+      hsl(var(--clay-rose)), 
+      hsl(var(--dusty-lavender)));
     opacity: 0;
     transition: opacity 0.3s ease;
   }
@@ -220,7 +236,8 @@
 
   .moodboard-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    border-color: rgba(243,168,156,0.2);
   }
 
   /* Story-style vertical rhythm */
@@ -243,17 +260,29 @@
     transform: scale(0.98);
   }
 
-  /* Emotional accent colors - dark variants */
-  .accent-blush { background-color: hsl(var(--blush)); }
-  .accent-tangerine { background-color: hsl(var(--tangerine)); }
-  .accent-sage { background-color: hsl(var(--sage)); }
-  .accent-coastal { background-color: hsl(var(--coastal)); }
+  /* V3 Emotional accent colors */
+  .accent-blush-coral { background-color: hsl(var(--blush-coral)); }
+  .accent-clay-rose { background-color: hsl(var(--clay-rose)); }
+  .accent-dusty-lavender { background-color: hsl(var(--dusty-lavender)); }
+  .accent-herbal-sage { background-color: hsl(var(--herbal-sage)); }
 
-  /* Glass morphism for overlays - enhanced for dark */
+  /* Glass morphism for overlays - V3 reflection mode */
   .glass-morph {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(30, 27, 24, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(243, 168, 156, 0.1);
+  }
+
+  /* V3 Reflection Mode Background Glow */
+  .reflection-mode {
+    background: rgba(64, 60, 58, 0.6);
+    backdrop-filter: blur(8px);
+  }
+
+  /* V3 Occlumency Vault Tint */
+  .vault-mode {
+    background: rgba(68, 66, 88, 0.7);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
 
@@ -276,7 +305,22 @@
   animation: spotlight-pulse 2s ease-in-out infinite;
 }
 
-/* Shimmer for vault mode - enhanced for dark */
+/* V3 Soundtrack Cue Aura */
+@keyframes soundtrack-glow {
+  0%, 100% { 
+    background: linear-gradient(45deg, rgba(165, 106, 124, 0.3), rgba(244, 205, 193, 0.3));
+  }
+  50% { 
+    background: linear-gradient(45deg, rgba(165, 106, 124, 0.5), rgba(244, 205, 193, 0.5));
+  }
+}
+
+.soundtrack-aura {
+  animation: soundtrack-glow 3s ease-in-out infinite;
+  border-radius: 12px;
+}
+
+/* Shimmer for vault mode - V3 twilight cloud */
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
@@ -285,8 +329,18 @@
 .vault-shimmer {
   background: linear-gradient(90deg, 
     transparent, 
-    rgba(255,255,255,0.1), 
+    rgba(68, 66, 88, 0.3), 
     transparent);
   background-size: 200% 100%;
   animation: shimmer 3s ease-in-out infinite;
+}
+
+/* V3 Occlumency pulse animation */
+@keyframes occlumency-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.8; }
+}
+
+.occlumency-pulse {
+  animation: occlumency-pulse 2s ease-in-out infinite;
 }
