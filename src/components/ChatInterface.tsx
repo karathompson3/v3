@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -298,9 +297,9 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
 
   if (loading) {
     return (
-      <div className="flex flex-col h-[600px] chat-message rounded-lg border border-slate-200 shadow-lg">
+      <div className="flex flex-col h-[600px] bg-slate-900/95 backdrop-blur-sm rounded-lg border border-white/20 shadow-lg">
         <div className="flex-1 flex items-center justify-center">
-          <div className="text-slate-600">Loading chat history...</div>
+          <div className="text-blue-100">Loading chat history...</div>
         </div>
       </div>
     );
@@ -308,7 +307,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
 
   if (showHistory) {
     return (
-      <div className="flex flex-col h-[600px] chat-message rounded-lg border border-slate-200 shadow-lg">
+      <div className="flex flex-col h-[600px] bg-slate-900/95 backdrop-blur-sm rounded-lg border border-white/20 shadow-lg">
         <ChatHistory
           availableDates={availableDates}
           currentDate={currentLog?.date || ''}
@@ -325,14 +324,14 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
 
   if (showApiKeyInput) {
     return (
-      <div className="flex flex-col h-[600px] chat-message rounded-lg border border-slate-200 shadow-lg">
+      <div className="flex flex-col h-[600px] bg-slate-900/95 backdrop-blur-sm rounded-lg border border-white/20 shadow-lg">
         <div className="flex-1 flex items-center justify-center p-8">
-          <Card className="w-full max-w-md">
+          <Card className="w-full max-w-md bg-slate-800/90 border-white/20">
             <CardContent className="p-6">
               <div className="text-center mb-6">
-                <Settings className="w-12 h-12 mx-auto text-blue-600 mb-4" />
-                <h3 className="text-lg font-semibold mb-2 chat-message">Connect to OpenAI</h3>
-                <p className="text-sm text-slate-600 chat-message">
+                <Settings className="w-12 h-12 mx-auto text-blue-400 mb-4" />
+                <h3 className="text-lg font-semibold mb-2 text-white">Connect to OpenAI</h3>
+                <p className="text-sm text-blue-200">
                   Enter your OpenAI API key to enable real ChatGPT conversations
                 </p>
               </div>
@@ -342,13 +341,13 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
                   value={apiKey}
                   onChange={(e) => setApiKey(e.target.value)}
                   placeholder="sk-..."
-                  className="font-mono text-sm chat-input"
+                  className="font-mono text-sm bg-slate-700/50 border-white/20 text-white placeholder:text-slate-400"
                 />
                 <div className="flex gap-2">
                   <Button 
                     onClick={() => saveApiKey(apiKey)}
                     disabled={!apiKey.trim()}
-                    className="flex-1"
+                    className="flex-1 bg-blue-600 hover:bg-blue-700"
                   >
                     Save & Connect
                   </Button>
@@ -359,6 +358,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
                         setApiKey(localStorage.getItem('openai_api_key') || '');
                         setShowApiKeyInput(false);
                       }}
+                      className="border-white/20 text-white hover:bg-white/10"
                     >
                       Cancel
                     </Button>
@@ -366,8 +366,8 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
                 </div>
               </div>
               
-              <div className="mt-4 text-xs text-slate-500 chat-message">
-                <p>Find your API key at <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">platform.openai.com/api-keys</a></p>
+              <div className="mt-4 text-xs text-slate-400">
+                <p>Find your API key at <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">platform.openai.com/api-keys</a></p>
                 <p className="mt-1">Your key is stored locally and never shared.</p>
               </div>
             </CardContent>
@@ -379,7 +379,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
 
   if (showMediaCapture) {
     return (
-      <div className="flex flex-col h-[600px] chat-message rounded-lg border border-slate-200 shadow-lg">
+      <div className="flex flex-col h-[600px] bg-slate-900/95 backdrop-blur-sm rounded-lg border border-white/20 shadow-lg">
         <div className="flex-1 flex items-center justify-center p-4">
           <MediaCapture 
             onMediaCapture={handleMediaCapture}
@@ -395,14 +395,14 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="flex flex-col h-[600px] chat-message rounded-lg border border-slate-200 shadow-lg">
+    <div className="flex flex-col h-[600px] bg-slate-900/95 backdrop-blur-sm rounded-lg border border-white/20 shadow-lg">
       {/* Header with controls */}
-      <div className="flex justify-between items-center p-4 border-b border-slate-200">
+      <div className="flex justify-between items-center p-4 border-b border-white/20">
         <div className="flex items-center gap-2">
-          <Bot className="w-5 h-5 text-blue-600" />
-          <span className="font-medium chat-message">AI Companion</span>
+          <Bot className="w-5 h-5 text-blue-400" />
+          <span className="font-medium text-white">AI Companion</span>
           {currentDate !== today && (
-            <Badge variant="outline" className="text-xs">
+            <Badge variant="outline" className="text-xs border-white/20 text-blue-200">
               {new Date(currentDate).toLocaleDateString()}
             </Badge>
           )}
@@ -412,7 +412,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
             variant="ghost"
             size="sm"
             onClick={() => setShowHistory(true)}
-            className="text-slate-500 hover:text-slate-700"
+            className="text-slate-400 hover:text-white hover:bg-white/10"
             title="Chat History"
           >
             <History className="w-4 h-4" />
@@ -421,7 +421,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
             variant="ghost"
             size="sm"
             onClick={() => setShowApiKeyInput(true)}
-            className="text-slate-500 hover:text-slate-700"
+            className="text-slate-400 hover:text-white hover:bg-white/10"
           >
             <Settings className="w-4 h-4" />
           </Button>
@@ -432,15 +432,15 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 && (
           <div className="flex gap-3 justify-start">
-            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-              <Bot className="w-4 h-4 text-blue-600" />
+            <div className="w-8 h-8 bg-blue-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+              <Bot className="w-4 h-4 text-blue-400" />
             </div>
-            <Card className="bg-white border-slate-200 max-w-[70%]">
+            <Card className="bg-slate-800/60 border-white/20 max-w-[70%]">
               <CardContent className="p-3">
-                <p className="text-sm chat-message">
+                <p className="text-sm text-blue-100">
                   Hello! I'm your AI companion designed to support your dignity and autonomy. Share anything - thoughts, feelings, experiences, media. I'm here to engage with you while quietly building your personal foundation of insights.
                 </p>
-                <p className="text-xs text-slate-500 mt-2 chat-message">
+                <p className="text-xs text-slate-400 mt-2">
                   {new Date().toLocaleTimeString()}
                 </p>
               </CardContent>
@@ -454,31 +454,31 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
             className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             {message.role === 'assistant' && (
-              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                <Bot className="w-4 h-4 text-blue-600" />
+              <div className="w-8 h-8 bg-blue-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <Bot className="w-4 h-4 text-blue-400" />
               </div>
             )}
             
             <div className={`max-w-[70%] ${message.role === 'user' ? 'order-first' : ''}`}>
               <Card className={`${
                 message.role === 'user' 
-                  ? 'bg-blue-500 text-white border-blue-500' 
-                  : 'bg-white border-slate-200'
+                  ? 'bg-blue-600 text-white border-blue-500' 
+                  : 'bg-slate-800/60 border-white/20'
               }`}>
                 <CardContent className="p-3">
                   <p className={`text-sm whitespace-pre-wrap ${
-                    message.role === 'user' ? 'text-white' : 'chat-message'
+                    message.role === 'user' ? 'text-white' : 'text-blue-100'
                   }`}>
                     {message.content}
                   </p>
                   <div className="flex items-center justify-between mt-2">
                     <p className={`text-xs ${
-                      message.role === 'user' ? 'text-blue-100' : 'text-slate-500 chat-message'
+                      message.role === 'user' ? 'text-blue-100' : 'text-slate-400'
                     }`}>
                       {message.timestamp.toLocaleTimeString()}
                     </p>
                     {message.reflectionCaptured && (
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant="secondary" className="text-xs bg-purple-600/20 text-purple-300 border-purple-500/30">
                         <Sparkles className="w-3 h-3 mr-1" />
                         Reflected
                       </Badge>
@@ -489,8 +489,8 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
             </div>
             
             {message.role === 'user' && (
-              <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                <User className="w-4 h-4 text-slate-600" />
+              <div className="w-8 h-8 bg-slate-700/60 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <User className="w-4 h-4 text-slate-300" />
               </div>
             )}
           </div>
@@ -498,10 +498,10 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
         
         {isLoading && (
           <div className="flex gap-3 justify-start">
-            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-              <Bot className="w-4 h-4 text-blue-600" />
+            <div className="w-8 h-8 bg-blue-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+              <Bot className="w-4 h-4 text-blue-400" />
             </div>
-            <Card className="bg-white border-slate-200">
+            <Card className="bg-slate-800/60 border-white/20">
               <CardContent className="p-3">
                 <div className="flex space-x-1">
                   <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div>
@@ -517,34 +517,34 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
       </div>
       
       {/* Input Area */}
-      <div className="border-t border-slate-200 p-4">
+      <div className="border-t border-white/20 p-4">
         {/* Media Preview */}
         {attachedMedia && (
-          <div className="mb-3 p-3 bg-slate-50 rounded-lg border">
+          <div className="mb-3 p-3 bg-slate-800/50 rounded-lg border border-white/20">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 {attachedMedia.type === 'photo' ? (
                   <>
-                    <Image className="w-4 h-4 text-slate-600" />
-                    <span className="text-sm text-slate-700 chat-message">Image attached</span>
+                    <Image className="w-4 h-4 text-slate-400" />
+                    <span className="text-sm text-slate-300">Image attached</span>
                   </>
                 ) : (
                   <>
-                    <Mic className="w-4 h-4 text-slate-600" />
-                    <span className="text-sm text-slate-700 chat-message">
+                    <Mic className="w-4 h-4 text-slate-400" />
+                    <span className="text-sm text-slate-300">
                       Voice memo ({Math.round((attachedMedia.duration || 0))}s)
                     </span>
                   </>
                 )}
                 {attachedMedia.caption && (
-                  <span className="text-xs text-slate-500 chat-message">- {attachedMedia.caption}</span>
+                  <span className="text-xs text-slate-400">- {attachedMedia.caption}</span>
                 )}
               </div>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={removeAttachedMedia}
-                className="h-6 w-6 p-0"
+                className="h-6 w-6 p-0 text-slate-400 hover:text-white"
               >
                 <X className="w-3 h-3" />
               </Button>
@@ -557,7 +557,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
             variant="ghost"
             size="sm"
             onClick={() => setShowMediaCapture(true)}
-            className="px-2"
+            className="px-2 text-slate-400 hover:text-white hover:bg-white/10"
             title="Add media"
           >
             <Paperclip className="w-4 h-4" />
@@ -568,13 +568,13 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Share anything... thoughts, feelings, experiences. I'll respond and quietly capture meaningful reflections."
-            className="resize-none min-h-[44px] max-h-32 chat-input"
+            className="resize-none min-h-[44px] max-h-32 bg-slate-800/50 border-white/20 text-white placeholder:text-slate-400"
             disabled={isLoading}
           />
           <Button
             onClick={handleSend}
             disabled={(!input.trim() && !attachedMedia) || isLoading}
-            className="px-4"
+            className="px-4 bg-blue-600 hover:bg-blue-700"
           >
             <Send className="w-4 h-4" />
           </Button>
