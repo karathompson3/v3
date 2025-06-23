@@ -6,6 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { Send, Tag, Clock, Shield, Lightbulb, Camera, Mic, X, MessageSquare } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { MediaCapture } from './MediaCapture';
+import { OcclumencyView } from './OcclumencyView';
+import { detectOcclumencyTriggers, type OcclumencyResult } from '../utils/occlumencyUtils';
 
 interface MotifEntry {
   id: string;
@@ -52,6 +54,7 @@ export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, exi
   const [isProcessing, setIsProcessing] = useState(false);
   const [showOcclumency, setShowOcclumency] = useState(false);
   const [occlumencyOutput, setOcclumencyOutput] = useState('');
+  const [showOcclumencyModal, setShowOcclumencyModal] = useState(false);
   const [suggestedReplay, setSuggestedReplay] = useState<MotifEntry | null>(null);
   const [showMediaCapture, setShowMediaCapture] = useState(false);
   const [attachedMedia, setAttachedMedia] = useState<{ type: 'photo' | 'voice'; url: string; duration?: number; caption?: string } | null>(null);
@@ -144,6 +147,47 @@ export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, exi
     return false;
   };
 
+  const checkForOcclumencyTrigger = (text: string, motifs: string[]) => {
+    if (text.toLowerCase().includes('occlumency check')) {
+      setShowOcclumencyModal(true);
+      return true;
+    }
+    
+    if (detectOcclumencyTriggers(text, motifs)) {
+      // Auto-prompt for high-intensity entries
+      toast({
+        title: "🛡️ Occlumency Available",
+        description: "This entry might benefit from containment protocol. Tap the shield button to repackage.",
+      });
+    }
+    
+    return false;
+  };
+
+  const handleOcclumencySave = (occlumencyResult: OcclumencyResult) => {
+    // Create a motif entry from the occlumency result
+    const entry: MotifEntry = {
+      id: occlumencyResult.entry_id,
+      content: occlumencyResult.repackaged_text,
+      motifs: occlumencyResult.tags,
+      timestamp: occlumencyResult.timestamp,
+      emotionalTone: 'contained, grounded',
+      intent: 'containment protocol',
+      metadata: {
+        originalText: occlumencyResult.original_text,
+        entryType: 'occlumency_repackaged'
+      }
+    };
+    
+    onEntrySubmit(entry);
+    setShowOcclumencyModal(false);
+    
+    toast({
+      title: "Occlumency entry saved",
+      description: "Your containment protocol has been logged to your codex",
+    });
+  };
+
   const handleSubmit = async () => {
     if (!currentEntry.trim() && !attachedMedia) return;
 
@@ -162,6 +206,9 @@ export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, exi
       
       // Auto-select suggested motifs if none manually selected
       const finalMotifs = selectedMotifs.length > 0 ? selectedMotifs : suggestedMotifsForEntry;
+
+      // Check for occlumency triggers before submitting
+      checkForOcclumencyTrigger(currentEntry, finalMotifs);
 
       const entry: MotifEntry = {
         id: Date.now().toString(),
@@ -219,206 +266,218 @@ export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, exi
   }
 
   return (
-    <div className="space-y-4">
-      <Card className="bg-white/90 backdrop-blur-sm shadow-lg">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Clock className="w-5 h-5" />
-            Express Yourself
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Textarea
-            placeholder={currentPlaceholder}
-            value={currentEntry}
-            onChange={(e) => setCurrentEntry(e.target.value)}
-            className="min-h-[120px] resize-none border-2 focus:border-blue-300"
-            disabled={isProcessing}
-          />
+    <>
+      <div className="space-y-4">
+        <Card className="bg-white/90 backdrop-blur-sm shadow-lg">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Clock className="w-5 h-5" />
+              Express Yourself
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Textarea
+              placeholder={currentPlaceholder}
+              value={currentEntry}
+              onChange={(e) => setCurrentEntry(e.target.value)}
+              className="min-h-[120px] resize-none border-2 focus:border-blue-300"
+              disabled={isProcessing}
+            />
 
-          {/* Attached Media Preview */}
-          {attachedMedia && (
-            <div className="border-2 border-dashed border-blue-200 rounded-lg p-4">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  {attachedMedia.type === 'photo' ? (
-                    <>
-                      <img 
-                        src={attachedMedia.url} 
-                        alt="Attached" 
-                        className="w-16 h-16 object-cover rounded-lg"
-                      />
-                      <div>
-                        <p className="text-sm font-medium text-slate-700">Photo attached</p>
-                        {attachedMedia.caption && (
-                          <p className="text-xs text-slate-500">{attachedMedia.caption}</p>
-                        )}
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <Mic className="w-6 h-6 text-blue-600" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-slate-700">Voice note attached</p>
-                        <p className="text-xs text-slate-500">
-                          Duration: {Math.floor((attachedMedia.duration || 0) / 60)}:{((attachedMedia.duration || 0) % 60).toString().padStart(2, '0')}
-                        </p>
-                      </div>
-                    </>
-                  )}
+            {/* Attached Media Preview */}
+            {attachedMedia && (
+              <div className="border-2 border-dashed border-blue-200 rounded-lg p-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    {attachedMedia.type === 'photo' ? (
+                      <>
+                        <img 
+                          src={attachedMedia.url} 
+                          alt="Attached" 
+                          className="w-16 h-16 object-cover rounded-lg"
+                        />
+                        <div>
+                          <p className="text-sm font-medium text-slate-700">Photo attached</p>
+                          {attachedMedia.caption && (
+                            <p className="text-xs text-slate-500">{attachedMedia.caption}</p>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center">
+                          <Mic className="w-6 h-6 text-blue-600" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-slate-700">Voice note attached</p>
+                          <p className="text-xs text-slate-500">
+                            Duration: {Math.floor((attachedMedia.duration || 0) / 60)}:{((attachedMedia.duration || 0) % 60).toString().padStart(2, '0')}
+                          </p>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setAttachedMedia(null)}
+                    className="text-slate-400 hover:text-slate-600"
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setAttachedMedia(null)}
-                  className="text-slate-400 hover:text-slate-600"
-                >
-                  <X className="w-4 h-4" />
-                </Button>
               </div>
-            </div>
-          )}
-
-          {/* Motif Suggestions */}
-          {currentEntry.length > 20 && (
-            <div className="space-y-2">
-              <p className="text-sm text-slate-600 flex items-center gap-2">
-                <Tag className="w-4 h-4" />
-                Suggested motifs (tap to select):
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {suggestMotifs(currentEntry).map((motif) => (
-                  <Badge
-                    key={motif}
-                    variant={selectedMotifs.includes(motif) ? "default" : "outline"}
-                    className="cursor-pointer hover:bg-blue-100 transition-colors"
-                    onClick={() => toggleMotif(motif)}
-                  >
-                    {motif}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Selected Motifs */}
-          {selectedMotifs.length > 0 && (
-            <div className="space-y-2">
-              <p className="text-sm text-slate-600">Selected motifs:</p>
-              <div className="flex flex-wrap gap-2">
-                {selectedMotifs.map((motif) => (
-                  <Badge
-                    key={motif}
-                    variant="default"
-                    className="cursor-pointer"
-                    onClick={() => toggleMotif(motif)}
-                  >
-                    {motif} ×
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Action Buttons */}
-          <div className="flex gap-2 flex-wrap">
-            <Button
-              onClick={handleSubmit}
-              disabled={(!currentEntry.trim() && !attachedMedia) || isProcessing}
-              className="flex items-center gap-2"
-            >
-              <Send className="w-4 h-4" />
-              {isProcessing ? 'Processing...' : 'Log Entry'}
-            </Button>
-            
-            <Button
-              variant="outline"
-              onClick={() => setShowMediaCapture(true)}
-              className="flex items-center gap-2"
-            >
-              <Camera className="w-4 h-4" />
-              Add Media
-            </Button>
-            
-            {currentEntry.trim() && (
-              <>
-                <Button
-                  variant="outline"
-                  onClick={handleOcclumencyCheck}
-                  className="flex items-center gap-2"
-                >
-                  <Shield className="w-4 h-4" />
-                  Occlumency Check
-                </Button>
-                
-                <Button
-                  variant="outline"
-                  onClick={() => onTranslatorMode?.(currentEntry)}
-                  className="flex items-center gap-2"
-                >
-                  <MessageSquare className="w-4 h-4" />
-                  🗣️ Translate This
-                </Button>
-              </>
             )}
-          </div>
-        </CardContent>
-      </Card>
 
-      {/* Occlumency Output */}
-      {showOcclumency && (
-        <Card className="bg-blue-50/50 border-blue-200">
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Shield className="w-5 h-5" />
-              Containment Protocol Active
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="bg-white p-4 rounded border-l-4 border-blue-400">
-              <p className="text-slate-700">{occlumencyOutput}</p>
-            </div>
-            <div className="mt-4 flex gap-2">
-              <Button size="sm" onClick={() => navigator.clipboard.writeText(occlumencyOutput)}>
-                Copy to Clipboard
+            {/* Motif Suggestions */}
+            {currentEntry.length > 20 && (
+              <div className="space-y-2">
+                <p className="text-sm text-slate-600 flex items-center gap-2">
+                  <Tag className="w-4 h-4" />
+                  Suggested motifs (tap to select):
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {suggestMotifs(currentEntry).map((motif) => (
+                    <Badge
+                      key={motif}
+                      variant={selectedMotifs.includes(motif) ? "default" : "outline"}
+                      className="cursor-pointer hover:bg-blue-100 transition-colors"
+                      onClick={() => toggleMotif(motif)}
+                    >
+                      {motif}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Selected Motifs */}
+            {selectedMotifs.length > 0 && (
+              <div className="space-y-2">
+                <p className="text-sm text-slate-600">Selected motifs:</p>
+                <div className="flex flex-wrap gap-2">
+                  {selectedMotifs.map((motif) => (
+                    <Badge
+                      key={motif}
+                      variant="default"
+                      className="cursor-pointer"
+                      onClick={() => toggleMotif(motif)}
+                    >
+                      {motif} ×
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Action Buttons */}
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                onClick={handleSubmit}
+                disabled={(!currentEntry.trim() && !attachedMedia) || isProcessing}
+                className="flex items-center gap-2"
+              >
+                <Send className="w-4 h-4" />
+                {isProcessing ? 'Processing...' : 'Log Entry'}
               </Button>
-              <Button size="sm" variant="outline" onClick={() => setShowOcclumency(false)}>
-                Close
+              
+              <Button
+                variant="outline"
+                onClick={() => setShowMediaCapture(true)}
+                className="flex items-center gap-2"
+              >
+                <Camera className="w-4 h-4" />
+                Add Media
               </Button>
+              
+              {currentEntry.trim() && (
+                <>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowOcclumencyModal(true)}
+                    className="flex items-center gap-2 bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100"
+                  >
+                    <Shield className="w-4 h-4" />
+                    🛡️ Repackage This
+                  </Button>
+                  
+                  <Button
+                    variant="outline"
+                    onClick={() => onTranslatorMode?.(currentEntry)}
+                    className="flex items-center gap-2"
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                    🗣️ Translate This
+                  </Button>
+                </>
+              )}
             </div>
           </CardContent>
         </Card>
-      )}
 
-      {/* Suggested Replay */}
-      {suggestedReplay && (
-        <Card className="bg-green-50/50 border-green-200">
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Lightbulb className="w-5 h-5" />
-              Relevant Memory
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-slate-600 mb-2">
-              {suggestedReplay.timestamp.toLocaleDateString()} • {suggestedReplay.motifs.join(', ')}
-            </p>
-            <div className="bg-white p-4 rounded border-l-4 border-green-400">
-              <p className="text-slate-700">{suggestedReplay.content}</p>
-            </div>
-            <Button 
-              size="sm" 
-              variant="outline" 
-              className="mt-3"
-              onClick={() => setSuggestedReplay(null)}
-            >
-              Thanks for the reminder
-            </Button>
-          </CardContent>
-        </Card>
+        {/* Occlumency Output */}
+        {showOcclumency && (
+          <Card className="bg-blue-50/50 border-blue-200">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Shield className="w-5 h-5" />
+                Containment Protocol Active
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="bg-white p-4 rounded border-l-4 border-blue-400">
+                <p className="text-slate-700">{occlumencyOutput}</p>
+              </div>
+              <div className="mt-4 flex gap-2">
+                <Button size="sm" onClick={() => navigator.clipboard.writeText(occlumencyOutput)}>
+                  Copy to Clipboard
+                </Button>
+                <Button size="sm" variant="outline" onClick={() => setShowOcclumency(false)}>
+                  Close
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Suggested Replay */}
+        {suggestedReplay && (
+          <Card className="bg-green-50/50 border-green-200">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Lightbulb className="w-5 h-5" />
+                Relevant Memory
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-slate-600 mb-2">
+                {suggestedReplay.timestamp.toLocaleDateString()} • {suggestedReplay.motifs.join(', ')}
+              </p>
+              <div className="bg-white p-4 rounded border-l-4 border-green-400">
+                <p className="text-slate-700">{suggestedReplay.content}</p>
+              </div>
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="mt-3"
+                onClick={() => setSuggestedReplay(null)}
+              >
+                Thanks for the reminder
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      {/* Occlumency Modal */}
+      {showOcclumencyModal && (
+        <OcclumencyView
+          originalText={currentEntry}
+          onSave={handleOcclumencySave}
+          onDismiss={() => setShowOcclumencyModal(false)}
+          showSaveOption={true}
+        />
       )}
-    </div>
+    </>
   );
 };
