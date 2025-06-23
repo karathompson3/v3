@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tag, Calendar, Camera, Mic, TrendingUp, Activity } from 'lucide-react';
@@ -16,9 +15,10 @@ interface MotifEntry {
 
 interface MotifDisplayProps {
   entries: MotifEntry[];
+  onEntryDelete: (id: string) => void;
 }
 
-export const MotifDisplay = ({ entries }: MotifDisplayProps) => {
+export const MotifDisplay = ({ entries, onEntryDelete }: MotifDisplayProps) => {
   // Calculate motif frequency
   const motifCounts = entries.reduce((acc, entry) => {
     entry.motifs.forEach(motif => {

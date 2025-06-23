@@ -1,4 +1,3 @@
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { JournalEntry } from './JournalEntry';
 import { MotifDisplay } from './MotifDisplay';
@@ -87,7 +86,10 @@ export const MainTabs = ({
       </TabsContent>
 
       <TabsContent value="reflections" className="mt-6">
-        <ReflectionsManager entries={entries} />
+        <ReflectionsManager 
+          entries={entries} 
+          onDelete={onEntryDelete}
+        />
       </TabsContent>
     </Tabs>
   );
