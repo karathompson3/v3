@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { WindDownMode } from '../components/WindDownMode';
 import { UserBillOfRights } from '../components/UserBillOfRights';
 import { GettingStartedGuide } from '../components/GettingStartedGuide';
@@ -61,6 +61,7 @@ const Index = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showTranslatorMode, setShowTranslatorMode] = useState(false);
   const [showProtocolLibrary, setShowProtocolLibrary] = useState(false);
+  const [showWeeklyRecap, setShowWeeklyRecap] = useState(false);
   const [translatorInitialText, setTranslatorInitialText] = useState('');
   
   const currentMantra = useMantra(entries);
@@ -235,6 +236,24 @@ const Index = () => {
       },
       visible: true,
     });
+  };
+
+  const handleWeeklyRecapViewThread = (motif: string) => {
+    // Navigate to the motif thread view
+    setShowWeeklyRecap(false);
+    // You could implement navigation to a specific motif thread here
+    console.log('Viewing thread for motif:', motif);
+  };
+
+  const handleWeeklyRecapNewEntry = () => {
+    setShowWeeklyRecap(false);
+    // Focus on the main entry input
+    setCurrentEntry('');
+  };
+
+  const handleWeeklyRecapClose = () => {
+    setShowWeeklyRecap(false);
+    markRecapShown();
   };
 
   // Show weekly recap when it's time
