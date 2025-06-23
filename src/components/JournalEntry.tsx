@@ -23,6 +23,11 @@ interface MotifEntry {
     duration?: number;
     caption?: string;
   };
+  metadata?: {
+    originalText?: string;
+    entryType?: string;
+    [key: string]: any;
+  };
 }
 
 interface JournalEntryProps {
@@ -223,7 +228,8 @@ export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, exi
           url: attachedMedia.url,
           duration: attachedMedia.duration,
           caption: attachedMedia.caption
-        } : undefined
+        } : undefined,
+        metadata: undefined
       };
 
       // Find a relevant replay

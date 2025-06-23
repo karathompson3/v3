@@ -19,4 +19,9 @@ export interface MotifEntry {
     duration?: number; // for voice notes in seconds
     caption?: string; // for photos
   };
+  metadata?: {
+    originalText?: string;
+    entryType?: string;
+    [key: string]: any;
+  };
 }
