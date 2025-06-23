@@ -23,7 +23,9 @@ export const ProcessScreen = () => {
           <p className="text-sm text-blue-100">Express your thoughts naturally</p>
         </div>
 
-        <ArrowRight className="w-6 h-6 text-blue-400 mx-auto hidden md:block" />
+        <div className="hidden md:flex justify-center">
+          <ArrowRight className="w-6 h-6 text-blue-400" />
+        </div>
 
         <div className="bg-white/10 rounded-lg p-6 text-center backdrop-blur-sm">
           <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -33,7 +35,9 @@ export const ProcessScreen = () => {
           <p className="text-sm text-blue-100">AI identifies key themes automatically</p>
         </div>
 
-        <ArrowRight className="w-6 h-6 text-blue-400 mx-auto hidden md:block" />
+        <div className="hidden md:flex justify-center">
+          <ArrowRight className="w-6 h-6 text-blue-400" />
+        </div>
 
         <div className="bg-white/10 rounded-lg p-6 text-center backdrop-blur-sm">
           <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-3">
