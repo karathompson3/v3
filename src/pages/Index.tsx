@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { WindDownMode } from '../components/WindDownMode';
 import { UserBillOfRights } from '../components/UserBillOfRights';
@@ -6,6 +7,7 @@ import { Header } from '../components/Header';
 import { EmergencyProtocol } from '../components/EmergencyProtocol';
 import { MainTabs } from '../components/MainTabs';
 import { ProtocolTemplates } from '../components/ProtocolTemplates';
+import { SignalContributionModal } from '../components/SignalContributionModal';
 import { useMantra } from '../hooks/useMantra';
 import { useAuth } from '../hooks/useAuth';
 import { useGovernance } from '../hooks/useGovernance';
