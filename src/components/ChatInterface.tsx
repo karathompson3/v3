@@ -42,9 +42,10 @@ interface Message {
 interface ChatInterfaceProps {
   onReflectionCapture: (entry: MotifEntry) => void;
   reflections: MotifEntry[];
+  onTranslatorMode?: (text: string) => void;
 }
 
-export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfaceProps) => {
+export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMode }: ChatInterfaceProps) => {
   const { currentLog, loading, availableDates, addMessage, loadChatLog, deleteChatLog } = useDailyChatLog();
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -240,6 +241,13 @@ export const ChatInterface = ({ onReflectionCapture, reflections }: ChatInterfac
     
     let messageContent = input.trim();
     let mediaContext = '';
+    
+    // Check for translator mode trigger
+    if (messageContent.toLowerCase().includes('initiate translator mode')) {
+      onTranslatorMode?.(messageContent);
+      setInput('');
+      return;
+    }
     
     if (attachedMedia) {
       if (attachedMedia.type === 'photo') {
