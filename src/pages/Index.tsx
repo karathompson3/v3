@@ -45,13 +45,19 @@ const Index = () => {
   const [showEmergencyProtocol, setShowEmergencyProtocol] = useState(false);
   const [showBillOfRights, setShowBillOfRights] = useState(false);
   const [showGettingStarted, setShowGettingStarted] = useState(false);
-  const [showOnboarding, setShowOnboarding] = useState(() => {
-    // Check if user has completed onboarding
-    if (!user) return false;
-    return !localStorage.getItem(`onboarding_complete_${user.id}`);
-  });
+  const [showOnboarding, setShowOnboarding] = useState(false);
   
   const currentMantra = useMantra(entries);
+
+  // Check onboarding status when user changes
+  useState(() => {
+    if (user) {
+      const hasCompletedOnboarding = localStorage.getItem(`onboarding_complete_${user.id}`);
+      if (!hasCompletedOnboarding) {
+        setShowOnboarding(true);
+      }
+    }
+  });
 
   // Show loading while checking authentication
   if (loading) {
