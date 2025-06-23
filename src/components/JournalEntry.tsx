@@ -3,10 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Send, Tag, Clock, Shield, Lightbulb, Camera, Mic, X, MessageSquare } from 'lucide-react';
+import { Send, Tag, Clock, Shield, Lightbulb, Camera, Mic, X, MessageSquare, BookOpen } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { MediaCapture } from './MediaCapture';
 import { OcclumencyView } from './OcclumencyView';
+import { ProtocolTemplates } from './ProtocolTemplates';
 import { detectOcclumencyTriggers, type OcclumencyResult } from '../utils/occlumencyUtils';
 
 interface MotifEntry {
@@ -62,6 +63,7 @@ export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, exi
   const [showOcclumencyModal, setShowOcclumencyModal] = useState(false);
   const [suggestedReplay, setSuggestedReplay] = useState<MotifEntry | null>(null);
   const [showMediaCapture, setShowMediaCapture] = useState(false);
+  const [showProtocolTemplates, setShowProtocolTemplates] = useState(false);
   const [attachedMedia, setAttachedMedia] = useState<{ type: 'photo' | 'voice'; url: string; duration?: number; caption?: string } | null>(null);
   const { toast } = useToast();
 
@@ -262,6 +264,15 @@ export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, exi
     );
   };
 
+  const handleUseTemplate = (template: string) => {
+    setCurrentEntry(template);
+    setShowProtocolTemplates(false);
+    toast({
+      title: "Template applied",
+      description: "Template has been loaded into your entry",
+    });
+  };
+
   if (showMediaCapture) {
     return (
       <MediaCapture 
@@ -271,15 +282,30 @@ export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, exi
     );
   }
 
+  if (showProtocolTemplates) {
+    return <ProtocolTemplates onUseTemplate={handleUseTemplate} onClose={() => setShowProtocolTemplates(false)} />;
+  }
+
   return (
     <>
       <div className="space-y-4">
         <Card className="bg-white/90 backdrop-blur-sm shadow-lg">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="w-5 h-5" />
-              Express Yourself
-            </CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center gap-2">
+                <Clock className="w-5 h-5" />
+                Express Yourself
+              </CardTitle>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowProtocolTemplates(true)}
+                className="text-blue-600 hover:text-blue-700"
+              >
+                <BookOpen className="w-4 h-4 mr-2" />
+                Templates
+              </Button>
+            </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <Textarea

@@ -4,9 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Shield, Copy, Save, X, Info, Edit3 } from 'lucide-react';
+import { Shield, Copy, Save, X, Info, Edit3, BookOpen } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { repackageText, createOcclumencyEntry, type OcclumencyResult } from '../utils/occlumencyUtils';
+import { ProtocolTemplates } from './ProtocolTemplates';
 
 interface OcclumencyViewProps {
   originalText: string;
@@ -24,6 +25,7 @@ export const OcclumencyView = ({
   const [repackagedText, setRepackagedText] = useState(repackageText(originalText));
   const [isEditing, setIsEditing] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const [showTemplates, setShowTemplates] = useState(false);
   const { toast } = useToast();
 
   const handleCopy = async () => {
@@ -62,6 +64,20 @@ export const OcclumencyView = ({
       description: "Generated new containment version",
     });
   };
+
+  const handleUseTemplate = (template: string) => {
+    setRepackagedText(template);
+    setShowTemplates(false);
+    setIsEditing(false);
+    toast({
+      title: "Template applied",
+      description: "Template has been loaded for your use",
+    });
+  };
+
+  if (showTemplates) {
+    return <ProtocolTemplates onUseTemplate={handleUseTemplate} onClose={() => setShowTemplates(false)} />;
+  }
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
@@ -110,15 +126,26 @@ export const OcclumencyView = ({
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h4 className="text-lg font-medium text-slate-800">🎭 Your Contained Version:</h4>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsEditing(!isEditing)}
-                className="text-slate-500 hover:text-slate-700"
-              >
-                <Edit3 className="w-4 h-4 mr-1" />
-                {isEditing ? 'Done' : 'Edit'}
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => setShowTemplates(true)}
+                  className="text-blue-600 hover:text-blue-700"
+                >
+                  <BookOpen className="w-4 h-4 mr-1" />
+                  Templates
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsEditing(!isEditing)}
+                  className="text-slate-500 hover:text-slate-700"
+                >
+                  <Edit3 className="w-4 h-4 mr-1" />
+                  {isEditing ? 'Done' : 'Edit'}
+                </Button>
+              </div>
             </div>
             
             <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-lg border-2 border-green-200">
