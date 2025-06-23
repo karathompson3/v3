@@ -5,6 +5,7 @@ interface HeaderProps {
   onEmergencyProtocol: () => void;
   onShowBillOfRights: () => void;
   onShowGettingStarted: () => void;
+  onShowOnboarding?: () => void;
 }
 
 import { useState } from 'react';
@@ -13,17 +14,28 @@ import { Moon, Shield, ScrollText, BookOpen, Sparkles, Clock, FileText } from 'l
 import { GovernanceCovenantModal } from './GovernanceCovenantModal';
 import { InteractionLogsModal } from './InteractionLogsModal';
 import { useGovernance } from '../hooks/useGovernance';
+import { useAuth } from '../hooks/useAuth';
 
 export const Header = ({ 
   currentMantra, 
   onWindDownMode, 
   onEmergencyProtocol, 
   onShowBillOfRights,
-  onShowGettingStarted
+  onShowGettingStarted,
+  onShowOnboarding
 }: HeaderProps) => {
   const [showGovernanceModal, setShowGovernanceModal] = useState(false);
   const [showLogsModal, setShowLogsModal] = useState(false);
   const { userRole, permissions } = useGovernance();
+  const { user } = useAuth();
+
+  const handleShowOnboarding = () => {
+    if (user && onShowOnboarding) {
+      // Clear the onboarding completion flag and show onboarding
+      localStorage.removeItem(`onboarding_complete_${user.id}`);
+      onShowOnboarding();
+    }
+  };
 
   return (
     <>
@@ -58,6 +70,16 @@ export const Header = ({
             <BookOpen className="w-4 h-4 group-hover:text-blue-300 transition-colors" />
             How to Use
           </Button>
+          {user && onShowOnboarding && (
+            <Button
+              variant="outline"
+              onClick={handleShowOnboarding}
+              className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-200 group text-sm"
+            >
+              <Sparkles className="w-4 h-4 group-hover:text-blue-300 transition-colors" />
+              About V3
+            </Button>
+          )}
           <Button
             variant="outline"
             onClick={onWindDownMode}

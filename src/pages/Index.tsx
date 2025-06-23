@@ -11,6 +11,7 @@ import { useGovernance } from '../hooks/useGovernance';
 import { AuthPage } from '../components/AuthPage';
 import { Button } from '@/components/ui/button';
 import { Footer } from '../components/Footer';
+import { OnboardingModal } from '../components/OnboardingModal';
 
 interface MotifEntry {
   id: string;
@@ -43,6 +44,7 @@ const Index = () => {
   const [showEmergencyProtocol, setShowEmergencyProtocol] = useState(false);
   const [showBillOfRights, setShowBillOfRights] = useState(false);
   const [showGettingStarted, setShowGettingStarted] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   
   const currentMantra = useMantra(entries);
 
@@ -141,6 +143,10 @@ const Index = () => {
     });
   };
 
+  const handleShowOnboardingAgain = () => {
+    setShowOnboarding(true);
+  };
+
   if (showGettingStarted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 p-6">
@@ -210,6 +216,7 @@ const Index = () => {
           onEmergencyProtocol={() => setShowEmergencyProtocol(true)}
           onShowBillOfRights={() => setShowBillOfRights(true)}
           onShowGettingStarted={() => setShowGettingStarted(true)}
+          onShowOnboarding={handleShowOnboardingAgain}
         />
 
         {/* Sacred codex interface */}
@@ -225,6 +232,12 @@ const Index = () => {
         
         <Footer />
       </div>
+
+      {/* Onboarding Modal */}
+      <OnboardingModal 
+        open={showOnboarding}
+        onComplete={handleOnboardingComplete}
+      />
     </div>
   );
 };
