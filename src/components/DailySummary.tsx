@@ -1,8 +1,8 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Flame, Heart, TrendingUp } from 'lucide-react';
-import { format, isToday, differenceInDays } from 'date-fns';
+import { Calendar, Heart, TrendingUp } from 'lucide-react';
+import { format, isToday } from 'date-fns';
 
 interface MotifEntry {
   id: string;
@@ -33,28 +33,6 @@ interface DailySummaryProps {
 export const DailySummary = ({ entries }: DailySummaryProps) => {
   // Filter today's entries
   const todaysEntries = entries.filter(entry => isToday(entry.timestamp));
-  
-  // Calculate streak (days with at least one entry)
-  const sortedEntries = entries.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
-  let currentStreak = 0;
-  let checkDate = new Date();
-  
-  for (let i = 0; i < 30; i++) { // Check last 30 days max
-    const dayEntries = entries.filter(entry => 
-      format(entry.timestamp, 'yyyy-MM-dd') === format(checkDate, 'yyyy-MM-dd')
-    );
-    
-    if (dayEntries.length > 0) {
-      currentStreak++;
-      checkDate.setDate(checkDate.getDate() - 1);
-    } else if (i === 0) {
-      // If no entries today, streak is 0
-      break;
-    } else {
-      // Gap in streak
-      break;
-    }
-  }
   
   // Get today's motifs
   const todaysMotifs = todaysEntries.flatMap(entry => entry.motifs);
@@ -90,22 +68,11 @@ export const DailySummary = ({ entries }: DailySummaryProps) => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Entries & Streak */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <div className="text-sm text-stone-beige font-medium">Entries Today</div>
-            <div className="text-2xl font-serif text-candlewhite">
-              {todaysEntries.length}
-            </div>
-          </div>
-          <div className="space-y-2">
-            <div className="text-sm text-stone-beige font-medium flex items-center gap-2">
-              <Flame className="w-4 h-4 text-accent" />
-              Reflection Streak
-            </div>
-            <div className="text-2xl font-serif text-candlewhite">
-              {currentStreak} {currentStreak === 1 ? 'day' : 'days'}
-            </div>
+        {/* Entries Count */}
+        <div className="space-y-2">
+          <div className="text-sm text-stone-beige font-medium">Entries Today</div>
+          <div className="text-2xl font-serif text-candlewhite">
+            {todaysEntries.length}
           </div>
         </div>
 
