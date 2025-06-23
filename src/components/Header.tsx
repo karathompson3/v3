@@ -1,17 +1,17 @@
-
 interface HeaderProps {
   currentMantra: string;
   onWindDownMode: () => void;
   onEmergencyProtocol: () => void;
   onShowBillOfRights: () => void;
   onShowGettingStarted: () => void;
-  onShowOnboarding?: () => void;
-  onShowProtocolLibrary?: () => void;
+  onShowOnboarding: () => void;
+  onShowProtocolLibrary: () => void;
+  onShowWeeklyRecap?: () => void;
 }
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Moon, Shield, ScrollText, BookOpen, Sparkles, Clock, FileText, Library } from 'lucide-react';
+import { Moon, Shield, ScrollText, BookOpen, Sparkles, Clock, FileText, Library, Calendar } from 'lucide-react';
 import { GovernanceCovenantModal } from './GovernanceCovenantModal';
 import { InteractionLogsModal } from './InteractionLogsModal';
 import { useGovernance } from '../hooks/useGovernance';
@@ -24,7 +24,8 @@ export const Header = ({
   onShowBillOfRights,
   onShowGettingStarted,
   onShowOnboarding,
-  onShowProtocolLibrary
+  onShowProtocolLibrary,
+  onShowWeeklyRecap
 }: HeaderProps) => {
   const [showGovernanceModal, setShowGovernanceModal] = useState(false);
   const [showLogsModal, setShowLogsModal] = useState(false);
@@ -40,7 +41,7 @@ export const Header = ({
   };
 
   return (
-    <>
+    <header className="relative">
       <div className="text-center mb-8">
         <div className="relative">
           <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent mb-3">
@@ -62,82 +63,95 @@ export const Header = ({
           </div>
         </div>
         
-        {/* Quick Actions */}
-        <div className="flex justify-center gap-3 mb-6 flex-wrap">
-          <Button
-            variant="outline"
-            onClick={onShowGettingStarted}
-            className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-200 group"
-          >
-            <BookOpen className="w-4 h-4 group-hover:text-blue-300 transition-colors" />
-            How to Use
-          </Button>
-          {onShowProtocolLibrary && (
+        {/* Navigation and actions */}
+        <div className="flex flex-wrap items-center justify-between gap-4 mt-8">
+          <div className="flex flex-wrap gap-2">
             <Button
               variant="outline"
-              onClick={onShowProtocolLibrary}
+              onClick={onShowGettingStarted}
               className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-200 group"
             >
-              <Library className="w-4 h-4 group-hover:text-purple-300 transition-colors" />
-              Protocol Library
+              <BookOpen className="w-4 h-4 group-hover:text-blue-300 transition-colors" />
+              How to Use
             </Button>
-          )}
-          {user && onShowOnboarding && (
+            {onShowProtocolLibrary && (
+              <Button
+                variant="outline"
+                onClick={onShowProtocolLibrary}
+                className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-200 group"
+              >
+                <Library className="w-4 h-4 group-hover:text-purple-300 transition-colors" />
+                Protocol Library
+              </Button>
+            )}
+            {user && onShowOnboarding && (
+              <Button
+                variant="outline"
+                onClick={handleShowOnboarding}
+                className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-200 group text-sm"
+              >
+                <Sparkles className="w-4 h-4 group-hover:text-blue-300 transition-colors" />
+                About V3
+              </Button>
+            )}
             <Button
               variant="outline"
-              onClick={handleShowOnboarding}
-              className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-200 group text-sm"
+              onClick={onWindDownMode}
+              className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-200 group"
             >
-              <Sparkles className="w-4 h-4 group-hover:text-blue-300 transition-colors" />
-              About V3
+              <Moon className="w-4 h-4 group-hover:text-purple-300 transition-colors" />
+              Wind-Down Mode
             </Button>
-          )}
-          <Button
-            variant="outline"
-            onClick={onWindDownMode}
-            className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-200 group"
-          >
-            <Moon className="w-4 h-4 group-hover:text-purple-300 transition-colors" />
-            Wind-Down Mode
-          </Button>
-          <Button
-            variant="outline"
-            onClick={onEmergencyProtocol}
-            className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-200 group"
-          >
-            <Shield className="w-4 h-4 group-hover:text-amber-300 transition-colors" />
-            Display Personal ID
-          </Button>
-          <Button
-            variant="outline"
-            onClick={onShowBillOfRights}
-            className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-200 group"
-          >
-            <ScrollText className="w-4 h-4 group-hover:text-green-300 transition-colors" />
-            Privacy Rights
-          </Button>
-        </div>
-
-        {/* Governance Actions */}
-        <div className="flex justify-center gap-3 mb-4 flex-wrap">
-          <Button
-            variant="outline"
-            onClick={() => setShowGovernanceModal(true)}
-            className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-200 group text-xs"
-          >
-            <FileText className="w-3 h-3 group-hover:text-indigo-300 transition-colors" />
-            Governance Covenant
-          </Button>
-          {permissions.canViewLogs && (
             <Button
               variant="outline"
-              onClick={() => setShowLogsModal(true)}
+              onClick={onEmergencyProtocol}
+              className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-200 group"
+            >
+              <Shield className="w-4 h-4 group-hover:text-amber-300 transition-colors" />
+              Display Personal ID
+            </Button>
+            <Button
+              variant="outline"
+              onClick={onShowBillOfRights}
+              className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-200 group"
+            >
+              <ScrollText className="w-4 h-4 group-hover:text-green-300 transition-colors" />
+              Privacy Rights
+            </Button>
+            {onShowWeeklyRecap && (
+              <Button
+                onClick={onShowWeeklyRecap}
+                variant="outline"
+                size="sm"
+                className="whisper-hover bg-white/10 border-white/20 text-white hover:bg-white/20 text-xs"
+              >
+                <Calendar className="w-3 h-3 mr-1" />
+                Weekly Recap
+              </Button>
+            )}
+          </div>
+
+          {/* Wind Down Mode Dropdown */}
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setShowGovernanceModal(true)}
               className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-200 group text-xs"
             >
-              <Clock className="w-3 h-3 group-hover:text-slate-300 transition-colors" />
-              Interaction Logs
+              <FileText className="w-3 h-3 group-hover:text-indigo-300 transition-colors" />
+              Governance Covenant
             </Button>
-          )}
+            {permissions.canViewLogs && (
+              <Button
+                variant="outline"
+                onClick={() => setShowLogsModal(true)}
+                className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-200 group text-xs"
+              >
+                <Clock className="w-3 h-3 group-hover:text-slate-300 transition-colors" />
+                Interaction Logs
+              </Button>
+            )}
+          </div>
         </div>
 
         <div className="text-xs text-blue-200 mb-2">
@@ -154,6 +168,6 @@ export const Header = ({
         open={showLogsModal} 
         onOpenChange={setShowLogsModal} 
       />
-    </>
+    </header>
   );
 };

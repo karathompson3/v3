@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { WindDownMode } from '../components/WindDownMode';
 import { UserBillOfRights } from '../components/UserBillOfRights';
@@ -17,6 +16,8 @@ import { Footer } from '../components/Footer';
 import { OnboardingModal } from '../components/onboarding/OnboardingModal';
 import { TranslatorMode } from '../components/TranslatorMode';
 import { useToast } from '@/hooks/use-toast';
+import { WeeklyRecapCard } from '../components/WeeklyRecapCard';
+import { useWeeklyRecap } from '../hooks/useWeeklyRecap';
 
 interface MotifEntry {
   id: string;
@@ -49,6 +50,8 @@ const Index = () => {
   const { user, loading } = useAuth();
   const { logInteraction } = useGovernance();
   const { toast } = useToast();
+  const { shouldShowRecap, markRecapShown, showRecapManually } = useWeeklyRecap(user?.id);
+  
   const [entries, setEntries] = useState<MotifEntry[]>([]);
   const [currentEntry, setCurrentEntry] = useState('');
   const [isWindDownMode, setIsWindDownMode] = useState(false);
@@ -234,6 +237,13 @@ const Index = () => {
     });
   };
 
+  // Show weekly recap when it's time
+  useEffect(() => {
+    if (shouldShowRecap && !showOnboarding && !isWindDownMode && !showEmergencyProtocol) {
+      setShowWeeklyRecap(true);
+    }
+  }, [shouldShowRecap, showOnboarding, isWindDownMode, showEmergencyProtocol]);
+
   if (showGettingStarted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 p-6">
@@ -311,6 +321,19 @@ const Index = () => {
     );
   }
 
+  if (showWeeklyRecap) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 flex items-center justify-center p-6">
+        <WeeklyRecapCard
+          entries={entries}
+          onViewThread={handleWeeklyRecapViewThread}
+          onStartNewEntry={handleWeeklyRecapNewEntry}
+          onClose={handleWeeklyRecapClose}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 memory-mapping-mode">
       {/* Mystical background texture overlay */}
@@ -327,6 +350,7 @@ const Index = () => {
           onShowGettingStarted={() => setShowGettingStarted(true)}
           onShowOnboarding={handleShowOnboardingAgain}
           onShowProtocolLibrary={() => setShowProtocolLibrary(true)}
+          onShowWeeklyRecap={showRecapManually}
         />
 
         {/* Sacred codex interface */}
