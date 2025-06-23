@@ -1,3 +1,4 @@
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ChatInterface } from './ChatInterface';
 import { ReflectionsManager } from './ReflectionsManager';
@@ -33,9 +34,10 @@ interface MainTabsProps {
   setCurrentEntry: (entry: string) => void;
   onEntrySubmit: (entry: MotifEntry) => void;
   onEntryDelete: (id: string) => void;
+  onTranslatorMode?: (text: string) => void;
 }
 
-export const MainTabs = ({ entries, currentEntry, setCurrentEntry, onEntrySubmit, onEntryDelete }: MainTabsProps) => {
+export const MainTabs = ({ entries, currentEntry, setCurrentEntry, onEntrySubmit, onEntryDelete, onTranslatorMode }: MainTabsProps) => {
   return (
     <Tabs defaultValue="chat" className="w-full">
       <TabsList className="grid w-full grid-cols-4 mb-8 portal-glass border-border/30 shadow-lg backdrop-blur-16">
@@ -78,6 +80,7 @@ export const MainTabs = ({ entries, currentEntry, setCurrentEntry, onEntrySubmit
           <ChatInterface 
             onReflectionCapture={onEntrySubmit}
             reflections={entries}
+            onTranslatorMode={onTranslatorMode}
           />
         </div>
       </TabsContent>

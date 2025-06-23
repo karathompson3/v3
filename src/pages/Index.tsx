@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { WindDownMode } from '../components/WindDownMode';
 import { UserBillOfRights } from '../components/UserBillOfRights';
@@ -33,6 +34,11 @@ interface MotifEntry {
     url: string;
     duration?: number;
     caption?: string;
+  };
+  metadata?: {
+    originalText?: string;
+    translatedText?: string;
+    entryType?: string;
   };
 }
 
