@@ -3,7 +3,7 @@ import { ArrowRight, Tag, Brain, RefreshCw } from 'lucide-react';
 
 export const ProcessScreen = () => {
   return (
-    <div className="space-y-6 max-w-3xl mx-auto pb-8">
+    <div className="space-y-6 max-w-3xl mx-auto py-4">
       <div className="text-center space-y-4">
         <h2 className="text-3xl font-bold text-white font-serif">
           How V3 Works
