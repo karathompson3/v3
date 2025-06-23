@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { WindDownMode } from '../components/WindDownMode';
 import { UserBillOfRights } from '../components/UserBillOfRights';
@@ -75,6 +76,13 @@ const Index = () => {
       }
     }
   }, [user]);
+
+  // Show weekly recap when it's time
+  useEffect(() => {
+    if (shouldShowRecap && !showOnboarding && !isWindDownMode && !showEmergencyProtocol) {
+      setShowWeeklyRecap(true);
+    }
+  }, [shouldShowRecap, showOnboarding, isWindDownMode, showEmergencyProtocol]);
 
   // Show loading while checking authentication
   if (loading) {
@@ -255,13 +263,6 @@ const Index = () => {
     setShowWeeklyRecap(false);
     markRecapShown();
   };
-
-  // Show weekly recap when it's time
-  useEffect(() => {
-    if (shouldShowRecap && !showOnboarding && !isWindDownMode && !showEmergencyProtocol) {
-      setShowWeeklyRecap(true);
-    }
-  }, [shouldShowRecap, showOnboarding, isWindDownMode, showEmergencyProtocol]);
 
   if (showGettingStarted) {
     return (
