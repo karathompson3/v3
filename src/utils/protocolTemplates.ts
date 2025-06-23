@@ -2,167 +2,202 @@
 import { ProtocolTemplate, ProtocolTemplateCategory } from '../types/ProtocolTemplate';
 
 export const DEFAULT_TEMPLATES: ProtocolTemplate[] = [
-  // Parental Templates
+  // Command Protocol Templates
   {
-    id: 'parental-basic',
-    name: 'Basic Check-in',
-    category: 'parental',
-    description: 'For routine parental check-ins',
-    template: "Just settling in for the night. All good on my end. Will check in tomorrow.",
-    isCustom: false,
-    createdAt: new Date(),
-    usageCount: 0,
-    tags: ['parental', 'routine', 'basic']
-  },
-  {
-    id: 'parental-busy',
-    name: 'Busy Day Response',
-    category: 'parental',
-    description: 'When you need space after a long day',
-    template: "Had a full day today. Taking some quiet time to decompress. Everything's manageable.",
-    isCustom: false,
-    createdAt: new Date(),
-    usageCount: 0,
-    tags: ['parental', 'busy', 'space']
-  },
-  {
-    id: 'parental-studying',
-    name: 'Study/Work Mode',
-    category: 'parental',
-    description: 'When focusing on work or studies',
-    template: "Deep in study mode tonight. Making good progress. Will surface when I'm done.",
-    isCustom: false,
-    createdAt: new Date(),
-    usageCount: 0,
-    tags: ['parental', 'study', 'focus']
-  },
-
-  // Wellness Templates
-  {
-    id: 'wellness-basic',
-    name: 'Routine Wellness',
-    category: 'wellness',
-    description: 'For wellness check-ins',
-    template: "Taking care of myself today. Sticking to my routine. Feeling grounded.",
-    isCustom: false,
-    createdAt: new Date(),
-    usageCount: 0,
-    tags: ['wellness', 'routine', 'grounded']
-  },
-  {
-    id: 'wellness-recovery',
-    name: 'Recovery Mode',
-    category: 'wellness',
-    description: 'When you need recovery time',
-    template: "In recovery mode today. Being gentle with myself. Taking it step by step.",
-    isCustom: false,
-    createdAt: new Date(),
-    usageCount: 0,
-    tags: ['wellness', 'recovery', 'gentle']
-  },
-
-  // Work Templates
-  {
-    id: 'work-boundaries',
-    name: 'Work Boundaries',
-    category: 'work',
-    description: 'Setting professional boundaries',
-    template: "Wrapping up for today. Will be offline until tomorrow morning. Thanks for understanding.",
-    isCustom: false,
-    createdAt: new Date(),
-    usageCount: 0,
-    tags: ['work', 'boundaries', 'offline']
-  },
-  {
-    id: 'work-overwhelmed',
-    name: 'Managing Workload',
-    category: 'work',
-    description: 'When work feels overwhelming',
-    template: "Working through my priority list today. Taking breaks as needed. Making steady progress.",
-    isCustom: false,
-    createdAt: new Date(),
-    usageCount: 0,
-    tags: ['work', 'overwhelmed', 'progress']
-  },
-
-  // Social Templates
-  {
-    id: 'social-recharge',
-    name: 'Social Recharge',
-    category: 'social',
-    description: 'When you need social space',
-    template: "Taking some solo time to recharge. Nothing personal - just need to reset. Will reach out soon.",
-    isCustom: false,
-    createdAt: new Date(),
-    usageCount: 0,
-    tags: ['social', 'recharge', 'solo']
-  },
-  {
-    id: 'social-misunderstanding',
-    name: 'Clear Communication',
-    category: 'social',
-    description: 'When there might be misunderstandings',
-    template: "Want to make sure we're on the same page. Happy to clarify anything if needed.",
-    isCustom: false,
-    createdAt: new Date(),
-    usageCount: 0,
-    tags: ['social', 'clarity', 'communication']
-  },
-
-  // Emergency Templates
-  {
-    id: 'emergency-basic',
-    name: 'Basic Containment',
+    id: 'cmd-occlumency-check',
+    name: 'Occlumency Check Command',
     category: 'emergency',
-    description: 'Quick containment for any situation',
-    template: "All good here. Just processing some thoughts. Will check in later if needed.",
+    description: 'Triggers the containment protocol interface',
+    template: "occlumency check",
     isCustom: false,
     createdAt: new Date(),
     usageCount: 0,
-    tags: ['emergency', 'containment', 'basic']
+    tags: ['command', 'occlumency', 'containment']
+  },
+  {
+    id: 'cmd-translator-mode',
+    name: 'Translator Mode Command',
+    category: 'emergency',
+    description: 'Activates the translation protocol interface',
+    template: "initiate translator mode",
+    isCustom: false,
+    createdAt: new Date(),
+    usageCount: 0,
+    tags: ['command', 'translator', 'communication']
+  },
+  {
+    id: 'cmd-emergency-id',
+    name: 'Emergency ID Command',
+    category: 'emergency',
+    description: 'Displays your personal emergency protocol',
+    template: "display personal id",
+    isCustom: false,
+    createdAt: new Date(),
+    usageCount: 0,
+    tags: ['command', 'emergency', 'identity']
+  },
+
+  // Occlumency Protocol Definitions
+  {
+    id: 'protocol-basic-containment',
+    name: 'Basic Containment Protocol',
+    category: 'wellness',
+    description: 'Standard response for overwhelming situations',
+    template: "Taking some time to process things. Everything is manageable. Will check in when ready.",
+    isCustom: false,
+    createdAt: new Date(),
+    usageCount: 0,
+    tags: ['occlumency', 'containment', 'basic']
+  },
+  {
+    id: 'protocol-spiral-containment',
+    name: 'Spiral Containment Protocol',
+    category: 'wellness',
+    description: 'For intense emotional spiraling episodes',
+    template: "Working through some thoughts right now. Taking it step by step. All is stable on my end.",
+    isCustom: false,
+    createdAt: new Date(),
+    usageCount: 0,
+    tags: ['occlumency', 'spiral', 'intense']
+  },
+  {
+    id: 'protocol-parental-deflection',
+    name: 'Parental Deflection Protocol',
+    category: 'parental',
+    description: 'When family dynamics become overwhelming',
+    template: "Family stuff is all normal. Just working through some routine things. Nothing to worry about.",
+    isCustom: false,
+    createdAt: new Date(),
+    usageCount: 0,
+    tags: ['occlumency', 'parental', 'deflection']
+  },
+
+  // Recovery Arc Definitions
+  {
+    id: 'protocol-recovery-check',
+    name: 'Recovery Arc Check-in',
+    category: 'wellness',
+    description: 'Progress tracking for recovery journey',
+    template: "Making steady progress today. Staying connected to my process. Growth feels sustainable.",
+    isCustom: false,
+    createdAt: new Date(),
+    usageCount: 0,
+    tags: ['recovery', 'progress', 'growth']
+  },
+  {
+    id: 'protocol-stability-signal',
+    name: 'Stability Signal Protocol',
+    category: 'wellness',
+    description: 'When you need to signal stability to yourself or others',
+    template: "Anchored and present. Routine is holding steady. Systems are working well.",
+    isCustom: false,
+    createdAt: new Date(),
+    usageCount: 0,
+    tags: ['stability', 'routine', 'grounded']
+  },
+
+  // Signal Mining Definitions  
+  {
+    id: 'protocol-pattern-recognition',
+    name: 'Pattern Recognition Protocol',
+    category: 'work',
+    description: 'For identifying meaningful patterns in experiences',
+    template: "Noticing patterns in [situation]. Signal emerging around [theme]. Worth tracking this thread.",
+    isCustom: false,
+    createdAt: new Date(),
+    usageCount: 0,
+    tags: ['signal-mining', 'patterns', 'awareness']
+  },
+  {
+    id: 'protocol-butterfly-thread',
+    name: 'Butterfly Thread Protocol',
+    category: 'work',
+    description: 'Following delicate but significant connections',
+    template: "Light touch tracking on [theme]. Thread feels fragile but real. Following without forcing.",
+    isCustom: false,
+    createdAt: new Date(),
+    usageCount: 0,
+    tags: ['butterfly-thread', 'delicate', 'following']
+  },
+
+  // Social Protocol Definitions
+  {
+    id: 'protocol-ghost-mode',
+    name: 'Ghost Mode Protocol',
+    category: 'social',
+    description: 'When you need to be present but invisible',
+    template: "Moving in observer mode today. Present but not engaging. Maintaining gentle distance.",
+    isCustom: false,
+    createdAt: new Date(),
+    usageCount: 0,
+    tags: ['ghost-mode', 'observer', 'distance']
+  },
+  {
+    id: 'protocol-cloudperson',
+    name: 'Cloudperson Protocol',
+    category: 'social',
+    description: 'For dissociative or floating states',
+    template: "Floating a bit above the situation today. Maintaining perspective from distance. Still connected to ground.",
+    isCustom: false,
+    createdAt: new Date(),
+    usageCount: 0,
+    tags: ['cloudperson', 'dissociation', 'perspective']
+  },
+
+  // Phoenix Logic Definitions
+  {
+    id: 'protocol-phoenix-reset',
+    name: 'Phoenix Logic Reset',
+    category: 'wellness',
+    description: 'For major life transitions and renewals',
+    template: "In a renewal phase. Old patterns burning away clean. New structure emerging from foundation up.",
+    isCustom: false,
+    createdAt: new Date(),
+    usageCount: 0,
+    tags: ['phoenix-logic', 'renewal', 'transformation']
   }
 ];
 
 export const TEMPLATE_CATEGORIES: ProtocolTemplateCategory[] = [
   {
-    id: 'parental',
-    name: 'Parental',
-    description: 'Templates for family communications',
-    icon: '👨‍👩‍👧‍👦',
-    templates: DEFAULT_TEMPLATES.filter(t => t.category === 'parental')
+    id: 'emergency',
+    name: 'Commands',
+    description: 'System commands and emergency protocols',
+    icon: '⚡',
+    templates: DEFAULT_TEMPLATES.filter(t => t.category === 'emergency')
   },
   {
     id: 'wellness',
     name: 'Wellness',
-    description: 'Templates for wellness check-ins',
+    description: 'Mental health and stability protocols',
     icon: '🌱',
     templates: DEFAULT_TEMPLATES.filter(t => t.category === 'wellness')
   },
   {
+    id: 'parental',
+    name: 'Parental',
+    description: 'Family communication protocols',
+    icon: '👨‍👩‍👧‍👦',
+    templates: DEFAULT_TEMPLATES.filter(t => t.category === 'parental')
+  },
+  {
     id: 'work',
-    name: 'Work',
-    description: 'Templates for professional situations',
-    icon: '💼',
+    name: 'Processing',
+    description: 'Cognitive and analytical protocols',
+    icon: '🧠',
     templates: DEFAULT_TEMPLATES.filter(t => t.category === 'work')
   },
   {
     id: 'social',
     name: 'Social',
-    description: 'Templates for social interactions',
+    description: 'Interpersonal navigation protocols',
     icon: '👥',
     templates: DEFAULT_TEMPLATES.filter(t => t.category === 'social')
   },
   {
-    id: 'emergency',
-    name: 'Emergency',
-    description: 'Quick containment templates',
-    icon: '🚨',
-    templates: DEFAULT_TEMPLATES.filter(t => t.category === 'emergency')
-  },
-  {
     id: 'custom',
     name: 'Custom',
-    description: 'Your personal templates',
+    description: 'Your personal protocol definitions',
     icon: '⭐',
     templates: []
   }
