@@ -67,14 +67,14 @@ const Index = () => {
   const currentMantra = useMantra(entries);
 
   // Check onboarding status when user changes
-  useState(() => {
+  useEffect(() => {
     if (user) {
       const hasCompletedOnboarding = localStorage.getItem(`onboarding_complete_${user.id}`);
       if (!hasCompletedOnboarding) {
         setShowOnboarding(true);
       }
     }
-  });
+  }, [user]);
 
   // Show loading while checking authentication
   if (loading) {
