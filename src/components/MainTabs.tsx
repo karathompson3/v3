@@ -1,9 +1,9 @@
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ChatInterface } from './ChatInterface';
 import { ReflectionsManager } from './ReflectionsManager';
 import { MotifDisplay } from './MotifDisplay';
-import { Scroll, Archive, Map } from 'lucide-react';
+import { DailySummary } from './DailySummary';
+import { Scroll, Archive, Map, Sun } from 'lucide-react';
 
 interface MotifEntry {
   id: string;
@@ -38,29 +38,40 @@ interface MainTabsProps {
 export const MainTabs = ({ entries, currentEntry, setCurrentEntry, onEntrySubmit, onEntryDelete }: MainTabsProps) => {
   return (
     <Tabs defaultValue="chat" className="w-full">
-      <TabsList className="grid w-full grid-cols-3 mb-8 portal-glass border-border/30 shadow-lg backdrop-blur-16">
+      <TabsList className="grid w-full grid-cols-4 mb-8 portal-glass border-border/30 shadow-lg backdrop-blur-16">
+        <TabsTrigger 
+          value="summary" 
+          className="flex items-center gap-2 whisper-hover data-[state=active]:bg-accent/20 data-[state=active]:text-foreground data-[state=active]:shadow-md codex-transition font-medium"
+        >
+          <Sun className="w-4 h-4" />
+          <span className="font-serif hidden sm:inline">Today</span>
+        </TabsTrigger>
         <TabsTrigger 
           value="chat" 
-          className="flex items-center gap-3 whisper-hover data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:shadow-md codex-transition font-medium"
+          className="flex items-center gap-2 whisper-hover data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:shadow-md codex-transition font-medium"
         >
           <Scroll className="w-4 h-4" />
-          <span className="font-serif">Chronicle</span>
+          <span className="font-serif hidden sm:inline">Chronicle</span>
         </TabsTrigger>
         <TabsTrigger 
           value="reflections" 
-          className="flex items-center gap-3 whisper-hover data-[state=active]:bg-accent/20 data-[state=active]:text-foreground data-[state=active]:shadow-md codex-transition font-medium"
+          className="flex items-center gap-2 whisper-hover data-[state=active]:bg-accent/20 data-[state=active]:text-foreground data-[state=active]:shadow-md codex-transition font-medium"
         >
           <Archive className="w-4 h-4" />
-          <span className="font-serif">Codex</span>
+          <span className="font-serif hidden sm:inline">Codex</span>
         </TabsTrigger>
         <TabsTrigger 
           value="patterns" 
-          className="flex items-center gap-3 whisper-hover data-[state=active]:bg-accent/20 data-[state=active]:text-foreground data-[state=active]:shadow-md codex-transition font-medium"
+          className="flex items-center gap-2 whisper-hover data-[state=active]:bg-accent/20 data-[state=active]:text-foreground data-[state=active]:shadow-md codex-transition font-medium"
         >
           <Map className="w-4 h-4" />
-          <span className="font-serif">Threads</span>
+          <span className="font-serif hidden sm:inline">Threads</span>
         </TabsTrigger>
       </TabsList>
+
+      <TabsContent value="summary" className="space-y-8 portal-fade">
+        <DailySummary entries={entries} />
+      </TabsContent>
 
       <TabsContent value="chat" className="space-y-8 portal-fade">
         <div className="sacred-scroll observatory-glow">
