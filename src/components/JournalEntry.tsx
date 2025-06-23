@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Send, Tag, Clock, Shield, Lightbulb, Camera, Mic, X } from 'lucide-react';
+import { Send, Tag, Clock, Shield, Lightbulb, Camera, Mic, X, MessageSquare } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { MediaCapture } from './MediaCapture';
 
@@ -28,6 +28,7 @@ interface JournalEntryProps {
   currentEntry: string;
   setCurrentEntry: (entry: string) => void;
   existingEntries: MotifEntry[];
+  onTranslatorMode?: (text: string) => void;
 }
 
 const suggestedMotifs = [
@@ -46,7 +47,7 @@ const placeholderPrompts = [
   "What's asking for attention?"
 ];
 
-export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, existingEntries }: JournalEntryProps) => {
+export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, existingEntries, onTranslatorMode }: JournalEntryProps) => {
   const [selectedMotifs, setSelectedMotifs] = useState<string[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showOcclumency, setShowOcclumency] = useState(false);
@@ -135,8 +136,21 @@ export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, exi
     });
   };
 
+  const checkForTranslatorTrigger = (text: string) => {
+    if (text.toLowerCase().includes('initiate translator mode')) {
+      onTranslatorMode?.(text);
+      return true;
+    }
+    return false;
+  };
+
   const handleSubmit = async () => {
     if (!currentEntry.trim() && !attachedMedia) return;
+
+    // Check for translator mode trigger
+    if (checkForTranslatorTrigger(currentEntry)) {
+      return; // Don't submit as regular entry
+    }
 
     setIsProcessing(true);
     
@@ -329,14 +343,25 @@ export const JournalEntry = ({ onEntrySubmit, currentEntry, setCurrentEntry, exi
             </Button>
             
             {currentEntry.trim() && (
-              <Button
-                variant="outline"
-                onClick={handleOcclumencyCheck}
-                className="flex items-center gap-2"
-              >
-                <Shield className="w-4 h-4" />
-                Occlumency Check
-              </Button>
+              <>
+                <Button
+                  variant="outline"
+                  onClick={handleOcclumencyCheck}
+                  className="flex items-center gap-2"
+                >
+                  <Shield className="w-4 h-4" />
+                  Occlumency Check
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  onClick={() => onTranslatorMode?.(currentEntry)}
+                  className="flex items-center gap-2"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  🗣️ Translate This
+                </Button>
+              </>
             )}
           </div>
         </CardContent>

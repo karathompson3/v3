@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { WindDownMode } from '../components/WindDownMode';
 import { UserBillOfRights } from '../components/UserBillOfRights';
@@ -13,6 +12,7 @@ import { AuthPage } from '../components/AuthPage';
 import { Button } from '@/components/ui/button';
 import { Footer } from '../components/Footer';
 import { OnboardingModal } from '../components/onboarding/OnboardingModal';
+import { TranslatorMode } from '../components/TranslatorMode';
 
 interface MotifEntry {
   id: string;
@@ -46,6 +46,8 @@ const Index = () => {
   const [showBillOfRights, setShowBillOfRights] = useState(false);
   const [showGettingStarted, setShowGettingStarted] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showTranslatorMode, setShowTranslatorMode] = useState(false);
+  const [translatorInitialText, setTranslatorInitialText] = useState('');
   
   const currentMantra = useMantra(entries);
 
@@ -170,6 +172,37 @@ const Index = () => {
     setShowOnboarding(false);
   };
 
+  const handleTranslatorMode = (text: string) => {
+    setTranslatorInitialText(text);
+    setShowTranslatorMode(true);
+    
+    logInteraction({
+      type: 'system_update',
+      input: 'Translator mode initiated',
+      metadata: {
+        trigger: 'translator_mode_request',
+        originalTextLength: text.length,
+      },
+      visible: true,
+    });
+  };
+
+  const handleTranslatorEntry = (entry: MotifEntry) => {
+    handleNewEntry(entry);
+    
+    logInteraction({
+      type: 'entry_created',
+      input: 'Translation completed',
+      motifTags: entry.motifs,
+      metadata: {
+        translatorMode: true,
+        originalText: entry.metadata?.originalText,
+        translatedText: entry.metadata?.translatedText,
+      },
+      visible: true,
+    });
+  };
+
   if (showGettingStarted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 p-6">
@@ -225,6 +258,19 @@ const Index = () => {
     );
   }
 
+  if (showTranslatorMode) {
+    return (
+      <TranslatorMode
+        initialText={translatorInitialText}
+        onEntry={handleTranslatorEntry}
+        onClose={() => {
+          setShowTranslatorMode(false);
+          setTranslatorInitialText('');
+        }}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 memory-mapping-mode">
       {/* Mystical background texture overlay */}
@@ -250,6 +296,7 @@ const Index = () => {
             setCurrentEntry={setCurrentEntry}
             onEntrySubmit={handleNewEntry}
             onEntryDelete={handleDeleteEntry}
+            onTranslatorMode={handleTranslatorMode}
           />
         </div>
         
