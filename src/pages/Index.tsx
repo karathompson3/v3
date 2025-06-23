@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { WindDownMode } from '../components/WindDownMode';
 import { UserBillOfRights } from '../components/UserBillOfRights';
@@ -11,7 +12,7 @@ import { useGovernance } from '../hooks/useGovernance';
 import { AuthPage } from '../components/AuthPage';
 import { Button } from '@/components/ui/button';
 import { Footer } from '../components/Footer';
-import { OnboardingModal } from '../components/OnboardingModal';
+import { OnboardingModal } from '../components/onboarding/OnboardingModal';
 
 interface MotifEntry {
   id: string;
@@ -44,7 +45,11 @@ const Index = () => {
   const [showEmergencyProtocol, setShowEmergencyProtocol] = useState(false);
   const [showBillOfRights, setShowBillOfRights] = useState(false);
   const [showGettingStarted, setShowGettingStarted] = useState(false);
-  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(() => {
+    // Check if user has completed onboarding
+    if (!user) return false;
+    return !localStorage.getItem(`onboarding_complete_${user.id}`);
+  });
   
   const currentMantra = useMantra(entries);
 
@@ -145,6 +150,18 @@ const Index = () => {
 
   const handleShowOnboardingAgain = () => {
     setShowOnboarding(true);
+  };
+
+  const handleOnboardingComplete = (firstEntry?: MotifEntry) => {
+    if (user) {
+      localStorage.setItem(`onboarding_complete_${user.id}`, 'true');
+    }
+    
+    if (firstEntry) {
+      handleNewEntry(firstEntry);
+    }
+    
+    setShowOnboarding(false);
   };
 
   if (showGettingStarted) {
