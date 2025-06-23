@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { WindDownMode } from '../components/WindDownMode';
 import { UserBillOfRights } from '../components/UserBillOfRights';
@@ -6,6 +5,7 @@ import { GettingStartedGuide } from '../components/GettingStartedGuide';
 import { Header } from '../components/Header';
 import { EmergencyProtocol } from '../components/EmergencyProtocol';
 import { MainTabs } from '../components/MainTabs';
+import { ProtocolTemplates } from '../components/ProtocolTemplates';
 import { useMantra } from '../hooks/useMantra';
 import { useAuth } from '../hooks/useAuth';
 import { useGovernance } from '../hooks/useGovernance';
@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Footer } from '../components/Footer';
 import { OnboardingModal } from '../components/onboarding/OnboardingModal';
 import { TranslatorMode } from '../components/TranslatorMode';
+import { useToast } from '@/hooks/use-toast';
 
 interface MotifEntry {
   id: string;
@@ -45,6 +46,7 @@ interface MotifEntry {
 const Index = () => {
   const { user, loading } = useAuth();
   const { logInteraction } = useGovernance();
+  const { toast } = useToast();
   const [entries, setEntries] = useState<MotifEntry[]>([]);
   const [currentEntry, setCurrentEntry] = useState('');
   const [isWindDownMode, setIsWindDownMode] = useState(false);
@@ -53,6 +55,7 @@ const Index = () => {
   const [showGettingStarted, setShowGettingStarted] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showTranslatorMode, setShowTranslatorMode] = useState(false);
+  const [showProtocolLibrary, setShowProtocolLibrary] = useState(false);
   const [translatorInitialText, setTranslatorInitialText] = useState('');
   
   const currentMantra = useMantra(entries);
@@ -209,6 +212,26 @@ const Index = () => {
     });
   };
 
+  const handleProtocolLibraryUse = (template: string) => {
+    setCurrentEntry(template);
+    setShowProtocolLibrary(false);
+    
+    toast({
+      title: "Template applied",
+      description: "Protocol template has been loaded into your entry field",
+    });
+    
+    logInteraction({
+      type: 'system_update',
+      input: 'Protocol template used from library',
+      metadata: {
+        templateUsed: true,
+        templateLength: template.length,
+      },
+      visible: true,
+    });
+  };
+
   if (showGettingStarted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 p-6">
@@ -277,6 +300,15 @@ const Index = () => {
     );
   }
 
+  if (showProtocolLibrary) {
+    return (
+      <ProtocolTemplates
+        onUseTemplate={handleProtocolLibraryUse}
+        onClose={() => setShowProtocolLibrary(false)}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 memory-mapping-mode">
       {/* Mystical background texture overlay */}
@@ -292,6 +324,7 @@ const Index = () => {
           onShowBillOfRights={() => setShowBillOfRights(true)}
           onShowGettingStarted={() => setShowGettingStarted(true)}
           onShowOnboarding={handleShowOnboardingAgain}
+          onShowProtocolLibrary={() => setShowProtocolLibrary(true)}
         />
 
         {/* Sacred codex interface */}

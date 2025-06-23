@@ -6,11 +6,12 @@ interface HeaderProps {
   onShowBillOfRights: () => void;
   onShowGettingStarted: () => void;
   onShowOnboarding?: () => void;
+  onShowProtocolLibrary?: () => void;
 }
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Moon, Shield, ScrollText, BookOpen, Sparkles, Clock, FileText } from 'lucide-react';
+import { Moon, Shield, ScrollText, BookOpen, Sparkles, Clock, FileText, Library } from 'lucide-react';
 import { GovernanceCovenantModal } from './GovernanceCovenantModal';
 import { InteractionLogsModal } from './InteractionLogsModal';
 import { useGovernance } from '../hooks/useGovernance';
@@ -22,7 +23,8 @@ export const Header = ({
   onEmergencyProtocol, 
   onShowBillOfRights,
   onShowGettingStarted,
-  onShowOnboarding
+  onShowOnboarding,
+  onShowProtocolLibrary
 }: HeaderProps) => {
   const [showGovernanceModal, setShowGovernanceModal] = useState(false);
   const [showLogsModal, setShowLogsModal] = useState(false);
@@ -70,6 +72,16 @@ export const Header = ({
             <BookOpen className="w-4 h-4 group-hover:text-blue-300 transition-colors" />
             How to Use
           </Button>
+          {onShowProtocolLibrary && (
+            <Button
+              variant="outline"
+              onClick={onShowProtocolLibrary}
+              className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-200 group"
+            >
+              <Library className="w-4 h-4 group-hover:text-purple-300 transition-colors" />
+              Protocol Library
+            </Button>
+          )}
           {user && onShowOnboarding && (
             <Button
               variant="outline"
