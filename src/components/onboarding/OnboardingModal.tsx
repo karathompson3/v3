@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { WelcomeScreen } from './WelcomeScreen';
 import { ProcessScreen } from './ProcessScreen';
 import { LanguageScreen } from './LanguageScreen';
@@ -44,12 +44,28 @@ export const OnboardingModal = ({ open, onComplete }: OnboardingModalProps) => {
     onComplete(entry);
   };
 
+  const handleClose = () => {
+    onComplete();
+  };
+
   return (
-    <Dialog open={open} onOpenChange={() => {}}>
+    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
       <DialogContent className="max-w-4xl h-[90vh] p-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 border-blue-200/30 flex flex-col">
         <VisuallyHidden>
           <DialogTitle>Onboarding - Step {currentScreen + 1} of {screens.length}</DialogTitle>
         </VisuallyHidden>
+        
+        {/* Close button */}
+        <div className="absolute top-4 right-4 z-20">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleClose}
+            className="text-white/60 hover:text-white hover:bg-white/10 h-8 w-8"
+          >
+            <X className="w-4 h-4" />
+          </Button>
+        </div>
         
         {/* Progress indicator - Fixed at top */}
         <div className="flex-shrink-0 p-6 pb-4">
