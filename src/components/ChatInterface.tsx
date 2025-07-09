@@ -3,11 +3,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Send, Bot, User, Sparkles, Settings, Paperclip, X, Image, Mic, History } from 'lucide-react';
+import { Send, Bot, User, Sparkles, Paperclip, X, Image, Mic, History } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { MediaCapture } from './MediaCapture';
 import { ChatHistory } from './ChatHistory';
 import { useDailyChatLog } from '../hooks/useDailyChatLog';
+import { supabase } from '@/integrations/supabase/client';
 
 interface MotifEntry {
   id: string;
@@ -49,8 +50,6 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
   const { currentLog, loading, availableDates, addMessage, loadChatLog, deleteChatLog } = useDailyChatLog();
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKey, setApiKey] = useState(localStorage.getItem('openai_api_key') || '');
-  const [showApiKeyInput, setShowApiKeyInput] = useState(!apiKey);
   const [showMediaCapture, setShowMediaCapture] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [attachedMedia, setAttachedMedia] = useState<{
@@ -71,69 +70,41 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
     scrollToBottom();
   }, [currentLog?.messages]);
 
-  const saveApiKey = (key: string) => {
-    localStorage.setItem('openai_api_key', key);
-    setApiKey(key);
-    setShowApiKeyInput(false);
-    toast({
-      title: "API Key saved",
-      description: "You can now chat with real ChatGPT!",
-    });
-  };
-
   const generateAIResponse = async (userMessage: string, mediaContext?: string): Promise<string> => {
-    if (!apiKey) {
-      throw new Error('API key not configured');
-    }
-
     // Prepare context from recent reflections
     const recentReflections = reflections.slice(0, 5);
     const contextMessage = recentReflections.length > 0 
-      ? `\n\nUser's recent reflections context: ${recentReflections.map(r => 
+      ? recentReflections.map(r => 
           `"${r.content}" (themes: ${r.motifs.join(', ')})`
-        ).join('; ')}`
+        ).join('; ')
       : '';
 
-    const mediaContextMessage = mediaContext ? `\n\nMedia context: ${mediaContext}` : '';
-    
     // Include recent chat history for context
     const recentMessages = currentLog?.messages.slice(-6) || [];
     const chatHistoryContext = recentMessages.length > 0
-      ? `\n\nRecent conversation history: ${recentMessages.map(msg => 
+      ? recentMessages.map(msg => 
           `${msg.role}: ${msg.content}`
-        ).join('\n')}`
+        ).join('\n')
       : '';
 
-    const systemPrompt = `You are a supportive AI companion focused on dignity, autonomy, and mental wellness. You help users reflect thoughtfully while building their personal foundation. Be warm, non-judgmental, and encouraging. Ask thoughtful follow-up questions and validate their experiences. Respond to EVERYTHING the user shares - whether it's deep reflection, casual thoughts, media, or simple statements. This is an interactive conversation, not just Q&A. You have access to the user's conversation history and reflections to provide continuity.${contextMessage}${mediaContextMessage}${chatHistoryContext}`;
+    const fullMessage = mediaContext ? `${userMessage}\n\n${mediaContext}` : userMessage;
 
     try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: 'gpt-4.1-2025-04-14',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userMessage }
-          ],
-          max_tokens: 800,
-          temperature: 0.8,
-          stream: false
-        })
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
+          message: fullMessage,
+          context: contextMessage,
+          chatHistory: chatHistoryContext
+        }
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error?.message || 'Failed to get response from OpenAI');
+      if (error) {
+        throw new Error(error.message || 'Failed to get response from AI');
       }
 
-      const data = await response.json();
-      return data.choices[0]?.message?.content || 'Sorry, I had trouble generating a response.';
+      return data.response || 'Sorry, I had trouble generating a response.';
     } catch (error) {
-      console.error('OpenAI API error:', error);
+      console.error('AI chat error:', error);
       throw error;
     }
   };
@@ -187,30 +158,22 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
     return hasReflectionContent || isThoughtfulLength;
   };
 
-  const captureReflectionFromMessage = (messageContent: string, media?: any) => {
+  const captureReflectionFromMessage = async (messageContent: string, media?: any) => {
     if (!shouldCaptureReflection(messageContent)) return;
     
-    const generateMotifs = (content: string): string[] => {
-      const baseMotifs = ['Personal Reflection'];
-      const lowerContent = content.toLowerCase();
-      
-      if (lowerContent.includes('work') || lowerContent.includes('job')) baseMotifs.push('Career');
-      if (lowerContent.includes('family') || lowerContent.includes('relationship')) baseMotifs.push('Relationships');
-      if (lowerContent.includes('anxious') || lowerContent.includes('worry')) baseMotifs.push('Anxiety');
-      if (lowerContent.includes('grateful') || lowerContent.includes('thankful')) baseMotifs.push('Gratitude');
-      if (lowerContent.includes('goal') || lowerContent.includes('plan')) baseMotifs.push('Goals');
-      if (media) baseMotifs.push('Media Shared');
-      
-      return baseMotifs;
-    };
+    // Use o3 for enhanced pattern analysis
+    const { enhancedMotifDetection } = await import('../utils/patternAnalysis');
+    const analysis = await enhancedMotifDetection(messageContent, reflections);
     
     const reflection: MotifEntry = {
       id: Date.now().toString(),
       content: messageContent,
-      motifs: generateMotifs(messageContent),
+      motifs: analysis.motifs,
       timestamp: new Date(),
-      emotionalTone: 'reflective',
-      intent: 'self-exploration',
+      emotionalTone: analysis.emotionalTone,
+      intent: analysis.intent,
+      dictionaryTerms: analysis.dictionaryTerms,
+      stabilityFlags: analysis.stabilityFlags,
       media: media || undefined
     };
     
@@ -219,8 +182,8 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
     setTimeout(() => {
       toast({
         title: "Reflection captured",
-        description: "Added to your foundation",
-        duration: 2000
+        description: `Themes detected: ${analysis.motifs.join(', ')}`,
+        duration: 3000
       });
     }, 1000);
     
@@ -229,16 +192,6 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
 
   const handleSend = async () => {
     if ((!input.trim() && !attachedMedia) || isLoading) return;
-    
-    if (!apiKey) {
-      setShowApiKeyInput(true);
-      toast({
-        title: "API Key Required",
-        description: "Please enter your OpenAI API key to chat",
-        variant: "destructive"
-      });
-      return;
-    }
     
     let messageContent = input.trim();
     let mediaContext = '';
@@ -288,7 +241,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
       console.error('Error generating response:', error);
       toast({
         title: "Connection issue",
-        description: error instanceof Error ? error.message : "Please check your API key and try again.",
+        description: error instanceof Error ? error.message : "Please check the server connection.",
         variant: "destructive"
       });
     } finally {
@@ -327,61 +280,6 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
           onDeleteDate={deleteChatLog}
           onClose={() => setShowHistory(false)}
         />
-      </div>
-    );
-  }
-
-  if (showApiKeyInput) {
-    return (
-      <div className="flex flex-col h-[600px] bg-slate-900/95 backdrop-blur-sm rounded-lg border border-white/20 shadow-lg">
-        <div className="flex-1 flex items-center justify-center p-8">
-          <Card className="w-full max-w-md bg-slate-800/90 border-white/20">
-            <CardContent className="p-6">
-              <div className="text-center mb-6">
-                <Settings className="w-12 h-12 mx-auto text-blue-400 mb-4" />
-                <h3 className="text-lg font-semibold mb-2 text-white">Connect to OpenAI</h3>
-                <p className="text-sm text-blue-200">
-                  Enter your OpenAI API key to enable real ChatGPT conversations
-                </p>
-              </div>
-              
-              <div className="space-y-4">
-                <Textarea
-                  value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
-                  placeholder="sk-..."
-                  className="font-mono text-sm bg-slate-700/50 border-white/20 text-white placeholder:text-slate-400"
-                />
-                <div className="flex gap-2">
-                  <Button 
-                    onClick={() => saveApiKey(apiKey)}
-                    disabled={!apiKey.trim()}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700"
-                  >
-                    Save & Connect
-                  </Button>
-                  {localStorage.getItem('openai_api_key') && (
-                    <Button 
-                      variant="outline"
-                      onClick={() => {
-                        setApiKey(localStorage.getItem('openai_api_key') || '');
-                        setShowApiKeyInput(false);
-                      }}
-                      className="border-white/20 text-white hover:bg-white/10"
-                    >
-                      Cancel
-                    </Button>
-                  )}
-                </div>
-              </div>
-              
-              <div className="mt-4 text-xs text-slate-400">
-                <p>Find your API key at <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">platform.openai.com/api-keys</a></p>
-                <p className="mt-1">Your key is stored locally and never shared.</p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
       </div>
     );
   }
@@ -425,14 +323,6 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
             title="Chat History"
           >
             <History className="w-4 h-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setShowApiKeyInput(true)}
-            className="text-slate-400 hover:text-white hover:bg-white/10"
-          >
-            <Settings className="w-4 h-4" />
           </Button>
         </div>
       </div>
