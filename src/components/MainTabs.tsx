@@ -1,5 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { JournalEntry } from './JournalEntry';
+import { ChatInterface } from './ChatInterface';
 import { MotifDisplay } from './MotifDisplay';
 import { NarrativeMap } from './NarrativeMap';
 import { ReflectionsManager } from './ReflectionsManager';
@@ -65,11 +66,9 @@ export const MainTabs = ({
       </TabsList>
 
       <TabsContent value="journal" className="mt-6">
-        <JournalEntry
-          onEntrySubmit={onEntrySubmit}
-          currentEntry={currentEntry}
-          setCurrentEntry={setCurrentEntry}
-          existingEntries={entries}
+        <ChatInterface
+          onReflectionCapture={onEntrySubmit}
+          reflections={entries}
           onTranslatorMode={onTranslatorMode}
         />
       </TabsContent>
