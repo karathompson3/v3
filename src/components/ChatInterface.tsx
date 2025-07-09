@@ -90,6 +90,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
     const fullMessage = mediaContext ? `${userMessage}\n\n${mediaContext}` : userMessage;
 
     try {
+      console.log('Calling ai-chat edge function...');
       const { data, error } = await supabase.functions.invoke('ai-chat', {
         body: {
           message: fullMessage,
@@ -302,14 +303,14 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="flex flex-col h-[600px] bg-slate-900/95 backdrop-blur-sm rounded-lg border border-white/20 shadow-lg">
+    <div className="flex flex-col h-[600px] bg-background rounded-lg border border-border shadow-lg">
       {/* Header with controls */}
-      <div className="flex justify-between items-center p-4 border-b border-white/20">
+      <div className="flex justify-between items-center p-4 border-b border-border bg-card">
         <div className="flex items-center gap-2">
-          <Bot className="w-5 h-5 text-blue-400" />
-          <span className="font-medium text-white">AI Companion</span>
+          <Bot className="w-5 h-5 text-primary" />
+          <span className="font-medium text-foreground">Your AI Companion</span>
           {currentDate !== today && (
-            <Badge variant="outline" className="text-xs border-white/20 text-blue-200">
+            <Badge variant="outline" className="text-xs">
               {new Date(currentDate).toLocaleDateString()}
             </Badge>
           )}
@@ -319,7 +320,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
             variant="ghost"
             size="sm"
             onClick={() => setShowHistory(true)}
-            className="text-slate-400 hover:text-white hover:bg-white/10"
+            className="text-muted-foreground hover:text-foreground"
             title="Chat History"
           >
             <History className="w-4 h-4" />
@@ -327,123 +328,97 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
         </div>
       </div>
 
-      {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      {/* Chat Messages - Text Message Style */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50">
         {messages.length === 0 && (
-          <div className="flex gap-3 justify-start">
-            <div className="w-8 h-8 bg-blue-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-              <Bot className="w-4 h-4 text-blue-400" />
+          <div className="flex justify-start">
+            <div className="max-w-[85%] bg-white rounded-2xl rounded-bl-md p-4 shadow-sm border border-slate-200">
+              <p className="text-sm text-slate-700">
+                Hey! I'm your AI companion. Share anything on your mind - I'm here to listen and respond while quietly building your personal foundation.
+              </p>
+              <p className="text-xs text-slate-400 mt-2">
+                {new Date().toLocaleTimeString()}
+              </p>
             </div>
-            <Card className="bg-slate-800/60 border-white/20 max-w-[70%]">
-              <CardContent className="p-3">
-                <p className="text-sm text-blue-100">
-                  Hello! I'm your AI companion designed to support your dignity and autonomy. Share anything - thoughts, feelings, experiences, media. I'm here to engage with you while quietly building your personal foundation of insights.
-                </p>
-                <p className="text-xs text-slate-400 mt-2">
-                  {new Date().toLocaleTimeString()}
-                </p>
-              </CardContent>
-            </Card>
           </div>
         )}
 
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
-            {message.role === 'assistant' && (
-              <div className="w-8 h-8 bg-blue-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                <Bot className="w-4 h-4 text-blue-400" />
-              </div>
-            )}
-            
-            <div className={`max-w-[70%] ${message.role === 'user' ? 'order-first' : ''}`}>
-              <Card className={`${
-                message.role === 'user' 
-                  ? 'bg-blue-600 text-white border-blue-500' 
-                  : 'bg-slate-800/60 border-white/20'
+            <div className={`max-w-[85%] ${
+              message.role === 'user' 
+                ? 'bg-blue-500 text-white rounded-2xl rounded-br-md' 
+                : 'bg-white rounded-2xl rounded-bl-md border border-slate-200'
+            } p-4 shadow-sm`}>
+              <p className={`text-sm whitespace-pre-wrap ${
+                message.role === 'user' ? 'text-white font-typewriter' : 'text-slate-700'
               }`}>
-                <CardContent className="p-3">
-                  <p className={`text-sm whitespace-pre-wrap ${
-                    message.role === 'user' ? 'text-white font-typewriter' : 'text-blue-100 bot-message'
-                  }`}>
-                    {message.content}
-                  </p>
-                  <div className="flex items-center justify-between mt-2">
-                    <p className={`text-xs ${
-                      message.role === 'user' ? 'text-blue-100' : 'text-slate-400'
-                    }`}>
-                      {message.timestamp.toLocaleTimeString()}
-                    </p>
-                    {message.reflectionCaptured && (
-                      <Badge variant="secondary" className="text-xs bg-purple-600/20 text-purple-300 border-purple-500/30">
-                        <Sparkles className="w-3 h-3 mr-1" />
-                        Reflected
-                      </Badge>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-            
-            {message.role === 'user' && (
-              <div className="w-8 h-8 bg-slate-700/60 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                <User className="w-4 h-4 text-slate-300" />
+                {message.content}
+              </p>
+              <div className="flex items-center justify-between mt-2">
+                <p className={`text-xs ${
+                  message.role === 'user' ? 'text-blue-100' : 'text-slate-400'
+                }`}>
+                  {message.timestamp.toLocaleTimeString()}
+                </p>
+                {message.reflectionCaptured && (
+                  <Badge variant="secondary" className="text-xs">
+                    <Sparkles className="w-3 h-3 mr-1" />
+                    Reflected
+                  </Badge>
+                )}
               </div>
-            )}
+            </div>
           </div>
         ))}
         
         {isLoading && (
-          <div className="flex gap-3 justify-start">
-            <div className="w-8 h-8 bg-blue-600/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-              <Bot className="w-4 h-4 text-blue-400" />
+          <div className="flex justify-start">
+            <div className="max-w-[85%] bg-white rounded-2xl rounded-bl-md p-4 shadow-sm border border-slate-200">
+              <div className="flex space-x-1">
+                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+              </div>
             </div>
-            <Card className="bg-slate-800/60 border-white/20">
-              <CardContent className="p-3">
-                <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         )}
         
         <div ref={messagesEndRef} />
       </div>
       
-      {/* Input Area */}
-      <div className="border-t border-white/20 p-4">
+      {/* Input Area - iPhone style */}
+      <div className="border-t border-border p-4 bg-card">
         {/* Media Preview */}
         {attachedMedia && (
-          <div className="mb-3 p-3 bg-slate-800/50 rounded-lg border border-white/20">
+          <div className="mb-3 p-3 bg-muted rounded-lg border">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 {attachedMedia.type === 'photo' ? (
                   <>
-                    <Image className="w-4 h-4 text-slate-400" />
-                    <span className="text-sm text-slate-300">Image attached</span>
+                    <Image className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm">Image attached</span>
                   </>
                 ) : (
                   <>
-                    <Mic className="w-4 h-4 text-slate-400" />
-                    <span className="text-sm text-slate-300">
+                    <Mic className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm">
                       Voice memo ({Math.round((attachedMedia.duration || 0))}s)
                     </span>
                   </>
                 )}
                 {attachedMedia.caption && (
-                  <span className="text-xs text-slate-400">- {attachedMedia.caption}</span>
+                  <span className="text-xs text-muted-foreground">- {attachedMedia.caption}</span>
                 )}
               </div>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={removeAttachedMedia}
-                className="h-6 w-6 p-0 text-slate-400 hover:text-white"
+                className="h-6 w-6 p-0"
               >
                 <X className="w-3 h-3" />
               </Button>
@@ -451,12 +426,12 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
           </div>
         )}
         
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-end">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setShowMediaCapture(true)}
-            className="px-2 text-slate-400 hover:text-white hover:bg-white/10"
+            className="px-2 shrink-0"
             title="Add media"
           >
             <Paperclip className="w-4 h-4" />
@@ -466,14 +441,16 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Share anything... thoughts, feelings, experiences. I'll respond and quietly capture meaningful reflections."
-            className="user-input resize-none min-h-[44px] max-h-32 bg-slate-800/50 border-white/20 text-white placeholder:text-slate-400 font-typewriter"
+            placeholder="Message..."
+            className="user-input resize-none min-h-[40px] max-h-32 font-typewriter rounded-2xl border-border bg-background flex-1"
             disabled={isLoading}
           />
+          
           <Button
             onClick={handleSend}
             disabled={(!input.trim() && !attachedMedia) || isLoading}
-            className="px-4 bg-blue-600 hover:bg-blue-700"
+            className="px-4 shrink-0 rounded-full bg-blue-500 hover:bg-blue-600"
+            size="sm"
           >
             <Send className="w-4 h-4" />
           </Button>
