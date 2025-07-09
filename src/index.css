@@ -10,99 +10,107 @@
 
 @layer base {
   :root {
-    /* V3 Codex Color Scheme - Blue Observatory Palette */
-    --background: 16 20 32; /* #101420 Deep observatory blue */
-    --foreground: 236 226 220; /* #ECE2DC Soft candlewhite */
+    /* HIGH CONTRAST COLOR SCHEME - Maximum Readability */
+    --background: 255 255 255; /* Pure white background */
+    --foreground: 15 15 15; /* Almost black text */
 
-    --card: 24 32 48; /* #182030 Deeper blue scroll, like twilight parchment */
-    --card-foreground: 236 226 220; /* #ECE2DC Soft candlewhite */
+    --card: 250 250 250; /* Very light gray cards */
+    --card-foreground: 15 15 15; /* Almost black text on cards */
 
-    --popover: 24 32 48; /* #182030 Deeper blue scroll */
-    --popover-foreground: 236 226 220; /* #ECE2DC Soft candlewhite */
+    --popover: 255 255 255; /* Pure white popover */
+    --popover-foreground: 15 15 15; /* Almost black text */
 
-    /* Input fields - Deeper scroll texture */
-    --input: 20 28 42; /* #141C2A Even deeper blue for nested feeling */
-    --border: 20 28 42; /* #141C2A Deeper scroll border */
+    /* Input fields - Light with dark text */
+    --input: 245 245 245; /* Light gray input background */
+    --border: 200 200 200; /* Medium gray borders */
 
-    /* Primary/Interactive - Faint plum (emotional highlight thread) */
-    --primary: 141 106 159; /* #8D6A9F Faint plum/mauve */
-    --primary-foreground: 236 226 220; /* Soft candlewhite for contrast */
+    /* Primary/Interactive - Strong blue with white text */
+    --primary: 37 99 235; /* Strong blue #2563eb */
+    --primary-foreground: 255 255 255; /* White text on blue */
 
-    /* Secondary text - Stone beige */
-    --secondary: 20 28 42; /* #141C2A Deeper scroll */
-    --secondary-foreground: 182 171 162; /* #B6ABA2 Stone beige */
+    /* Secondary - Light gray with dark text */
+    --secondary: 240 240 240; /* Light gray */
+    --secondary-foreground: 15 15 15; /* Almost black text */
 
-    --muted: 20 28 42; /* #141C2A Deeper scroll */
-    --muted-foreground: 154 142 130; /* #9A8E82 Muted stone */
+    --muted: 245 245 245; /* Very light gray */
+    --muted-foreground: 75 75 75; /* Dark gray text */
 
-    /* Accent - Memory glow */
-    --accent: 255 214 165; /* #FFD6A5 Memory glow (like match being struck) */
-    --accent-foreground: 16 20 32; /* Background for contrast */
+    /* Accent - Orange with dark text */
+    --accent: 251 146 60; /* Orange #fb923c */
+    --accent-foreground: 15 15 15; /* Almost black text */
 
-    /* Success - Sage wisdom */
-    --destructive: 141 106 159; /* #8D6A9F Using plum for gentle success */
-    --destructive-foreground: 236 226 220; /* Soft candlewhite */
+    /* Success/Destructive - High contrast */
+    --destructive: 220 38 38; /* Red #dc2626 */
+    --destructive-foreground: 255 255 255; /* White text */
 
-    --ring: 141 106 159; /* #8D6A9F Faint plum for focus */
+    --ring: 37 99 235; /* Strong blue for focus */
 
-    --radius: 0.875rem; /* Slightly more rounded for organic feel */
+    --radius: 0.5rem; /* Standard border radius */
 
-    /* Sidebar colors matching codex theme */
-    --sidebar-background: 12 16 28; /* Slightly darker than main */
-    --sidebar-foreground: 236 226 220; /* Soft candlewhite */
-    --sidebar-primary: 141 106 159; /* Faint plum */
-    --sidebar-primary-foreground: 236 226 220; /* Soft candlewhite */
-    --sidebar-accent: 255 214 165; /* Memory glow */
-    --sidebar-accent-foreground: 16 20 32; /* Background */
-    --sidebar-border: 20 28 42; /* Deeper scroll */
-    --sidebar-ring: 141 106 159; /* Faint plum */
+    /* Sidebar colors - High contrast */
+    --sidebar-background: 250 250 250; /* Very light gray */
+    --sidebar-foreground: 15 15 15; /* Almost black */
+    --sidebar-primary: 37 99 235; /* Strong blue */
+    --sidebar-primary-foreground: 255 255 255; /* White */
+    --sidebar-accent: 251 146 60; /* Orange */
+    --sidebar-accent-foreground: 15 15 15; /* Almost black */
+    --sidebar-border: 200 200 200; /* Medium gray */
+    --sidebar-ring: 37 99 235; /* Strong blue */
 
-    /* Custom codex emotional colors */
-    --observatory-blue: 16 20 32; /* #101420 */
-    --twilight-scroll: 24 32 48; /* #182030 */
-    --deeper-scroll: 20 28 42; /* #141C2A */
-    --candlewhite: 236 226 220; /* #ECE2DC */
-    --stone-beige: 182 171 162; /* #B6ABA2 */
-    --emotional-plum: 141 106 159; /* #8D6A9F */
-    --memory-glow: 255 214 165; /* #FFD6A5 */
-    --whisper-shadow: 18 24 36; /* #121824 */
-
-    /* Chat text colors - BLACK text on light background */
-    --chat-text: 20 20 20; /* #141414 Dark text for chat messages */
-    --chat-background: 248 250 252; /* #F8FAFC Light background for chat */
+    /* Chat specific - Maximum contrast */
+    --chat-user-bg: 37 99 235; /* Strong blue for user messages */
+    --chat-user-text: 255 255 255; /* White text on blue */
+    --chat-bot-bg: 245 245 245; /* Light gray for bot messages */
+    --chat-bot-text: 15 15 15; /* Almost black text */
+    --chat-input-bg: 255 255 255; /* White input background */
+    --chat-input-text: 15 15 15; /* Almost black input text */
   }
 
-  .light {
-    /* Keeping minimal light mode as fallback */
-    --background: 250 248 246; /* Parchment white */
-    --foreground: 26 24 22; /* Leather journal dark */
-    --card: 255 253 251;
-    --card-foreground: 26 24 22;
-    --popover: 255 253 251;
-    --popover-foreground: 26 24 22;
-    --primary: 141 106 159;
-    --primary-foreground: 250 248 246;
-    --secondary: 245 243 241;
-    --secondary-foreground: 82 75 69;
-    --muted: 245 243 241;
-    --muted-foreground: 120 113 108;
-    --accent: 238 213 184;
-    --accent-foreground: 26 24 22;
-    --destructive: 141 106 159;
-    --destructive-foreground: 250 248 246;
-    --border: 229 225 221;
-    --input: 229 225 221;
-    --ring: 141 106 159;
-    --sidebar-background: 248 246 244;
-    --sidebar-foreground: 26 24 22;
-    --sidebar-primary: 141 106 159;
-    --sidebar-primary-foreground: 250 248 246;
-    --sidebar-accent: 238 213 184;
-    --sidebar-accent-foreground: 26 24 22;
-    --sidebar-border: 229 225 221;
-    --sidebar-ring: 141 106 159;
-    --chat-text: 20 20 20;
-    --chat-background: 248 250 252;
+  .dark {
+    /* DARK MODE - High contrast */
+    --background: 15 15 15; /* Almost black background */
+    --foreground: 250 250 250; /* Almost white text */
+    
+    --card: 25 25 25; /* Dark gray cards */
+    --card-foreground: 250 250 250; /* Almost white text */
+    
+    --popover: 25 25 25; /* Dark gray popover */
+    --popover-foreground: 250 250 250; /* Almost white text */
+    
+    --primary: 59 130 246; /* Bright blue #3b82f6 */
+    --primary-foreground: 15 15 15; /* Almost black text */
+    
+    --secondary: 40 40 40; /* Dark gray */
+    --secondary-foreground: 250 250 250; /* Almost white text */
+    
+    --muted: 30 30 30; /* Darker gray */
+    --muted-foreground: 180 180 180; /* Light gray text */
+    
+    --accent: 251 146 60; /* Orange */
+    --accent-foreground: 15 15 15; /* Almost black text */
+    
+    --destructive: 239 68 68; /* Bright red #ef4444 */
+    --destructive-foreground: 250 250 250; /* Almost white text */
+    
+    --border: 80 80 80; /* Medium gray borders */
+    --input: 30 30 30; /* Dark input background */
+    --ring: 59 130 246; /* Bright blue */
+    
+    --sidebar-background: 20 20 20;
+    --sidebar-foreground: 250 250 250;
+    --sidebar-primary: 59 130 246;
+    --sidebar-primary-foreground: 15 15 15;
+    --sidebar-accent: 251 146 60;
+    --sidebar-accent-foreground: 15 15 15;
+    --sidebar-border: 80 80 80;
+    --sidebar-ring: 59 130 246;
+
+    --chat-user-bg: 59 130 246; /* Bright blue for user messages */
+    --chat-user-text: 15 15 15; /* Almost black text */
+    --chat-bot-bg: 30 30 30; /* Dark gray for bot messages */
+    --chat-bot-text: 250 250 250; /* Almost white text */
+    --chat-input-bg: 25 25 25; /* Dark input background */
+    --chat-input-text: 250 250 250; /* Almost white input text */
   }
 }
 
@@ -115,78 +123,119 @@
     @apply bg-background text-foreground;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 400;
-    line-height: 1.7;
-    /* Codex texture - subtle starlight grain */
-    background-image: 
-      radial-gradient(circle at 1px 1px, rgba(255,214,165,0.03) 1px, transparent 0),
-      radial-gradient(circle at 3px 7px, rgba(141,106,159,0.02) 1px, transparent 0);
-    background-size: 32px 32px, 48px 48px;
-    background-position: 0 0, 16px 24px;
+    line-height: 1.6;
+    font-size: 16px; /* Ensure readable base font size */
   }
 
-  /* Typography rules */
+  /* Typography rules - Maximum readability */
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Crimson Text', serif;
-    font-weight: 600;
-    letter-spacing: -0.015em;
-    line-height: 1.3;
-    color: hsl(var(--candlewhite));
-  }
-
-  /* Quotes and memories - soft, weighted, reflective */
-  blockquote, .memory-text, .reflection-quote {
-    font-family: 'Newsreader', serif;
-    font-style: italic;
-    font-weight: 400;
-    opacity: 0.95;
-    color: hsl(var(--stone-beige));
-  }
-
-  /* Body text - clean, soulful */
-  p, div, span {
     font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    color: hsl(var(--foreground));
+    margin-bottom: 0.5rem;
   }
 
-  /* Chat message styling - HIGH CONTRAST for legibility */
-  .chat-message {
-    color: hsl(20 20 20) !important; /* Very dark text */
-    background-color: hsl(248 250 252); /* Light background */
+  h1 { font-size: 2.25rem; }
+  h2 { font-size: 1.875rem; }
+  h3 { font-size: 1.5rem; }
+  h4 { font-size: 1.25rem; }
+  h5 { font-size: 1.125rem; }
+  h6 { font-size: 1rem; }
+
+  /* Body text - maximum readability */
+  p, div, span, li {
+    font-family: 'Inter', sans-serif;
+    color: hsl(var(--foreground));
+    line-height: 1.6;
+  }
+
+  /* Strong text readability */
+  strong, b {
+    font-weight: 600;
+    color: hsl(var(--foreground));
+  }
+
+  /* Chat message styling - Use semantic chat colors */
+  .chat-user-message {
+    background-color: hsl(var(--chat-user-bg)) !important;
+    color: hsl(var(--chat-user-text)) !important;
+  }
+
+  .chat-bot-message {
+    background-color: hsl(var(--chat-bot-bg)) !important;
+    color: hsl(var(--chat-bot-text)) !important;
   }
 
   .chat-input {
-    color: hsl(20 20 20) !important; /* Very dark text */
-    background-color: hsl(248 250 252); /* Light background */
+    background-color: hsl(var(--chat-input-bg)) !important;
+    color: hsl(var(--chat-input-text)) !important;
+    border: 1px solid hsl(var(--border)) !important;
   }
 
-  /* User input areas - typewriter font */
-  .user-input, textarea, input[type="text"], .chat-input {
+  /* User input areas - typewriter font with high contrast */
+  .user-input, textarea, input[type="text"] {
     font-family: 'Courier Prime', 'JetBrains Mono', 'Courier', monospace !important;
     font-weight: 400 !important;
+    color: hsl(var(--foreground)) !important;
+    background-color: hsl(var(--input)) !important;
+    border: 1px solid hsl(var(--border)) !important;
   }
 
   /* Bot responses - clean sans-serif */
   .bot-message {
     font-family: 'Inter', sans-serif !important;
-  }
-
-  /* Fix any yellow text issues - ensure all text has proper contrast */
-  .text-yellow-400, .text-yellow-500, .text-yellow-300 {
     color: hsl(var(--foreground)) !important;
   }
 
-  /* Ensure all text is legible */
-  * {
-    color: inherit;
+  /* Button text readability */
+  button {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
   }
 
-  /* High contrast overrides for accessibility */
-  .bg-white, .bg-white\/10, .bg-white\/20 {
-    color: hsl(20 20 20) !important;
+  /* Form labels and descriptions */
+  label {
+    font-weight: 500;
+    color: hsl(var(--foreground));
   }
 
+  /* Ensure all interactive elements have proper contrast */
+  input, textarea, select {
+    color: hsl(var(--foreground)) !important;
+    background-color: hsl(var(--input)) !important;
+    border: 1px solid hsl(var(--border)) !important;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    outline: 2px solid hsl(var(--ring)) !important;
+    outline-offset: 2px !important;
+  }
+
+  /* Remove any problematic text colors */
+  .text-yellow-400, .text-yellow-500, .text-yellow-300, 
+  .text-slate-400, .text-slate-500, .text-blue-100,
   .text-white {
     color: hsl(var(--foreground)) !important;
   }
+
+  /* Muted text should still be readable */
+  .text-muted-foreground {
+    color: hsl(var(--muted-foreground)) !important;
+  }
+
+  /* Ensure proper contrast for links */
+  a {
+    color: hsl(var(--primary));
+    text-decoration: underline;
+  }
+
+  a:hover {
+    color: hsl(var(--primary));
+    opacity: 0.8;
+  }
+}
 }
 
 @layer components {

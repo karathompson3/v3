@@ -329,14 +329,14 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
       </div>
 
       {/* Chat Messages - Text Message Style */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50">
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-background">
         {messages.length === 0 && (
           <div className="flex justify-start">
-            <div className="max-w-[85%] bg-white rounded-2xl rounded-bl-md p-4 shadow-sm border border-slate-200">
-              <p className="text-sm text-slate-700">
+            <div className="max-w-[85%] chat-bot-message rounded-2xl rounded-bl-md p-4 shadow-sm border">
+              <p className="text-sm">
                 Hey! I'm your AI companion. Share anything on your mind - I'm here to listen and respond while quietly building your personal foundation.
               </p>
-              <p className="text-xs text-slate-400 mt-2">
+              <p className="text-xs opacity-70 mt-2">
                 {new Date().toLocaleTimeString()}
               </p>
             </div>
@@ -348,20 +348,18 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
             key={message.id}
             className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
-            <div className={`max-w-[85%] ${
+            <div className={`max-w-[85%] p-4 shadow-sm rounded-2xl ${
               message.role === 'user' 
-                ? 'bg-blue-500 text-white rounded-2xl rounded-br-md' 
-                : 'bg-white rounded-2xl rounded-bl-md border border-slate-200'
-            } p-4 shadow-sm`}>
+                ? 'chat-user-message rounded-br-md' 
+                : 'chat-bot-message rounded-bl-md border'
+            }`}>
               <p className={`text-sm whitespace-pre-wrap ${
-                message.role === 'user' ? 'text-white font-typewriter' : 'text-slate-700'
+                message.role === 'user' ? 'font-typewriter' : ''
               }`}>
                 {message.content}
               </p>
               <div className="flex items-center justify-between mt-2">
-                <p className={`text-xs ${
-                  message.role === 'user' ? 'text-blue-100' : 'text-slate-400'
-                }`}>
+                <p className="text-xs opacity-70">
                   {message.timestamp.toLocaleTimeString()}
                 </p>
                 {message.reflectionCaptured && (
@@ -377,11 +375,11 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
         
         {isLoading && (
           <div className="flex justify-start">
-            <div className="max-w-[85%] bg-white rounded-2xl rounded-bl-md p-4 shadow-sm border border-slate-200">
+            <div className="max-w-[85%] chat-bot-message rounded-2xl rounded-bl-md p-4 shadow-sm border">
               <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
               </div>
             </div>
           </div>
