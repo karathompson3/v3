@@ -63,6 +63,10 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				}
 			},
+			fontFamily: {
+				'typewriter': ['Courier Prime', 'JetBrains Mono', 'Courier', 'monospace'],
+				'mono': ['JetBrains Mono', 'monospace'],
+			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',

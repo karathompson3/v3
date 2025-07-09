@@ -147,15 +147,45 @@
     font-family: 'Inter', sans-serif;
   }
 
-  /* Chat message styling - BLACK text on light background */
+  /* Chat message styling - HIGH CONTRAST for legibility */
   .chat-message {
-    color: hsl(var(--chat-text)) !important;
-    background-color: hsl(var(--chat-background));
+    color: hsl(20 20 20) !important; /* Very dark text */
+    background-color: hsl(248 250 252); /* Light background */
   }
 
   .chat-input {
-    color: hsl(var(--chat-text)) !important;
-    background-color: hsl(var(--chat-background));
+    color: hsl(20 20 20) !important; /* Very dark text */
+    background-color: hsl(248 250 252); /* Light background */
+  }
+
+  /* User input areas - typewriter font */
+  .user-input, textarea, input[type="text"], .chat-input {
+    font-family: 'Courier Prime', 'JetBrains Mono', 'Courier', monospace !important;
+    font-weight: 400 !important;
+  }
+
+  /* Bot responses - clean sans-serif */
+  .bot-message {
+    font-family: 'Inter', sans-serif !important;
+  }
+
+  /* Fix any yellow text issues - ensure all text has proper contrast */
+  .text-yellow-400, .text-yellow-500, .text-yellow-300 {
+    color: hsl(var(--foreground)) !important;
+  }
+
+  /* Ensure all text is legible */
+  * {
+    color: inherit;
+  }
+
+  /* High contrast overrides for accessibility */
+  .bg-white, .bg-white\/10, .bg-white\/20 {
+    color: hsl(20 20 20) !important;
+  }
+
+  .text-white {
+    color: hsl(var(--foreground)) !important;
   }
 }
 

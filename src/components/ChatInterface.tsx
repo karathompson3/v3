@@ -475,7 +475,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
               }`}>
                 <CardContent className="p-3">
                   <p className={`text-sm whitespace-pre-wrap ${
-                    message.role === 'user' ? 'text-white' : 'text-blue-100'
+                    message.role === 'user' ? 'text-white font-typewriter' : 'text-blue-100 bot-message'
                   }`}>
                     {message.content}
                   </p>
@@ -576,7 +576,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Share anything... thoughts, feelings, experiences. I'll respond and quietly capture meaningful reflections."
-            className="resize-none min-h-[44px] max-h-32 bg-slate-800/50 border-white/20 text-white placeholder:text-slate-400"
+            className="user-input resize-none min-h-[44px] max-h-32 bg-slate-800/50 border-white/20 text-white placeholder:text-slate-400 font-typewriter"
             disabled={isLoading}
           />
           <Button
