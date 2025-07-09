@@ -114,13 +114,14 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
           'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
-          model: 'gpt-4o-mini',
+          model: 'gpt-4.1-2025-04-14',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: userMessage }
           ],
-          max_tokens: 500,
-          temperature: 0.7
+          max_tokens: 800,
+          temperature: 0.8,
+          stream: false
         })
       });
 
