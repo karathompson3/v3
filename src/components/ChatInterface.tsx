@@ -328,15 +328,15 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
         </div>
       </div>
 
-      {/* Chat Messages - Text Message Style */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-background">
+      {/* Chat Messages - Inline Text Message Style */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-background">
         {messages.length === 0 && (
           <div className="flex justify-start">
-            <div className="max-w-[85%] chat-bot-message rounded-2xl rounded-bl-md p-4 shadow-sm border">
-              <p className="text-sm">
+            <div className="max-w-[80%] bg-muted text-foreground rounded-2xl rounded-bl-md p-3 shadow-sm">
+              <p className="text-sm leading-relaxed">
                 Hey! I'm your AI companion. Share anything on your mind - I'm here to listen and respond while quietly building your personal foundation.
               </p>
-              <p className="text-xs opacity-70 mt-2">
+              <p className="text-xs text-muted-foreground mt-2">
                 {new Date().toLocaleTimeString()}
               </p>
             </div>
@@ -348,18 +348,22 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
             key={message.id}
             className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
-            <div className={`max-w-[85%] p-4 shadow-sm rounded-2xl ${
+            <div className={`max-w-[80%] p-3 shadow-sm rounded-2xl ${
               message.role === 'user' 
-                ? 'chat-user-message rounded-br-md' 
-                : 'chat-bot-message rounded-bl-md border'
+                ? 'bg-primary text-primary-foreground rounded-br-md' 
+                : 'bg-muted text-foreground rounded-bl-md'
             }`}>
-              <p className={`text-sm whitespace-pre-wrap ${
-                message.role === 'user' ? 'font-typewriter' : ''
+              <p className={`text-sm leading-relaxed whitespace-pre-wrap ${
+                message.role === 'user' ? 'font-mono' : ''
               }`}>
                 {message.content}
               </p>
               <div className="flex items-center justify-between mt-2">
-                <p className="text-xs opacity-70">
+                <p className={`text-xs ${
+                  message.role === 'user' 
+                    ? 'text-primary-foreground/70' 
+                    : 'text-muted-foreground'
+                }`}>
                   {message.timestamp.toLocaleTimeString()}
                 </p>
                 {message.reflectionCaptured && (
@@ -375,7 +379,7 @@ export const ChatInterface = ({ onReflectionCapture, reflections, onTranslatorMo
         
         {isLoading && (
           <div className="flex justify-start">
-            <div className="max-w-[85%] chat-bot-message rounded-2xl rounded-bl-md p-4 shadow-sm border">
+            <div className="max-w-[80%] bg-muted text-foreground rounded-2xl rounded-bl-md p-3 shadow-sm">
               <div className="flex space-x-1">
                 <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
                 <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
